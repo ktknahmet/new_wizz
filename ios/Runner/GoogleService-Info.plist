@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>39403204971-mr3b3mjhnmurr4hurdqc6v534hlg8rpt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.39403204971-mr3b3mjhnmurr4hurdqc6v534hlg8rpt</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>39403204971-np6blchpd499rgjd9lklc1fd1grio9q6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDcyVydbzSexOQhN_PvEt8IJMDqVpjzaLc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>39403204971</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wizz.sales</string>
+	<key>PROJECT_ID</key>
+	<string>wizz-sales</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wizz-sales.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:39403204971:ios:9ceb48f13aed708d685c2e</string>
+</dict>
+</plist>

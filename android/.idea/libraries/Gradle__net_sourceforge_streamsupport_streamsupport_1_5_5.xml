@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: net.sourceforge.streamsupport:streamsupport:1.5.5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.streamsupport/streamsupport/1.5.5/3370d8ad7a7c607c307122c22674a0387e6b6dab/streamsupport-1.5.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.streamsupport/streamsupport/1.5.5/ea6412ee998f5bea6c41b49ac8cba3ca50208c50/streamsupport-1.5.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.streamsupport/streamsupport/1.5.5/9a18b74d7494fbfb3a78511e18dfe13cf5471ab4/streamsupport-1.5.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

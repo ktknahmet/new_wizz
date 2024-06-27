@@ -1,0 +1,89 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:wizzsales/utils/basePage/BaseStateful.dart';
+import 'package:wizzsales/utils/res/PageName.dart';
+import 'package:wizzsales/utils/style/ColorEnums.dart';
+import 'package:wizzsales/utils/style/CustomTextStyle.dart';
+import 'package:wizzsales/utils/style/WidgetStyle.dart';
+
+import '../../constants/colorsUtil.dart';
+
+class Board extends BaseStatefulPage {
+  const Board(super.appBarName, {super.key});
+
+  @override
+  State<StatefulWidget> createState() => _BoardState();
+}
+
+class _BoardState extends BaseStatefulPageState<Board> {
+ @override
+  Widget design() {
+   return Column(
+     children: [
+       GestureDetector(
+         onTap: (){
+           Navigator.pushNamed(context, '/${PageName.appointmentBoard}');
+         },
+         child: Card(
+           shape: cardShape(context),
+           color: ColorUtil().getColor(context, ColorEnums.background),
+           elevation: 2,
+           child: Padding(
+             padding: const EdgeInsets.all(12),
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text("appointmentBoard".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                 Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+               ],
+             ),
+           ),
+         ),
+       ),
+       const SizedBox(height: 8,),
+       GestureDetector(
+         onTap: (){
+           Navigator.pushNamed(context, '/${PageName.salesBoard}');
+         },
+         child: Card(
+           shape: cardShape(context),
+           color: ColorUtil().getColor(context, ColorEnums.background),
+           elevation: 2,
+           child: Padding(
+             padding: const EdgeInsets.all(12),
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text("salesBoard".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                 Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+               ],
+             ),
+           ),
+         ),
+       ),
+       const SizedBox(height: 8,),
+       GestureDetector(
+         onTap: (){
+           Navigator.pushNamed(context, '/${PageName.successBoard}');
+         },
+         child: Card(
+           shape: cardShape(context),
+           color: ColorUtil().getColor(context, ColorEnums.background),
+           elevation: 2,
+           child: Padding(
+             padding: const EdgeInsets.all(12),
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text("demoBoard".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                 Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+               ],
+             ),
+           ),
+         ),
+       ),
+       const SizedBox(height: 8,),
+     ],
+   );
+  }
+}

@@ -1,0 +1,771 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:wizzsales/adminPage/adminApiService/adminApiService.dart';
+import 'package:wizzsales/adminPage/adminModel/inventoryModel/postDistInventoryWarehouse.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/distStockList/DistStockList.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/organisations/allOrganisations.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/pool/poolHistory.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/pool/poolListDetails.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/pool/stockPool.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/poolDistributor/poolDistributor.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/postPool/poolProductSave.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/postPool/poolStockProduct.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/postPool/stockPostResponse.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/postStockDealer/postStockDealer.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/product/StockProduct.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/stockDealer/stockDealer.dart';
+import 'package:wizzsales/adminPage/adminModel/stockModel/stockHistory/stockHistory.dart';
+import 'package:wizzsales/adminPage/adminModel/stockPayModel/postStockPay.dart';
+import 'package:wizzsales/adminPage/adminModel/warehouse/warehouseList.dart';
+import 'package:wizzsales/adminPage/adminService/adminModule.dart';
+import 'package:wizzsales/model/OLD/User.dart';
+import 'package:wizzsales/model/OLD/register/LoginUser.dart';
+import 'package:wizzsales/model/stockCheckIn/returnStock.dart';
+import 'package:wizzsales/model/stockModel/assignDealerList.dart';
+import 'package:wizzsales/service/ServiceModule.dart';
+import 'package:wizzsales/service/api/ApiService.dart';
+import 'package:wizzsales/utils/function/SharedPref.dart';
+import 'package:wizzsales/utils/res/SharedUtils.dart';
+import 'package:wizzsales/utils/res/StringUtils.dart';
+import 'package:wizzsales/utils/style/WidgetStyle.dart';
+import 'package:wizzsales/widgets/Constant.dart';
+import 'package:wizzsales/widgets/Extension.dart';
+import 'package:wizzsales/widgets/WidgetExtension.dart';
+// ignore_for_file: use_build_context_synchronously
+
+class StockVm extends ChangeNotifier{
+  SharedPref pref = SharedPref();
+  Barcode? result;
+  String query="";
+  String stockQuery="";
+  int? response;
+  String? postStock;
+  List<AssignDealerList>? assignList;
+  List<StockHistory>? stockHistory;
+  List<GetPoolHistory>? getPoolHistory;
+  List<StockProduct>? stockProduct;
+  List<PoolListDetails>? poolList;
+  List<DistStockList>? distStockList;
+  List<PoolDistributor>? distributorList;
+  List<AllOrganisations>? organisations;
+  List<PoolStockProduct> poolStock=[];
+  List<WarehouseList>? warehouseList;
+  List<StockDealer>? stockDealer;
+  StockPostResponse? postResponse;
+  String detailsPostResponse="";
+  List<PoolDistributor> postList=[];
+  PermissionStatus? status;
+  String orgQuery="";
+  LoginUser? loginUser;
+  TextEditingController distributorId = TextEditingController();
+  TextEditingController warehouseName = TextEditingController();
+  int? distId;
+  User? user;
+  int index=0;
+  List<Map<String, bool>> gridMap = [];
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+
+  setPaidPaidDate(int index){
+    poolList![index].isPaid = true;
+    poolList![index].paidDate = formatDate(DateTime.now().toString());
+    notifyListeners();
+  }
+  setAllDistId(String distName,int id){
+    distributorId.text = distName;
+    distId = id;
+    notifyListeners();
+  }
+  setDistIdPoolStock(int index,int id){
+    poolStock[index].distributorId = id;
+    notifyListeners();
+  }
+  setDistId(int index,int id){
+    poolList![index].distributorId = id;
+    notifyListeners();
+  }
+  setDistWarehouse(int distId,String value){
+    warehouseName.text = value;
+    for(int i=0;i<poolList!.length;i++){
+      poolList![i].distId = distId;
+      poolList![i].distWarehouseName = value;
+    }
+
+    notifyListeners();
+  }
+  setDistWarehouseName(int index,String value){
+    poolStock[index].distWarehouseName = value;
+    notifyListeners();
+  }
+  setImporterWarehouseName(int index,String value){
+    poolStock[index].importerWarehouseName = value;
+    notifyListeners();
+  }
+  addGridMap(Map<String,bool> map){
+    gridMap.add(map);
+    notifyListeners();
+  }
+
+  setGridMap(String key,bool value) {
+
+    for (int i = 0; i < gridMap.length; i++) {
+      if (gridMap[i].containsKey(key)) { // Belirtilen anahtarı içerip içermediğini kontrol et
+        gridMap[i][key] = value; // Değerini tersine çevir
+      }
+    }
+    notifyListeners();
+  }
+  checkCamera()async{
+    await Permission.camera.request().then((value) => {
+      status = value,
+    });
+    print("kamera durum :$status");
+    notifyListeners();
+  }
+
+  setQuery(String value){
+    query = value;
+    notifyListeners();
+  }
+
+  setStockQuery(String value){
+    stockQuery = value;
+    notifyListeners();
+  }
+
+  List<AllOrganisations> searchOrganisation(List<AllOrganisations> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<AllOrganisations> filteredList = list.where((resource) =>
+    (resource.name != null && resource.name!.toLowerCase().contains(query.toLowerCase()))).toList();
+    return filteredList;
+  }
+  List<PoolListDetails> searchProduct(List<PoolListDetails> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<PoolListDetails> filteredList = list.where((resource) =>
+    (resource.serialNumber != null && resource.serialNumber!.toLowerCase().contains(query.toLowerCase())) ||
+        (resource.distWarehouseName != null && resource.distWarehouseName!.toLowerCase().contains(query.toLowerCase()))||
+        (resource.importerWarehouseName != null && resource.importerWarehouseName!.toLowerCase().contains(query.toLowerCase()))).toList();
+    return filteredList;
+  }
+
+  List<DistStockList> searchStockList(List<DistStockList> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<DistStockList> filteredList = list.where((value) =>
+    (value.serialNumber != null && value.serialNumber!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.dealerName != null && value.dealerName!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.warehouseName != null && value.warehouseName!.toString().toLowerCase().contains(query.toLowerCase())
+        )).toList();
+    return filteredList;
+  }
+
+  List<WarehouseList> searchWarehouse(List<WarehouseList> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<WarehouseList> filteredList = list.where((value) =>
+    (value.warehouseName != null && value.warehouseName!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.warehousePhone != null && value.warehousePhone!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.warehouseAdress != null && value.warehouseAdress!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.warehouseSpocname != null && value.warehouseSpocname!.toString().toLowerCase().contains(query.toLowerCase())
+        )).toList();
+    return filteredList;
+  }
+
+  List<AssignDealerList> searchAssign(List<AssignDealerList> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<AssignDealerList> filteredList = list.where((value) =>
+     value.serialNumber!.toString().toLowerCase().contains(query.toLowerCase())).toList();
+    return filteredList;
+  }
+
+  List<StockDealer> searchDealer(List<StockDealer> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<StockDealer> filteredList = list.where((value) =>
+        value.name!.toString().toLowerCase().contains(query.toLowerCase()) ||
+        value.email!.toString().toLowerCase().contains(query.toLowerCase()) ||
+        value.phone!.toString().toLowerCase().contains(query.toLowerCase())
+    ).toList();
+    return filteredList;
+  }
+
+  List<AllOrganisations> searchDist(List<AllOrganisations> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<AllOrganisations> filteredList = list.where((value) =>
+    value.name!.toString().toLowerCase().contains(query.toLowerCase())
+    ).toList();
+    return filteredList;
+  }
+
+  List<PoolStockProduct> searchScanProduct(List<PoolStockProduct> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<PoolStockProduct> filteredList = list.where((value) => value.productSerialNumber!.toString().toLowerCase().contains(query.toLowerCase())).toList();
+    return filteredList;
+  }
+
+  deleteItem(List<PoolStockProduct> details,int index){
+
+    details.removeAt(index);
+    notifyListeners();
+  }
+  void onQRViewCreated(BuildContext context, QRViewController qrViewController, int productId,int assign,String total) {
+    final player = AudioPlayer();
+
+    qrViewController.scannedDataStream.listen((scanData) async {
+      result = scanData;
+      if ((assign + poolStock.length) < int.parse(total)) {
+        if (result!.code!.length == 8) {
+          if (poolStock.isNotEmpty) {
+            bool found = false;
+            for (int i = 0; i < poolStock.length; i++) {
+              if (poolStock[i].productSerialNumber! == result!.code) {
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              var model = PoolStockProduct(
+                productId: productId,
+                stockDate: DateTime.now(),
+                productSerialNumber: result!.code,
+                distributorId: 0,
+              );
+              poolStock.add(model);
+            } else {
+              snackBarDesign(context, StringUtil.error, "canNotAddSameSerial".tr());
+            }
+          } else {
+            var model = PoolStockProduct(
+              productId: productId,
+              stockDate: DateTime.now(),
+              productSerialNumber: result!.code,
+              distributorId: 0,
+            );
+            poolStock.add(model);
+          }
+
+          await Future.delayed(const Duration(seconds: 2)); // Delay before resuming camera
+
+        } else {
+          snackBarDesign(context, StringUtil.error, "serialIdMust8".tr());
+          await player.play(AssetSource('error.mp3'));
+          await Future.delayed(const Duration(seconds: 4));
+        }
+      } else {
+        snackBarDesign(context, StringUtil.error, "cannotAddMoreProduct".tr());
+        notifyListeners();
+
+
+      }
+
+
+      qrViewController.resumeCamera();
+
+      notifyListeners();
+      print("Current poolStock length: ${poolStock.length}"); // Verify the current length
+      print("verilerrrrr $assign -- ${poolStock.length}  -- $total");
+    });
+
+
+
+  }
+
+   checkProductControl(BuildContext context, QRViewController qrViewController, List<PoolListDetails> details) {
+    final player = AudioPlayer();
+    qrViewController.scannedDataStream.listen((scanData) async {
+
+      result = scanData;
+      bool found = false;
+
+      if (distId == null) {
+        snackBarDesign(context, StringUtil.error, "pleaseSelectDistributor".tr());
+        await player.play(AssetSource('error.mp3'));
+      } else {
+
+        for (int i = 0; i < details.length; i++) {
+          if (details[i].serialNumber == result!.code) {
+            found = true;
+            if (details[i].distributorId == 0) {
+              details[i].distributorId = distId!;
+              await player.play(AssetSource('scanner.mp3'));
+              notifyListeners();
+            }
+            break;
+          }
+        }
+        if (!found) {
+          snackBarDesign(context, StringUtil.error, "serialNumberCannotFind".tr());
+          await player.play(AssetSource('error.mp3'));
+        }
+      }
+      await Future.delayed(const Duration(seconds: 4));
+      qrViewController.resumeCamera();
+    });
+    notifyListeners();
+  }
+
+  Future<void>postProduct(BuildContext context,PoolProductSave save) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+    showProgress(context, true);
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.postPool(save).then((value) {
+        postResponse = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        }
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+
+  Future<void>postDistributors(BuildContext context,List<PoolDistributor> poolDistributor) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+    showProgress(context, true);
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.detailsPost(poolDistributor).then((value) {
+        detailsPostResponse = value;
+        snackBarDesign(context, StringUtil.success, "successAdded".tr());
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        }
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+
+  Future<void>getOrganisations(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.allOrganisations().then((value) {
+        organisations = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        }
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void>getWarehouse(BuildContext context,int? distId) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      warehouseList = await apiService.getWarehouses(distId);
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+
+    }
+  }
+
+  Future<void>getStockProduct(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.getStockProduct().then((value) {
+        stockProduct = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        }
+      }
+    } finally {
+      notifyListeners();
+
+    }
+
+  }
+  Future<void>getStockList(BuildContext context,int poolId) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    try {
+      await apiService.getPoolList(poolId).then((value) {
+        poolList = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        }
+      }
+    } finally {
+      notifyListeners();
+
+    }
+
+  }
+
+  Future<void>poolHistory(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.getPoolHistory().then((value) {
+        getPoolHistory = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        }
+      }
+    } finally {
+      notifyListeners();
+
+    }
+
+  }
+
+  Future<void>postStockPool(BuildContext context,StockPool pool) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+    showProgress(context, true);
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      await apiService.postStockPool(pool).then((value) {
+        response = value;
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        }
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+  //dealerlar için listeleme
+  Future<void>getDealerList(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      stockDealer = await apiService.getStockDealer();
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  //stoklar
+  Future<void>getStock(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+    index = await pref.getInt(context, SharedUtils.profileIndex);
+    loginUser ??= await getUser(context);
+    user ??= await getUserUser(context);
+
+    int? distId;
+    if(user!.roleType !="SUPERADMIN"){
+      distId= loginUser!.profiles![index].organisation_id;
+    }
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      distStockList = await apiService.getStockList(distId);
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void>postPay(BuildContext context,PostStockPay pay,int id,int index) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.postStockPay(pay).then((value) => {
+        setPaidPaidDate(index)
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+         snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+
+  Future<void>postDistWarehouse(BuildContext context,PostDistInventoryWarehouse postDistInventoryWarehouse,Function() function) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.postDistWarehouse(postDistInventoryWarehouse).then((value) => {
+        Navigator.pop(context),
+        snackBarDesign(context, StringUtil.success, "warehouseAdded".tr()),
+        function()
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+  // dealer post
+  postDealer(BuildContext context,PostStockDealer stockDealer) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.postStockDealer(stockDealer).then((value) => {
+        postStock =value,
+        Navigator.pop(context),
+        snackBarDesign(context, StringUtil.success, postStock!),
+        getStock(context)
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          Navigator.pop(context);
+          snackBarDesign(context, StringUtil.error, "You must be a distributor or sales manager.");
+
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+  //stock history
+  Future<void>getStockHistory(BuildContext context,int id) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      stockHistory = await apiService.getStockHistory(id);
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+  //delarlara atılan ürünler
+  Future<void>getAssign(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      assignList = await apiService.getAssignList();
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+           snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+  returnProduct(BuildContext context,ReturnStock stock) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.returnStock(stock).then((value) => {
+        snackBarDesign(context, StringUtil.success, "returnToDist".tr()),
+        getStock(context)
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data!);
+          Navigator.pop(context);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+          // DioException değilse genel bir hata durumu
+          print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+}

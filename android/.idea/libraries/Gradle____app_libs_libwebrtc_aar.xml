@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ./app/libs/libwebrtc.aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5eeed31fa35c676932d7445e6d576019/transformed/jetified-libwebrtc/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5eeed31fa35c676932d7445e6d576019/transformed/jetified-libwebrtc/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5eeed31fa35c676932d7445e6d576019/transformed/jetified-libwebrtc/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
