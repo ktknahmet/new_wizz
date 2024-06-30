@@ -14,7 +14,6 @@ import 'package:wizzsales/utils/style/ColorEnums.dart';
 import 'package:wizzsales/utils/style/CustomTextStyle.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
-import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
 class StockPage extends BaseStatefulPage {
@@ -106,19 +105,36 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                     ],
                   ),
                   const SizedBox(height: 8,),
-                  SizedBox(
-                    width: sizeWidth(context).width*0.80,
-                    child: ElevatedButton(
-                      onPressed: () async{
-                        if(piece.text.isNotEmpty){
-                          await post();
-                        }else{
-                          snackBarDesign(context, StringUtil.warning, "emptyPiece".tr());
-                        }
-                      },
-                      style: elevatedButtonStyle(context),
-                      child: Text("newStock".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: sizeWidth(context).width*0.40,
+                        child: ElevatedButton(
+                          onPressed: () async{
+                            if(piece.text.isNotEmpty){
+                              await post();
+                            }else{
+                              snackBarDesign(context, StringUtil.warning, "emptyPiece".tr());
+                            }
+                          },
+                          style: elevatedButtonStyle(context),
+                          child: Text("newStock".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                        ),
+                      ),
+                      if (viewModel.getPoolHistory!.isNotEmpty)
+                        SizedBox(
+                          width: sizeWidth(context).width*0.40,
+                          child: ElevatedButton(
+                            onPressed: () async{
+                              Navigator.pushNamed(context, '/${PageName.assignGlobalStock}');
+
+                            },
+                            style: elevatedButtonStyle(context),
+                            child: Text("assignStock".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 8,),
                   Divider(
@@ -145,9 +161,7 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                   ),
                   const SizedBox(height: 4,),
 
-                  viewModel.getPoolHistory!.isEmpty ?
-                  emptyView(context, "emptyStockHistory")
-                      :RefreshIndicator(
+                  if (viewModel.getPoolHistory!.isEmpty) emptyView(context, "emptyStockHistory") else RefreshIndicator(
                     onRefresh: getHistory,
                     color: ColorUtil().getColor(context, ColorEnums.wizzColor),
                     child: SizedBox(

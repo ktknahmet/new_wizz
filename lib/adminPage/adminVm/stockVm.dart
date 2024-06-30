@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -48,7 +49,7 @@ class StockVm extends ChangeNotifier{
   List<StockHistory>? stockHistory;
   List<GetPoolHistory>? getPoolHistory;
   List<StockProduct>? stockProduct;
-  List<PoolListDetails>? poolList;
+  List<PoolListDetails> poolList=[];
   List<DistStockList>? distStockList;
   List<PoolDistributor>? distributorList;
   List<AllOrganisations>? organisations;
@@ -57,12 +58,18 @@ class StockVm extends ChangeNotifier{
   List<StockDealer>? stockDealer;
   StockPostResponse? postResponse;
   String detailsPostResponse="";
+  bool isPaid = false;
   List<PoolDistributor> postList=[];
+  List<StockProduct> products =[];
+  int? productId;
   PermissionStatus? status;
   String orgQuery="";
   LoginUser? loginUser;
+  TextEditingController distWarehouseName = TextEditingController();
+  int? distWarehouseId;
   TextEditingController distributorId = TextEditingController();
   TextEditingController warehouseName = TextEditingController();
+  TextEditingController importerWarehouse = TextEditingController();
   int? distId;
   User? user;
   int index=0;
@@ -70,9 +77,53 @@ class StockVm extends ChangeNotifier{
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
 
+
+  addPoolList(String serial){
+    PoolListDetails details = PoolListDetails(
+      productName: "HYLA EST",
+      serialNumber: serial,
+      distributorId: distId ?? 0,
+      distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
+      distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
+      isPaid: isPaid,
+      paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+
+    );
+    poolList.add(details);
+    notifyListeners();
+  }
+  clearDistWarehouseName(){
+    distWarehouseName.clear();
+    notifyListeners();
+  }
+  setPaid(){
+    isPaid = !isPaid;
+    notifyListeners();
+  }
+  setProductId(int id){
+    productId = id;
+    notifyListeners();
+  }
+  addProducts(StockProduct product){
+    products.add(product);
+    notifyListeners();
+  }
   setPaidPaidDate(int index){
-    poolList![index].isPaid = true;
-    poolList![index].paidDate = formatDate(DateTime.now().toString());
+    poolList[index].isPaid = true;
+    poolList[index].paidDate = formatDate(DateTime.now().toString());
+    notifyListeners();
+  }
+
+  setAllDistIdWith(String distName,int id){
+    distWarehouseName.text = distName;
+
+    for(int i=0;i<poolList.length;i++){
+      if(poolList[i].distWarehouseId ==null){
+        poolList[i].distWarehouseId = id;
+        poolList[i].distWarehouseName = distWarehouseName.text;
+        print("aktekin ${poolList[i].distWarehouseId}");
+      }
+    }
     notifyListeners();
   }
   setAllDistId(String distName,int id){
@@ -84,15 +135,26 @@ class StockVm extends ChangeNotifier{
     poolStock[index].distributorId = id;
     notifyListeners();
   }
-  setDistId(int index,int id){
-    poolList![index].distributorId = id;
+  setDistId(String serial,int id){
+    for(int i=0;i<poolList.length;i++){
+      print("serial number $serial  --${poolList[i].serialNumber}");
+      if(poolList[i].serialNumber == serial){
+        poolList[i].distributorId = id;
+      }
+    }
+    notifyListeners();
+  }
+
+  setDistSpesificWarehouse(int index,int id,String name){
+    poolList[index].distWarehouseId = id;
+    poolList[index].distWarehouseName = name;
     notifyListeners();
   }
   setDistWarehouse(int distId,String value){
     warehouseName.text = value;
-    for(int i=0;i<poolList!.length;i++){
-      poolList![i].distId = distId;
-      poolList![i].distWarehouseName = value;
+    for(int i=0;i<poolList.length;i++){
+      poolList[i].distWarehouseId = distId;
+      poolList[i].distWarehouseName = value;
     }
 
     notifyListeners();
@@ -101,8 +163,14 @@ class StockVm extends ChangeNotifier{
     poolStock[index].distWarehouseName = value;
     notifyListeners();
   }
-  setImporterWarehouseName(int index,String value){
-    poolStock[index].importerWarehouseName = value;
+  setImporterWarehouseName(String value,int id){
+    importerWarehouse.text = value;
+    for(int i=0;i<poolStock.length;i++){
+      if(poolStock[i].importerWarehouseName ==null){
+        poolStock[i].importerWarehouseName = value;
+        poolStock[i].distWarehouseId  =id;
+      }
+    }
     notifyListeners();
   }
   addGridMap(Map<String,bool> map){
@@ -135,6 +203,10 @@ class StockVm extends ChangeNotifier{
   setStockQuery(String value){
     stockQuery = value;
     notifyListeners();
+  }
+
+  deletePoolListItem(List<PoolListDetails> details,int index){
+    details.removeAt(index);
   }
 
   List<AllOrganisations> searchOrganisation(List<AllOrganisations> list, String query) {
@@ -225,6 +297,22 @@ class StockVm extends ChangeNotifier{
     details.removeAt(index);
     notifyListeners();
   }
+   checkBeforeScan(BuildContext context, QRViewController qrViewController) {
+
+
+    qrViewController.scannedDataStream.listen((scanData) async {
+      result = scanData;
+      if(result!.code!.length !=8){
+        snackBarDesign(context, StringUtil.error, "serialIdMust8".tr());
+        return;
+      }else{
+
+        checkStockBefore(context, result!.code!);
+      }
+      qrViewController.resumeCamera();
+      notifyListeners();
+    });
+  }
   void onQRViewCreated(BuildContext context, QRViewController qrViewController, int productId,int assign,String total) {
     final player = AudioPlayer();
 
@@ -250,6 +338,7 @@ class StockVm extends ChangeNotifier{
               poolStock.add(model);
             } else {
               snackBarDesign(context, StringUtil.error, "canNotAddSameSerial".tr());
+              return;
             }
           } else {
             var model = PoolStockProduct(
@@ -267,24 +356,15 @@ class StockVm extends ChangeNotifier{
           snackBarDesign(context, StringUtil.error, "serialIdMust8".tr());
           await player.play(AssetSource('error.mp3'));
           await Future.delayed(const Duration(seconds: 4));
+          return;
         }
       } else {
         snackBarDesign(context, StringUtil.error, "cannotAddMoreProduct".tr());
-        notifyListeners();
-
-
+        return;
       }
-
-
       qrViewController.resumeCamera();
-
       notifyListeners();
-      print("Current poolStock length: ${poolStock.length}"); // Verify the current length
-      print("verilerrrrr $assign -- ${poolStock.length}  -- $total");
     });
-
-
-
   }
 
    checkProductControl(BuildContext context, QRViewController qrViewController, List<PoolListDetails> details) {
@@ -297,6 +377,7 @@ class StockVm extends ChangeNotifier{
       if (distId == null) {
         snackBarDesign(context, StringUtil.error, "pleaseSelectDistributor".tr());
         await player.play(AssetSource('error.mp3'));
+        return;
       } else {
 
         for (int i = 0; i < details.length; i++) {
@@ -336,7 +417,9 @@ class StockVm extends ChangeNotifier{
       if (error is DioException) {
         final res = error.response;
         if (res?.statusCode == 400) {
-          snackBarDesign(context, StringUtil.error, res!.data);
+          String jsonString = json.encode(res!.data);
+          showErrorMessage(context,jsonString);
+
         }
       }
     } finally {
@@ -427,23 +510,18 @@ class StockVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.getStockProduct().then((value) {
-        stockProduct = value;
-      });
+      stockProduct=  await apiService.getStockProduct();
 
     } catch (error) {
       if (error is DioException) {
         final res = error.response;
         if (res?.statusCode == 400) {
           snackBarDesign(context, StringUtil.error, res!.data);
-
         }
       }
     } finally {
       notifyListeners();
-
     }
-
   }
   Future<void>getStockList(BuildContext context,int poolId) async{
     String token = await pref.getString(context, SharedUtils.userToken);
@@ -765,6 +843,40 @@ class StockVm extends ChangeNotifier{
       }
     } finally {
       showProgress(context, false);
+      notifyListeners();
+    }
+  }
+  checkStockBefore(BuildContext context,String serialNum) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.checkStockBefore(serialNum).then((value) => {
+        if(value == false){
+          snackBarDesign(context, StringUtil.error, "thisSerialWasAdd"),
+        }else{
+          addPoolList(serialNum),
+        }
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data!);
+          Navigator.pop(context);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
       notifyListeners();
     }
   }

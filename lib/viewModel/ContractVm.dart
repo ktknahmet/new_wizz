@@ -18,6 +18,8 @@ import 'package:wizzsales/utils/res/StringUtils.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../widgets/Constant.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class ContractVm extends ChangeNotifier{
@@ -108,9 +110,7 @@ class ContractVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.distributorContractType(91).then((value) {
-        contractType = value;
-      });
+      contractType =  await apiService.distributorContractType(orgId);
 
     } catch (error) {
       if (error is DioException) {

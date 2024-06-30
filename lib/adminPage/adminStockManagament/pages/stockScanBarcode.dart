@@ -37,8 +37,8 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
 
   TextEditingController serialIdController = TextEditingController();
   StockVm viewModel = StockVm();
-  int? productId;
-  List<StockProduct> products =[];
+
+
   @override
   void initState() {
     getProduct();
@@ -70,7 +70,7 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                  child: SingleChildScrollView(
                    child: Column(
                      children: [
-                       if (productId == null) spinKit(context) else viewModel.status == null
+                       if (viewModel.productId == null) spinKit(context) else viewModel.status == null
                            ? spinKit(context)
                            : viewModel.status!.isGranted ?
                        SizedBox(
@@ -80,7 +80,7 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                              child: QRView(
                                  key: viewModel.qrKey,
                                  onQRViewCreated: (controller) {
-                                   viewModel.onQRViewCreated(context, controller, productId!,widget.assign,widget.total.toString());
+                                   viewModel.onQRViewCreated(context, controller, viewModel.productId!,widget.assign,widget.total.toString());
 
                                  },
                                  overlay: QrScannerOverlayShape(
@@ -117,7 +117,7 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                child: TextField(
                                  onChanged: (value){
                                    viewModel.setQuery(value);
-                                   viewModel.searchProduct(viewModel.poolList!,viewModel.query);
+                                   viewModel.searchProduct(viewModel.poolList,viewModel.query);
                                  },
                                  decoration: searchTextDesign(context, "search"),
                                  cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -135,15 +135,14 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                  dropdownColor: ColorUtil().getColor(context, ColorEnums.background),
                                  underline: const SizedBox(),
                                  hint: Text("selectProduct".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
-                                 value: productId != null && products.any((product) => product.productId == productId)
-                                     ? products.firstWhere((element) => element.productId == productId)
+                                 value: viewModel.productId != null && viewModel.products.any((product) => product.productId == viewModel.productId)
+                                     ? viewModel.products.firstWhere((element) => element.productId == viewModel.productId)
                                      : null,
                                  onChanged: (StockProduct? newValue) {
-                                   setState(() {
-                                     productId = newValue?.productId!;
-                                   });
+                                   viewModel.setProductId(newValue!.productId!);
+
                                  },
-                                 items: products.map<DropdownMenuItem<StockProduct>>((StockProduct stock) {
+                                 items: viewModel.products.map<DropdownMenuItem<StockProduct>>((StockProduct stock) {
                                    return DropdownMenuItem<StockProduct>(
                                      value: stock,
                                      child: Text(stock.productName!, style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
@@ -154,6 +153,31 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                            ),
                          ],
                        ),
+                       const SizedBox(height: 4,),
+                       TextField(
+                         style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                         cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                         decoration: dateInputDecoration(context,"selectWarehouse"),
+                         controller: viewModel.importerWarehouse,
+                         readOnly: true,
+                         onTap: () async{
+
+
+                           if(viewModel.warehouseList == null){
+                             await getWarehouses(null);
+                              await showImporterWarehouse(context,viewModel);
+                           }
+
+                           if(viewModel.warehouseList!.isEmpty){
+                             snackBarDesign(context, StringUtil.warning, "You must add warehouse.");
+                           }else{
+                             await showImporterWarehouse(context,viewModel);
+
+
+                           }
+                         },
+                       ),
+                       const SizedBox(height: 4,),
 
                        Column(
                          children: [
@@ -207,7 +231,7 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                    children: [
                                                      Text("product".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                     Text(stockProductName(productId!,viewModel.stockProduct!),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
+                                                     Text(stockProductName(viewModel.productId!,viewModel.stockProduct!),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
                                                    ],
                                                  ),
                                                  Divider(
@@ -282,36 +306,12 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                                  Divider(
                                                    color: ColorUtil().getColor(context, ColorEnums.wizzColor),
                                                  ),
-
+                                                 if(value.importerWarehouseName != null)
                                                  Row(
                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                    children: [
                                                      Text("importerWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                     value.importerWarehouseName == null ?
-                                                     SizedBox(
-                                                       width: sizeWidth(context).width*0.30,
-                                                       height: 30,
-                                                       child: ElevatedButton(
-                                                         onPressed: ()async{
-                                                           await getWarehouses(null);
-                                                           if(viewModel.warehouseList!.isEmpty){
-                                                             snackBarDesign(context, StringUtil.warning, "You must add warehouse.");
-                                                           }else{
-                                                             Map<String,dynamic> warehouseMap ={};
-                                                             warehouseMap = await selectWarehouseList(context,viewModel);
-
-                                                             if(warehouseMap["warehouseName"] !=null){
-                                                               viewModel.setImporterWarehouseName(index,warehouseMap["warehouseName"]);
-
-                                                             }
-
-                                                           }
-
-                                                         },
-                                                         style: elevatedButtonStyle(context),
-                                                         child: Text("add".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                       ),
-                                                     ):Text(value.importerWarehouseName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
+                                                     Text(value.importerWarehouseName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
 
                                                    ],
                                                  ),
@@ -370,22 +370,23 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
 
 
    if(viewModel.stockProduct!.isNotEmpty){
-     if(products.isEmpty){
+     if(viewModel.products.isEmpty){
        for(int i=0;i<viewModel.stockProduct!.length;i++){
          var value = viewModel.stockProduct![i];
-         products.add(StockProduct(productId: value.productId, productName: value.productName));
+        StockProduct product = StockProduct(productId: value.productId, productName: value.productName);
+         viewModel.addProducts(product);
        }
      }
-     productId = viewModel.stockProduct![0].productId!;
+     viewModel.setProductId(viewModel.stockProduct![0].productId!);
    }
    if(widget.beginSerial !=null && widget.endSerial !=null){
-     int number = int.parse(widget.endSerial!) - int.parse(widget.beginSerial!);
+     int number = int.parse(widget.endSerial!) - int.parse(widget.beginSerial!)+1;
 
      for(int i=0;i<number;i++){
        int serialNum = int.parse(widget.beginSerial!);
 
        PoolStockProduct poolStockProduct = PoolStockProduct(
-           productId: productId,
+           productId: viewModel.stockProduct![0].productId!,
            productSerialNumber: (serialNum+i).toString(),
            stockDate: DateTime.now(),
            distributorId: 0

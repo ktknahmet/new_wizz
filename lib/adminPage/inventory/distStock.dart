@@ -50,6 +50,8 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
         builder: (context,value,_){
           if(viewModel.distStockList ==null || viewModel.stockDealer == null){
             return spinKit(context);
+          }else if(viewModel.distStockList!.isEmpty){
+            return emptyView(context, "youDoNotHaveInventory");
           }else{
             return SingleChildScrollView(
               child: Column(
@@ -74,7 +76,7 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                             ),
                           ),
                         ),
-                       /* const SizedBox(width: 2,),
+                        /* const SizedBox(width: 2,),
                         Padding(
                           padding: const EdgeInsets.only(top: 2,bottom: 2),
                           child: Container(
@@ -91,7 +93,7 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                             ),
                           ),
                         ),*/
-                       /* const SizedBox(width: 2,),
+                        /* const SizedBox(width: 2,),
                         Padding(
                           padding: const EdgeInsets.only(top: 2,bottom: 2),
                           child: Container(
@@ -213,8 +215,8 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                           itemCount: viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery).length,
                           itemBuilder: (context,index){
                             DistStockList model = viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery)[index];
-                            int startIndex = ((viewModel.distStockList!.length == 1) ? 1 : viewModel.distStockList!.length);
-                            List<int> indices = List.generate(viewModel.distStockList!.length, (index) => startIndex - index);
+                            int startIndex = ((viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery).length == 1) ? 1 : viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery).length);
+                            List<int> indices = List.generate(viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery).length, (index) => startIndex - index);
                             return Card(
                               shape: cardShape(context),
                               color: ColorUtil().getColor(context, ColorEnums.background),
@@ -225,17 +227,16 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                                     Align(
                                         alignment:Alignment.centerLeft,
                                         child: Text(indices[index].toString(),style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),)),
-
                                     Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: sizeWidth(context).width*0.30,
-                                            child: Text("enterSerialNumber".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                                          ),
-                                           Text(model.serialNumber ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                                        ],
-                                      ),
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: sizeWidth(context).width*0.30,
+                                          child: Text("enterSerialNumber".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                        ),
+                                        Text(model.serialNumber ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                      ],
+                                    ),
                                     const SizedBox(height: 4,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -249,31 +250,31 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                                     ),
                                     const SizedBox(height: 4,),
                                     if (model.warehouseName ==null) Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("selectWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                              SizedBox(
-                                                height:30,
-                                                child: ElevatedButton(
-                                                  onPressed: ()async{
-                                                    if(viewModel.warehouseList == null){
-                                                      showProgress(context, true);
-                                                      await getWarehouse();
-                                                      showProgress(context, false);
-                                                    }
-                                                    showDistInventoryWarehouse(context,viewModel,model.poolDetailId!,getList);
-                                                  },
-                                                  style: elevatedButtonStyle(context),
-                                                  child:  Text("selectWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                ),
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("selectWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                            SizedBox(
+                                              height:30,
+                                              child: ElevatedButton(
+                                                onPressed: ()async{
+                                                  if(viewModel.warehouseList == null){
+                                                    showProgress(context, true);
+                                                    await getWarehouse();
+                                                    showProgress(context, false);
+                                                  }
+                                                  showDistInventoryWarehouse(context,viewModel,model.poolDetailId!,getList);
+                                                },
+                                                style: elevatedButtonStyle(context),
+                                                child:  Text("selectWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 4,),
-                                        ],
-                                      ) else Column(
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4,),
+                                      ],
+                                    ) else Column(
                                       children: [
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -354,18 +355,18 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                                     ),
                                     const SizedBox(height: 8,),
                                     if(model.isHistory == true)
-                                    SizedBox(
-                                      width: sizeWidth(context).width*0.8,
-                                      height: 30,
-                                      child: ElevatedButton(
-                                        onPressed: (){
-                                          Navigator.pushNamed(context, '/${PageName.stockHistory}',arguments: {"poolId":model.poolDetailId});
+                                      SizedBox(
+                                        width: sizeWidth(context).width*0.8,
+                                        height: 30,
+                                        child: ElevatedButton(
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, '/${PageName.stockHistory}',arguments: {"poolId":model.poolDetailId});
 
-                                        },
-                                        style: elevatedButtonStyle(context),
-                                        child:  Text("inventoryHistory".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                      ),
-                                    )
+                                          },
+                                          style: elevatedButtonStyle(context),
+                                          child:  Text("inventoryHistory".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                        ),
+                                      )
 
                                   ],
                                 ),
@@ -376,7 +377,7 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                       ),
                     ),
                   ),
-              
+
                 ],
               ),
             );

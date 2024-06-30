@@ -95,6 +95,8 @@ abstract class ApiService {
     return ApiService(ServiceModule().baseService("","",""));
   }
 
+  @GET(ApiEndpoints.assignStockBefore)
+  Future<bool> checkStockBefore(@Query("serial_number") String serialId);
 
   @POST(ApiEndpoints.login)
   Future<LoginUser> loginUser(@Body() Login user);

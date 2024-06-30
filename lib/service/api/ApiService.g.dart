@@ -21,6 +21,32 @@ class _ApiService implements ApiService {
   String? baseUrl;
 
   @override
+  Future<bool> checkStockBefore(String serialId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'serial_number': serialId};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<bool>(_setStreamType<bool>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/assign-stock-before',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
   Future<LoginUser> loginUser(Login user) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

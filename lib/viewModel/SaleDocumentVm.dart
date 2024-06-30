@@ -11,6 +11,8 @@ import 'package:wizzsales/utils/function/SharedPref.dart';
 import 'package:wizzsales/utils/res/SharedUtils.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../widgets/Constant.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class SaleDocumentVm extends ChangeNotifier{
@@ -34,9 +36,7 @@ class SaleDocumentVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.getSaleDocumentTypes().then((value) {
-        saleDocument = value;
-      });
+      saleDocument = await apiService.getSaleDocumentTypes();
 
     } catch (error) {
       if (error is DioException) {
@@ -62,9 +62,7 @@ class SaleDocumentVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.getSaleDocument(id).then((value) {
-        allSaleDocument = value;
-      });
+      allSaleDocument=  await apiService.getSaleDocument(id);
 
     } catch (error) {
       if (error is DioException) {

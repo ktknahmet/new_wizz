@@ -22,6 +22,7 @@ import 'package:wizzsales/model/languageModel/Languages.dart';
 import 'package:wizzsales/model/overrideModel/dealerOverrideWinner.dart';
 import 'package:wizzsales/utils/function/SharedPref.dart';
 import 'package:wizzsales/utils/res/SharedUtils.dart';
+import 'package:wizzsales/widgets/Extension.dart';
 import '../model/OLD/User.dart';
 
 List<Types> roleList = [
@@ -116,7 +117,7 @@ DateTime parseTime(String timeString, DateTime date) {
   double autoHeight(BuildContext context, double height) {
     double autoHeight=0.0;
 
-    print("ekran yüksekliği :$height");
+
 
     if(height<700){
       autoHeight = sizeWidth(context).height+110;
@@ -200,9 +201,7 @@ DateTime parseTime(String timeString, DateTime date) {
   }
   double reportsHeight(BuildContext context,double height){
     double autoHeight=0.0;
-    if (kDebugMode) {
-      print("ekran yüksekliği :$height");
-    }
+
     if(height<700){
       autoHeight = sizeWidth(context).height*0.60;
     }else if(height>=700 && height<800){
@@ -221,9 +220,7 @@ DateTime parseTime(String timeString, DateTime date) {
   }
   double expenseReportHeight(BuildContext context,double height){
     double autoHeight=0.0;
-    if (kDebugMode) {
-      print("ekran yüksekliği :$height");
-    }
+
     if(height<700){
       autoHeight = sizeWidth(context).height*0.58;
     }else if(height>=700 && height<800){
@@ -242,9 +239,7 @@ DateTime parseTime(String timeString, DateTime date) {
   }
 double photoHeight(BuildContext context,double height){
   double autoHeight=0.0;
-  if (kDebugMode) {
-    print("ekran yüksekliği :$height");
-  }
+
   if(height<700){
     autoHeight = sizeWidth(context).height*0.05;
   }else if(height>=700 && height<800){
@@ -263,9 +258,7 @@ double photoHeight(BuildContext context,double height){
 }
   double justList(BuildContext context,double height){
     double autoHeight=0.0;
-    if (kDebugMode) {
-      print("ekran yüksekliği :$height");
-    }
+
     if(height<700){
       autoHeight = sizeWidth(context).height*0.63;
     }else if(height>=700 && height<800){
@@ -1003,3 +996,17 @@ String? getOrganisationName(List<AllOrganisations>? organisations, int distribut
   }
 
 }
+Future<void> showErrorMessage(BuildContext context,String text) async{
+  try{
+
+    Map<String, dynamic> jsonData = json.decode(text);
+
+    String message = jsonData["message"];
+    valiDateInformation(context, message);
+
+  }catch(error){
+    return Future.error("hata mesajı :${error.toString()}");
+  }
+
+}
+

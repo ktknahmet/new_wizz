@@ -97,7 +97,7 @@ class _AllExpenseState extends State<AllExpense> {
 
                           const SizedBox(height: 8,),
                           SizedBox(
-                            height: justList(context,sizeWidth(context).height),
+                            height: justList(context,sizeWidth(context).height)-100,
                             child: RefreshIndicator(
                               onRefresh: getList,
                               color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -174,7 +174,7 @@ class _AllExpenseState extends State<AllExpense> {
 
               Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(

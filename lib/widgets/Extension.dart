@@ -1149,28 +1149,7 @@ selectAreaApptReport(BuildContext context,MyAppointmentVm viewModel){
   );
 }
 
-Future<void> showErrorMessage(BuildContext context,String text) async{
-  try{
-    String validationMessage ="";
-    Map<String, dynamic> jsonData = json.decode(text);
 
-    String message = jsonData["message"];
-    List<dynamic>? validations = jsonData["validations"];
-
-    if (validations == null) {
-      valiDateInformation(context, message);
-    } else {
-      for (var validation in validations) {
-        validationMessage  +=validation;
-      }
-      valiDateInformation(context, validationMessage);
-    }
-
-  }catch(error){
-    return Future.error("hata mesajı :${error.toString()}");
-  }
-
-}
 void valiDateInformation(BuildContext context, String errorMessage) {
   Future.delayed(const Duration(seconds: 0)).then((_) => {
     showModalBottomSheet(
@@ -3308,6 +3287,7 @@ Future<Map<String,dynamic>>selectWarehouseList(BuildContext context,StockVm view
   );
   return values;
 }
+
 showOrgList(BuildContext context,AdminOverrideVm viewModel){
     viewModel.query="";
   ScrollController controller = ScrollController();
@@ -5660,7 +5640,7 @@ barcodeSetDist(BuildContext context,StockVm viewModel){
   ScrollController controller = ScrollController();
   viewModel.orgQuery ="";
   showModalBottomSheet(
-      
+      isScrollControlled: true,
       context: context,
       backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
       shape: bottomSheetShape(context),
@@ -5703,7 +5683,7 @@ barcodeSetDist(BuildContext context,StockVm viewModel){
                         thumbColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
                         thickness: 1,
                         child: SizedBox(
-                          height: sizeWidth(context).height*0.6,
+                          height: sizeWidth(context).height*0.75,
                           child: ListView.builder(
                             controller: controller,
                             itemCount: viewModel.searchOrganisation(viewModel.organisations!,viewModel.orgQuery).length,
@@ -5731,6 +5711,7 @@ barcodeSetDist(BuildContext context,StockVm viewModel){
                                                  child: ElevatedButton(
                                                    onPressed: (){
                                                      viewModel.setAllDistId(model.name!, model.id!);
+                                                     viewModel.clearDistWarehouseName();
                                                      Navigator.pop(context);
 
                                                    },
@@ -6154,6 +6135,128 @@ showDistInventoryWarehouse(BuildContext context,StockVm viewModel,int poolId,Fun
                     children: [
                       const SizedBox(height: 40,),
                       SizedBox(
+                        width: sizeWidth(context).width*0.70,
+                        height: 40,
+                        child: TextField(
+                          onChanged: (value){
+                            viewModel.setQuery(value);
+                            viewModel.searchWarehouse(viewModel.warehouseList!,viewModel.query);
+                          },
+                          decoration: searchTextDesign(context, "search"),
+                          cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                          style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                        ),
+                      ),
+
+
+                      const SizedBox(height: 8,),
+                      SizedBox(
+                        height: sizeWidth(context).height*0.75,
+                        child: RawScrollbar(
+                          thumbColor:ColorUtil().getColor(context, ColorEnums.wizzColor) ,
+                          thumbVisibility: true,
+                          thickness: 1,
+                          trackVisibility: true,
+                          controller: controller,
+                          child:  ListView.builder(
+                            controller: controller,
+                            itemCount: viewModel.searchWarehouse(viewModel.warehouseList!,viewModel.query).length,
+                            itemBuilder: (context,index){
+                              WarehouseList model = viewModel.searchWarehouse(viewModel.warehouseList!,viewModel.query)[index];
+                              return  Card(
+                                shape: cardShape(context),
+                                color: ColorUtil().getColor(context, ColorEnums.background),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(model.warehouseName ?? "",style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                            const SizedBox(height: 4,),
+                                            Text(model.warehousePhone ?? "",style: CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                        child: ElevatedButton(
+                                          onPressed: ()async{
+                                            PostDistInventoryWarehouse post = PostDistInventoryWarehouse(
+                                                distributorWarehouseId: model.warehouseId,
+                                                poolDetailId: poolId
+                                            );
+                                            await viewModel.postDistWarehouse(context, post,function);
+
+                                          },
+                                          style: elevatedButtonStyle(context),
+                                          child: Text("add".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+
+
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8,right: 8,bottom: 16),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child:
+                          SizedBox(
+                            width: sizeWidth(context).width*0.80,
+                            child: ElevatedButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                              },
+                              style: elevatedButtonStyle(context),
+                              child: Text("back".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ]
+                ),
+              );
+            },
+          ),
+        );
+      }
+  );
+}
+showImporterWarehouse(BuildContext context,StockVm viewModel){
+  ScrollController controller = ScrollController();
+  viewModel.query="";
+  showModalBottomSheet(
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
+      backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
+      shape: bottomSheetShape(context),
+      constraints: BoxConstraints(
+        maxWidth:  sizeWidth(context).width,
+      ),
+      builder: (context){
+        return ChangeNotifierProvider.value(
+          value: viewModel,
+          child: Consumer<StockVm>(
+            builder: (context,value,_){
+              return SingleChildScrollView(
+                child: Column(
+                    children: [
+                      const SizedBox(height: 40,),
+                      SizedBox(
                           width: sizeWidth(context).width*0.70,
                           height: 40,
                           child: TextField(
@@ -6205,15 +6308,12 @@ showDistInventoryWarehouse(BuildContext context,StockVm viewModel,int poolId,Fun
                                                   height: 30,
                                                   child: ElevatedButton(
                                                     onPressed: ()async{
-                                                      PostDistInventoryWarehouse post = PostDistInventoryWarehouse(
-                                                        distributorWarehouseId: model.warehouseId,
-                                                        poolDetailId: poolId
-                                                      );
-                                                      await viewModel.postDistWarehouse(context, post,function);
+                                                     viewModel.setImporterWarehouseName(model.warehouseName!,model.warehouseId!);
+                                                     Navigator.pop(context);
 
                                                     },
                                                     style: elevatedButtonStyle(context),
-                                                    child: Text("add".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                    child: Text("select".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                                   ),
                                                 ),
 
@@ -7425,3 +7525,4 @@ showApptBoardDetails(BuildContext context,AppointmentBoard board){
       }
   );
 }
+

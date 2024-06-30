@@ -30,6 +30,7 @@ void main() async{
             Locale('de', 'DE'), // Almanca (Almanya)
             Locale('pt', 'BR'), // Portekizce (Brezilya)
             Locale('ru', 'RU'), // rusça
+            //Locale('bs', 'BA'), // Bosnian (Bosna-Hersek)
           ],
           path: 'assets/language',
           fallbackLocale: const Locale('en', 'US'),

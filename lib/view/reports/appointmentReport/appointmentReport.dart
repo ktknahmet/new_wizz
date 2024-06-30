@@ -1,20 +1,15 @@
-import 'package:animate_do/animate_do.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:wizzsales/constants/ColorsUtil.dart';
 import 'package:wizzsales/model/OLD/register/LoginUser.dart';
-import 'package:wizzsales/model/leadReportModel/demoLeadReportModel.dart';
-import 'package:wizzsales/utils/function/SharedPref.dart';
-import 'package:wizzsales/utils/res/SharedUtils.dart';
 import 'package:wizzsales/utils/style/ColorEnums.dart';
 import 'package:wizzsales/utils/style/CustomTextStyle.dart';
 import 'package:wizzsales/utils/style/ReportAppBar.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/view/reports/appointmentReport/appointmentGrid.dart';
-import 'package:wizzsales/view/setAppointment/editAppointment.dart';
 import 'package:wizzsales/viewModel/MyAppointmentVm.dart';
 import 'package:syncfusion_flutter_core/theme.dart' show SfDataGridTheme, SfDataGridThemeData;
 import 'package:wizzsales/widgets/Constant.dart';
@@ -49,6 +44,7 @@ class _AppointmentReportState extends State<AppointmentReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorUtil().getColor(context,ColorEnums.background),
       appBar: ReportAppBar(
         name: "appointmentReport".tr(),
         func: () async {

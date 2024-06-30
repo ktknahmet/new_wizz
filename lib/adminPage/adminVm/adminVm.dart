@@ -18,6 +18,8 @@ import 'package:wizzsales/utils/res/SharedUtils.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
+import '../../widgets/Constant.dart';
+
 class AdminVm extends ChangeNotifier{
   SharedPref pref = SharedPref();
   CListModel? cListModel;
@@ -116,9 +118,7 @@ class AdminVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.getStockReportListAllData(export).then((value) {
-        dataDetails = value;
-      });
+      dataDetails = await apiService.getStockReportListAllData(export);
 
     } catch (error) {
       if (error is DioException) {

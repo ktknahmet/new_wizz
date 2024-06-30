@@ -136,7 +136,7 @@ abstract class AdminApiService{
   @POST("https://hylana.wizz.app/api/v16/stock-pools/products")
   Future<StockPostResponse> postPool(@Body() PoolProductSave save);
 
-  @POST("https://hylana.wizz.app/api/v16/assigne-stock")
+  @POST("https://hylana.wizz.app/api/v16/assign-stock")
   Future<String> detailsPost(@Body() List<PoolDistributor> poolDistributor);
 
   @POST(ApiEndpoints.postDistContract)

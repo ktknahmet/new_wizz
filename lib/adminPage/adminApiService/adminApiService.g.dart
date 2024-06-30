@@ -817,7 +817,7 @@ class _AdminApiService implements AdminApiService {
     )
         .compose(
           _dio.options,
-          'https://hylana.wizz.app/api/v16/assigne-stock',
+          'https://hylana.wizz.app/api/v16/assign-stock',
           queryParameters: queryParameters,
           data: _data,
         )

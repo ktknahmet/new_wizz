@@ -84,7 +84,7 @@ class ApiEndpoints {
   static const String getSocial="/users/socialmedia";
   static const String goalsDetails ="/usergoals";
   static const String reportDetails='/dashboard/report/v2';
-
+  static const String assignStockBefore ="/assign-stock-before";
   static const String getDistributorContract ="/api/WizzEndpoints/contracts/distributors/{distributorId}";
   static const String distributorContractType ="/api/WizzEndpoints/contracts/{distributorId}";
   static const String postDistContract ="/api/WizzEndpoints/contracts/distributors";

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +48,7 @@ class _StockDetailsState extends State<StockDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
-      appBar: DefaultAppBar(name: "seeDetails".tr(),),
+      appBar: DefaultAppBar(name: "assignedStocks".tr(),),
       body: SizedBox(
         width: sizeWidth(context).width,
         height: sizeWidth(context).height,
@@ -57,10 +56,85 @@ class _StockDetailsState extends State<StockDetails> {
           value: viewModel,
           child: Consumer<StockVm>(
             builder: (context,value,_){
-              if(viewModel.organisations == null || viewModel.poolList == null){
+              if(viewModel.organisations == null){
                 return spinKit(context);
-              }else if(viewModel.poolList!.isEmpty){
-                return emptyView(context, "youMustAssignProduct");
+              }else if(viewModel.poolList.isEmpty){
+                return Column(
+                  children: [
+                    viewModel.status!.isGranted ?
+                    SizedBox(
+                      height: sizeWidth(context).height*0.12,
+                      width: sizeWidth(context).width*0.8,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: QRView(
+                              key: viewModel.qrKey,
+                              onQRViewCreated: (controller) {
+                                viewModel.checkProductControl(context, controller, viewModel.poolList);
+                              },
+                              overlay: QrScannerOverlayShape(
+                                borderColor: ColorUtil().getColor(context, ColorEnums.error),
+                                borderRadius: 24,
+                                borderLength: 30,
+                                borderWidth: 10,)
+                          )
+                      ),
+                    ):Column(
+                      children: [
+                        spinKit(context),
+                        Text("redirectSettingsForCamera".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                        const SizedBox(height: 8,),
+                        ElevatedButton(
+                          onPressed: (){
+                            openAppSettings();
+                          },
+                          style: elevatedButtonStyle(context),
+                          child: Text("givePermission".tr(),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16,),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8,right: 8,top: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: sizeWidth(context).width*0.4,
+                            height: 40,
+                            child: TextField(
+                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                              cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                              decoration: dateInputDecoration(context,"selectDist"),
+                              controller: viewModel.distributorId,
+                              readOnly: true,
+                              onTap: () async{
+                                barcodeSetDist(context,viewModel);
+                              },
+                            ),
+                          ),
+                          if(viewModel.poolList.isNotEmpty)
+                          SizedBox(
+                            width: sizeWidth(context).width*0.4,
+                            height: 40,
+                            child: TextField(
+                              onChanged: (value){
+                                viewModel.setQuery(value);
+                                viewModel.searchProduct(viewModel.poolList,viewModel.query);
+                              },
+                              decoration: searchTextDesign(context, "search"),
+                              cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4,),
+                    emptyView(context, "youMustAssignProduct"),
+
+                  ],
+                );
               }else{
                 return  SingleChildScrollView(
                   child: Column(
@@ -74,7 +148,7 @@ class _StockDetailsState extends State<StockDetails> {
                             child: QRView(
                                 key: viewModel.qrKey,
                                 onQRViewCreated: (controller) {
-                                  viewModel.checkProductControl(context, controller, viewModel.poolList!);
+                                  viewModel.checkProductControl(context, controller, viewModel.poolList);
                                 },
                                 overlay: QrScannerOverlayShape(
                                   borderColor: ColorUtil().getColor(context, ColorEnums.error),
@@ -124,7 +198,7 @@ class _StockDetailsState extends State<StockDetails> {
                               child: TextField(
                                 onChanged: (value){
                                   viewModel.setQuery(value);
-                                  viewModel.searchProduct(viewModel.poolList!,viewModel.query);
+                                  viewModel.searchProduct(viewModel.poolList,viewModel.query);
                                 },
                                 decoration: searchTextDesign(context, "search"),
                                 cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -148,9 +222,9 @@ class _StockDetailsState extends State<StockDetails> {
                             controller: controller,
                             child: ListView.builder(
                               controller: controller,
-                              itemCount:  viewModel.searchProduct(viewModel.poolList!,viewModel.query).length,
+                              itemCount:  viewModel.searchProduct(viewModel.poolList,viewModel.query).length,
                               itemBuilder: (context,index){
-                                PoolListDetails value = viewModel.searchProduct(viewModel.poolList!,viewModel.query)[index];
+                                PoolListDetails value = viewModel.searchProduct(viewModel.poolList,viewModel.query)[index];
 
                                 return  Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -171,8 +245,6 @@ class _StockDetailsState extends State<StockDetails> {
                                                 ],
                                               ),
                                               const SizedBox(height: 4,),
-
-
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -200,7 +272,7 @@ class _StockDetailsState extends State<StockDetails> {
                                                           ),
                                                           onChanged: (AllOrganisations? newValue) {
                                                             if (newValue != null) {
-                                                              viewModel.setDistId(index, newValue.id!);
+                                                              viewModel.setDistId(value.serialNumber!, newValue.id!);
                                                             }
                                                           },
                                                           items: viewModel.organisations!.map<DropdownMenuItem<AllOrganisations>>((AllOrganisations organisation) {
@@ -227,7 +299,7 @@ class _StockDetailsState extends State<StockDetails> {
                                                   children: [
                                                     Text("distWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
 
-                                                    value.distId ==null ?
+                                                    value.distWarehouseId ==null ?
                                                     SizedBox(
                                                       height:30,
                                                       child: ElevatedButton(
@@ -241,9 +313,7 @@ class _StockDetailsState extends State<StockDetails> {
 
 
                                                             if(warehouseMap["distId"] !=null){
-                                                              value.distId = warehouseMap["distId"];
-                                                              value.distWarehouseName = warehouseMap["warehouseName"];
-
+                                                              viewModel.setDistSpesificWarehouse(index,warehouseMap["distId"],warehouseMap["warehouseName"]);
                                                             }
                                                           }else{
                                                             snackBarDesign(context, StringUtil.warning, "You must add warehouse.");
@@ -340,18 +410,18 @@ class _StockDetailsState extends State<StockDetails> {
   }
   post() async{
 
-    for(int i=0;i<viewModel.poolList!.length;i++){
-      PoolListDetails value = viewModel.poolList![i];
+    for(int i=0;i<viewModel.poolList.length;i++){
+      PoolListDetails value = viewModel.poolList[i];
       if(value.assignedToDistributor ==false && value.distributorId !=0){
         PoolDistributor  pool = PoolDistributor(
-            poolDetailId: value.poolDetailId,
+            serialNumber: value.serialNumber,
             distributorId: value.distributorId,
-            distWarehouseId: value.distId
+            distWarehouseId: value.distWarehouseId
         );
         viewModel.postList.add(pool);
       }else{
         viewModel.postList.removeWhere((element) =>
-            element.poolDetailId == value.poolDetailId);
+            element.serialNumber == value.serialNumber);
       }
     }
     if(viewModel.postList.isNotEmpty){
@@ -365,9 +435,7 @@ class _StockDetailsState extends State<StockDetails> {
     PostStockPay pay = PostStockPay(poolDetailId: id);
     await viewModel.postPay(context, pay,widget.id,index);
   }
-
   Future<void> getWarehouses(int id)async{
     await viewModel.getWarehouse(context,id);
   }
-
 }

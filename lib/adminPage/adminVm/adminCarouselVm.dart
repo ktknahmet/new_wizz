@@ -13,6 +13,8 @@ import 'package:wizzsales/utils/res/StringUtils.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../../widgets/Constant.dart';
 // ignore_for_file: use_build_context_synchronously
 class AdminCarouselVm extends ChangeNotifier{
   SharedPref pref = SharedPref();

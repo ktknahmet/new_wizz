@@ -53,6 +53,7 @@ import 'package:wizzsales/adminPage/adminSale/adminSaleTabBar/AdminCustomerTabBa
 import 'package:wizzsales/adminPage/adminSale/adminSaleTabBar/AdminSaleTabBar.dart';
 import 'package:wizzsales/adminPage/adminSetting/adminSettings.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/addWarehouse.dart';
+import 'package:wizzsales/adminPage/adminStockManagament/pages/assignGlobalStock.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/setWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/updateWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/stockManagament.dart';
@@ -167,6 +168,9 @@ class RouteGenerator {
 
       case '/${PageName.stockManagement}':
         return MaterialPageRoute(builder: (_) =>   StockManagement("importerInventory".tr()));
+
+      case '/${PageName.assignGlobalStock}':
+        return MaterialPageRoute(builder: (_) =>   AssignGlobalStock("assignStock".tr()));
 
       case '/${PageName.overrideSettingsPage}':
         return MaterialPageRoute(builder: (_) =>   OverrideSettings("overrideSettings".tr()));
@@ -503,7 +507,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>  AdminSaleDetails(sale));
 
       case '/${PageName.adminStockPages}':
-        return MaterialPageRoute(builder: (_) =>   StockPage("stock".tr()));
+        return MaterialPageRoute(builder: (_) =>   StockPage("importerInventory".tr()));
 
       case '/${PageName.addBonusScreen}':
         return MaterialPageRoute(builder: (_) =>   const AdminAddBonus());

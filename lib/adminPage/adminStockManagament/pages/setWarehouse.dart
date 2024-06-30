@@ -9,14 +9,12 @@ import 'package:wizzsales/model/OLD/register/LoginUser.dart';
 import 'package:wizzsales/utils/basePage/BaseStateful.dart';
 import 'package:wizzsales/utils/function/SharedPref.dart';
 import 'package:wizzsales/utils/res/PageName.dart';
-import 'package:wizzsales/utils/res/SharedUtils.dart';
 import 'package:wizzsales/utils/style/ColorEnums.dart';
 import 'package:wizzsales/utils/style/CustomTextStyle.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
-
 import '../../../model/OLD/User.dart';
 
 class SetWarehouses extends BaseStatefulPage {
@@ -25,6 +23,7 @@ class SetWarehouses extends BaseStatefulPage {
   @override
   State<StatefulWidget> createState() => _SetWarehousesState();
 }
+
 
 class _SetWarehousesState extends BaseStatefulPageState<SetWarehouses> {
   WarehouseVm viewModel = WarehouseVm();
@@ -51,6 +50,7 @@ class _SetWarehousesState extends BaseStatefulPageState<SetWarehouses> {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  if(viewModel.warehouseList!.isNotEmpty)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -303,7 +303,6 @@ class _SetWarehousesState extends BaseStatefulPageState<SetWarehouses> {
                                         ),
                                       ],
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -341,9 +340,9 @@ class _SetWarehousesState extends BaseStatefulPageState<SetWarehouses> {
   }
 
   Future<void> getList()async{
-
     await viewModel.getWarehouse(context);
   }
+
   delete(int warehouseId)async{
     WarehouseDelete delete = WarehouseDelete(
       warehouseId: warehouseId

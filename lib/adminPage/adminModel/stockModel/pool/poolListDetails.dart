@@ -19,10 +19,10 @@ class PoolListDetails {
   int? distributorId;
   bool? assignedToDistributor;
   bool? isPaid;
-  dynamic paidDate;
+  String? paidDate;
   String? importerWarehouseName;
   String? distWarehouseName;
-  int? distId;
+  int? distWarehouseId;
 
   PoolListDetails({
     this.poolDetailId,
@@ -38,7 +38,7 @@ class PoolListDetails {
     this.paidDate,
     this.importerWarehouseName,
     this.distWarehouseName,
-    this.distId
+    this.distWarehouseId,
   });
 
   factory PoolListDetails.fromJson(Map<String, dynamic> json) => PoolListDetails(

@@ -9,24 +9,24 @@ List<PoolDistributor> poolDistributorFromJson(String str) => List<PoolDistributo
 String poolDistributorToJson(List<PoolDistributor> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class PoolDistributor {
-  int? poolDetailId;
+  String? serialNumber;
   int? distributorId;
   int? distWarehouseId;
 
   PoolDistributor({
-    this.poolDetailId,
+    this.serialNumber,
     this.distributorId,
     this.distWarehouseId
   });
 
   factory PoolDistributor.fromJson(Map<String, dynamic> json) => PoolDistributor(
-    poolDetailId: json["pool_detail_id"],
+    serialNumber: json["serial_number"],
     distributorId: json["distributor_id"],
     distWarehouseId: json["distributor_warehouse_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "pool_detail_id": poolDetailId,
+    "serial_number": serialNumber,
     "distributor_id": distributorId,
     "distributor_warehouse_id": distWarehouseId,
   };
