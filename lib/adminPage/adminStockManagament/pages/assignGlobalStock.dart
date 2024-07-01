@@ -138,6 +138,8 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                           onSubmitted: (String value){
                             if(value.length ==8){
                               //tüm poollarda arama yapacak ve ekleme yapacak
+                            }else{
+
                             }
                           },
                           decoration: searchTextDesign(context, "search"),
@@ -255,7 +257,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                                 children: [
                                                   Text("distWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
 
-                                                  value.distWarehouseId ==null ?
+                                                  value.distWarehouseId !=null ?
                                                   SizedBox(
                                                     height:30,
                                                     child: ElevatedButton(
@@ -307,7 +309,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                     ),
                                   ],
                                 ),
-                                                            ),
+                               ),
                               );
                           },
                         ),

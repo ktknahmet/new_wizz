@@ -494,9 +494,18 @@ class _AdminApiService implements AdminApiService {
 
   @override
   Future<List<StockReportDataDetails>> getStockReportListAllData(
-      String? export) async {
+    String? beginDate,
+    String? endDate,
+    int? distId,
+    String? download,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'export': export};
+    final queryParameters = <String, dynamic>{
+      r'beginDate': beginDate,
+      r'endDate': endDate,
+      r'distributor_id': distId,
+      r'export': download,
+    };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;

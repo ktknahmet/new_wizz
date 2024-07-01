@@ -100,7 +100,10 @@ abstract class AdminApiService{
 
   @GET("https://hylana.wizz.app/api/v16/stock-pools/reports")
   Future<List<StockReportDataDetails>> getStockReportListAllData(
-      @Query("export") String? export);
+      @Query("beginDate") String? beginDate,
+      @Query("endDate") String? endDate,
+      @Query("distributor_id") int? distId,
+      @Query("export") String? download);
 
   @PATCH(ApiEndpoints.approveRewardOrder)
   Future<AdminResponse> updateApproveReward(@Path("transactionCode") String code);

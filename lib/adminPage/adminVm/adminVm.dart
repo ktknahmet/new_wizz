@@ -28,7 +28,7 @@ class AdminVm extends ChangeNotifier{
   ReferralModel? referralModel;
   CustomerEventModel? customerEventModel;
   AdminResponse? response;
-  List<StockReportDataDetails>? dataDetails;
+
   List<Map<String, bool>> gridMap = [];
 
   int stockReportSize=1;
@@ -111,34 +111,7 @@ class AdminVm extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void>stockReportAllData(BuildContext context,String export) async{
-    String token = await pref.getString(context, SharedUtils.userToken);
 
-    showProgress(context, true);
-    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
-    notifyListeners();
-    try {
-      dataDetails = await apiService.getStockReportListAllData(export);
-
-    } catch (error) {
-      if (error is DioException) {
-        final res = error.response;
-        if (res?.statusCode == 400) {
-          String jsonString = json.encode(res!.data);
-          showErrorMessage(context,jsonString);
-        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
-          await deleteToken(context);
-        }
-      } else {
-        print("General error: $error");
-      }
-    } finally {
-      showProgress(context, false);
-      notifyListeners();
-
-    }
-
-  }
 
   Future<void>usedOrderReward(BuildContext context,String code) async{
     String token = await pref.getString(context, SharedUtils.userToken);

@@ -1624,10 +1624,10 @@ Future<void> generateAndOpenExcel(BuildContext context,List<StockReportDataDetai
   // Add data
   int rowIndex = 2; // Start from row 2 (after headers)
   for (var item in dataDetails) {
-    sheet.getRangeByIndex(rowIndex, 1).setText(item.product_name!);
+    sheet.getRangeByIndex(rowIndex, 1).setText(item.productName!);
     sheet.getRangeByIndex(rowIndex, 2).setText(mmDDYDate(item.stockDate.toString()));
     sheet.getRangeByIndex(rowIndex, 3).setText(item.serialNumber!);
-    sheet.getRangeByIndex(rowIndex, 4).setText(item.distributor_name ?? "");
+    sheet.getRangeByIndex(rowIndex, 4).setText(item.distName ?? "");
     sheet.getRangeByIndex(rowIndex, 5).setText(mmDDYDate(item.createdAt.toString()));
     sheet.getRangeByIndex(rowIndex, 6).setText(mmDDYDate(item.updatedAt.toString()));
 
@@ -3287,9 +3287,8 @@ Future<Map<String,dynamic>>selectWarehouseList(BuildContext context,StockVm view
   );
   return values;
 }
-
 showOrgList(BuildContext context,AdminOverrideVm viewModel){
-    viewModel.query="";
+  viewModel.query="";
   ScrollController controller = ScrollController();
   showModalBottomSheet(
       isScrollControlled: true,
@@ -3378,6 +3377,99 @@ showOrgList(BuildContext context,AdminOverrideVm viewModel){
         );
       }
   );
+}
+Future<int?>showOrgInventoryDist(BuildContext context,WarehouseVm viewModel)async{
+    viewModel.query="";
+  ScrollController controller = ScrollController();
+  await showModalBottomSheet(
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
+      backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
+      shape: bottomSheetShape(context),
+      constraints: BoxConstraints(
+        maxWidth:  sizeWidth(context).width,
+      ),
+      builder: (context){
+        return ChangeNotifierProvider.value(
+          value: viewModel,
+          child: Consumer<WarehouseVm>(
+            builder: (context,value,_){
+              return SingleChildScrollView(
+                child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 40),
+                        child: SizedBox(
+                          width: sizeWidth(context).width*0.70,
+                          height: 40,
+                          child: TextField(
+                            onChanged: (value){
+                              viewModel.setQuery(value);
+
+                              viewModel.searchDist(viewModel.organisations!,viewModel.query);
+                            },
+                            decoration: searchTextDesign(context, "search"),
+                            cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                            style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8,),
+                      SizedBox(
+                        height: sizeWidth(context).height*0.75,
+                        child: RawScrollbar(
+                          thumbColor:ColorUtil().getColor(context, ColorEnums.wizzColor) ,
+                          thumbVisibility: true,
+                          thickness: 1,
+                          trackVisibility: true,
+                          controller: controller,
+                          child: ListView.builder(
+                            controller: controller,
+                            itemCount:  viewModel.searchDist(viewModel.organisations!,viewModel.query).length,
+                            itemBuilder: (context,index){
+                              AllOrganisations model =viewModel.searchDist(viewModel.organisations!,viewModel.query)[index];
+                              return Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: GestureDetector(
+                                  onTap: (){
+                                    viewModel.setDistIdForReport(model.name!,model.id!);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Card(
+                                      shape: cardShape(context),
+                                      color: ColorUtil().getColor(context, ColorEnums.background),
+                                      elevation: 4,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child:Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(model.name ?? "",style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+
+                                          ],
+                                        ),
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
+
+                    ]
+                ),
+              );
+            },
+          ),
+        );
+      }
+
+  );
+  return viewModel.distId;
 }
 selectDistWarehouse(BuildContext context,WarehouseVm viewModel){
   viewModel.query="";

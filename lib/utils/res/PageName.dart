@@ -8,6 +8,7 @@ class PageName{
   static const String mainHome="MainHome";
   static const String home="Home";
   static const String sale="Sale";
+  static const String importerInventoryReport ="Importer Inventory Report";
   static const String logout ="Log Out";
   static const String resources="Resources";
   static const String myAccount="My Account";

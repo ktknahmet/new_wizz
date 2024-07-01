@@ -9,8 +9,8 @@ class StockReportDataDetails {
   DateTime? createdAt;
   DateTime? updatedAt;
   bool? assignedToDistributor;
-  String? product_name;
-  String? distributor_name;
+  String? productName;
+  String? distName;
 
   StockReportDataDetails({
     this.poolDetailId,
@@ -23,8 +23,8 @@ class StockReportDataDetails {
     this.createdAt,
     this.updatedAt,
     this.assignedToDistributor,
-    this.product_name,
-    this.distributor_name
+    this.productName,
+    this.distName
   });
 
   factory StockReportDataDetails.fromJson(Map<String, dynamic> json) => StockReportDataDetails(
@@ -38,8 +38,8 @@ class StockReportDataDetails {
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
     assignedToDistributor: json["assigned_to_distributor"],
-    product_name: json["product_name"],
-    distributor_name: json["distributor_name"],
+    productName: json["product_name"],
+    distName: json["distributor_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -53,7 +53,7 @@ class StockReportDataDetails {
     "created_at": createdAt!.toIso8601String(),
     "updated_at": updatedAt!.toIso8601String(),
     "assigned_to_distributor": assignedToDistributor,
-    "product_name": product_name,
-    "distributor_name": distributor_name,
+    "product_name": productName,
+    "distributor_name": distName,
   };
 }

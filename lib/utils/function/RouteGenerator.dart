@@ -56,6 +56,7 @@ import 'package:wizzsales/adminPage/adminStockManagament/pages/addWarehouse.dart
 import 'package:wizzsales/adminPage/adminStockManagament/pages/assignGlobalStock.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/setWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/updateWarehouse.dart';
+import 'package:wizzsales/adminPage/adminStockManagament/report/importerInventoryReport.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/stockManagament.dart';
 import 'package:wizzsales/adminPage/inventory/distStock.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/stockDetails.dart';
@@ -162,6 +163,12 @@ class RouteGenerator {
 
       case '/${PageName.digitalSignature}':
         return MaterialPageRoute(builder: (_) =>  const Signature());
+
+      case '/${PageName.inventoryReportPage}':
+        return MaterialPageRoute(builder: (_) =>  const InventoryReport());
+
+      case '/${PageName.importerInventoryReport}':
+        return MaterialPageRoute(builder: (_) =>  const ImporterInventoryReport());
 
       case '/${PageName.dealerOverridePage}':
         return MaterialPageRoute(builder: (_) =>  const DealerOverrideWinner());

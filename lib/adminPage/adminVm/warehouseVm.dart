@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wizzsales/adminPage/adminApiService/adminApiService.dart';
 import 'package:wizzsales/adminPage/adminModel/stockModel/organisations/allOrganisations.dart';
@@ -19,9 +20,9 @@ import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
-
 import '../../model/OLD/User.dart';
-
+import '../adminModel/stockReportModel/stockReportData.dart';
+// ignore_for_file: use_build_context_synchronously
 class WarehouseVm extends ChangeNotifier{
   SharedPref pref = SharedPref();
   List<WarehouseList>? warehouseList;
@@ -33,17 +34,44 @@ class WarehouseVm extends ChangeNotifier{
   String? postResponse;
   String? cCountryCode;
   String query ="";
-  TextEditingController distInfo = TextEditingController();
+  TextEditingController distInfo = TextEditingController(text:"selectDist".tr());
   List<AllOrganisations>? organisations;
   int type=1;
+  List<StockReportDataDetails>? dataDetails;
+  List<Map<String, bool>> gridMap = [];
 
+  addGridMap(Map<String,bool> map){
+    gridMap.add(map);
+    notifyListeners();
+  }
+
+  setGridMap(String key,bool value) {
+
+    for (int i = 0; i < gridMap.length; i++) {
+      if (gridMap[i].containsKey(key)) { // Belirtilen anahtarı içerip içermediğini kontrol et
+        gridMap[i][key] = value; // Değerini tersine çevir
+      }
+    }
+    notifyListeners();
+  }
 
   setType(int value){
     type = value;
     notifyListeners();
   }
+  setDistIdForReport(String name,int id){
+    distInfo.text = name;
+    distName = name;
+    if(id ==0){
+      distId =null;
+    }else{
+      distId = id;
+    }
 
+    notifyListeners();
+  }
   setDistId(String name,int id){
+    distInfo.text = name;
     distName = name;
     distId = id;
     notifyListeners();
@@ -63,13 +91,15 @@ class WarehouseVm extends ChangeNotifier{
     user ??= await getUserUser(context);
     notifyListeners();
   }
+
+
   List<AllOrganisations> searchDist(List<AllOrganisations> list, String query) {
 
     if (query.isEmpty) {
       return list;
     }
     List<AllOrganisations> filteredList = list.where((resource) =>
-    resource.name!.toLowerCase().contains(query.toLowerCase())).toList();
+    (resource.name != null && resource.name!.toLowerCase().contains(query.toLowerCase()))).toList();
 
     return filteredList;
   }
@@ -238,20 +268,46 @@ class WarehouseVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.allOrganisations().then((value) {
-        organisations = value;
-      });
+      organisations = await apiService.allOrganisations();
 
     } catch (error) {
       if (error is DioException) {
         final res = error.response;
         if (res?.statusCode == 400) {
-          showErrorMessage(context,"Error");
+          snackBarDesign(context, StringUtil.error, res!.data);
         }
       }
     } finally {
       notifyListeners();
 
     }
+  }
+  Future<void>stockReportAllData(BuildContext context,String? begin,String? end,int? distId,String? export) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+
+    showProgress(context, true);
+    AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
+    notifyListeners();
+    try {
+      dataDetails = await apiService.getStockReportListAllData(begin,end,distId,export);
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          String jsonString = json.encode(res!.data);
+          showErrorMessage(context,jsonString);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+
+    }
+
   }
 }
