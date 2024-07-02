@@ -60,77 +60,8 @@ class _StockDetailsState extends State<StockDetails> {
                 return spinKit(context);
               }else if(viewModel.poolList.isEmpty){
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    viewModel.status!.isGranted ?
-                    SizedBox(
-                      height: sizeWidth(context).height*0.12,
-                      width: sizeWidth(context).width*0.8,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: QRView(
-                              key: viewModel.qrKey,
-                              onQRViewCreated: (controller) {
-                                viewModel.checkProductControl(context, controller, viewModel.poolList);
-                              },
-                              overlay: QrScannerOverlayShape(
-                                borderColor: ColorUtil().getColor(context, ColorEnums.error),
-                                borderRadius: 24,
-                                borderLength: 30,
-                                borderWidth: 10,)
-                          )
-                      ),
-                    ):Column(
-                      children: [
-                        spinKit(context),
-                        Text("redirectSettingsForCamera".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                        const SizedBox(height: 8,),
-                        ElevatedButton(
-                          onPressed: (){
-                            openAppSettings();
-                          },
-                          style: elevatedButtonStyle(context),
-                          child: Text("givePermission".tr(),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 16,),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8,right: 8,top: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: sizeWidth(context).width*0.4,
-                            height: 40,
-                            child: TextField(
-                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-                              cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                              decoration: dateInputDecoration(context,"selectDist"),
-                              controller: viewModel.distributorId,
-                              readOnly: true,
-                              onTap: () async{
-                                barcodeSetDist(context,viewModel);
-                              },
-                            ),
-                          ),
-                          if(viewModel.poolList.isNotEmpty)
-                          SizedBox(
-                            width: sizeWidth(context).width*0.4,
-                            height: 40,
-                            child: TextField(
-                              onChanged: (value){
-                                viewModel.setQuery(value);
-                                viewModel.searchProduct(viewModel.poolList,viewModel.query);
-                              },
-                              decoration: searchTextDesign(context, "search"),
-                              cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
-                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 4,),
                     emptyView(context, "youMustAssignProduct"),
 
                   ],
@@ -176,11 +107,10 @@ class _StockDetailsState extends State<StockDetails> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8,right: 8,top: 16),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             SizedBox(
-                              width: sizeWidth(context).width*0.4,
-                              height: 40,
+                              width: sizeWidth(context).width*0.3,
                               child: TextField(
                                 style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
                                 cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -193,7 +123,7 @@ class _StockDetailsState extends State<StockDetails> {
                               ),
                             ),
                             SizedBox(
-                              width: sizeWidth(context).width*0.4,
+                              width: sizeWidth(context).width*0.3,
                               height: 40,
                               child: TextField(
                                 onChanged: (value){
@@ -205,6 +135,17 @@ class _StockDetailsState extends State<StockDetails> {
                                 style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
                               ),
                             ),
+                            SizedBox(
+                              width: sizeWidth(context).width*0.3,
+                              child: ElevatedButton(
+                                onPressed: () async{
+                                  await post();
+                                },
+                                style: elevatedButtonStyle(context),
+                                child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                              ),
+                            ),
+
                           ],
                         ),
                       ),
@@ -344,7 +285,7 @@ class _StockDetailsState extends State<StockDetails> {
                                                     Text(mmDDYDate(value.paidDate),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                   ],
                                                 ),
-                                              if(value.distributorId !=0)
+                                              if(value.distributorId !=0 && value.isPaid == false)
                                                 Padding(
                                                   padding: const EdgeInsets.only(top: 8),
                                                   child: SizedBox(
@@ -375,22 +316,7 @@ class _StockDetailsState extends State<StockDetails> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: SizedBox(
-                            width: sizeWidth(context).width*0.80,
-                            child: ElevatedButton(
-                              onPressed: () async{
-                                await post();
-                              },
-                              style: elevatedButtonStyle(context),
-                              child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                            ),
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 );

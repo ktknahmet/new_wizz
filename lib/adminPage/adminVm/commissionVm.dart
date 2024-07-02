@@ -327,6 +327,16 @@ class CommissionVm extends ChangeNotifier{
 
   }
 
+  List<CommisionList> searchRate(List<CommisionList> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<CommisionList> filteredList = list.where((resource) =>
+        (resource.roleViewName != null && resource.roleViewName!.toLowerCase().contains(query.toLowerCase())) ||
+        (resource.dealerName != null && resource.dealerName!.toLowerCase().contains(query.toLowerCase()))
+    ).toList();
+    return filteredList;
+  }
   List<StockDealer> searchDealer(List<StockDealer> list, String query) {
     if (query.isEmpty) {
       return list;

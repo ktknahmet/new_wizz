@@ -27,6 +27,7 @@ import 'package:wizzsales/adminPage/adminModel/commissionModel/payPost.dart';
 import 'package:wizzsales/adminPage/adminModel/commissionModel/postAdjust.dart';
 import 'package:wizzsales/adminPage/adminModel/customerEventModel/RewardEvent.dart';
 import 'package:wizzsales/adminPage/adminModel/customerEventModel/RewardEventActivityDetailDocuments.dart';
+import 'package:wizzsales/adminPage/adminModel/inventoryModel/allAssignStock.dart';
 import 'package:wizzsales/adminPage/adminModel/inventoryModel/postDistInventoryWarehouse.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/orgDetails.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/overrideUserList.dart';
@@ -3569,6 +3570,139 @@ selectDistWarehouse(BuildContext context,WarehouseVm viewModel){
       }
   );
 }
+selectAssignStockList(BuildContext context,StockVm viewModel){
+  viewModel.query="";
+  ScrollController controller = ScrollController();
+  showModalBottomSheet(
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
+      backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
+      shape: bottomSheetShape(context),
+      constraints: BoxConstraints(
+        maxWidth:  sizeWidth(context).width,
+      ),
+      builder: (context){
+        return ChangeNotifierProvider.value(
+          value: viewModel,
+          child: Consumer<StockVm>(
+            builder: (context,value,_){
+              return SingleChildScrollView(
+                child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 40),
+                        child: SizedBox(
+                          width: sizeWidth(context).width*0.70,
+                          height: 40,
+                          child: TextField(
+                            onChanged: (value){
+                              viewModel.setQuery(value);
+
+                              viewModel.searchAssignStock(viewModel.allAssignStock!,viewModel.query);
+                            },
+                            decoration: searchTextDesign(context, "search"),
+                            cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                            style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8,),
+                      SizedBox(
+                        height: sizeWidth(context).height*0.75,
+                        child: RawScrollbar(
+                          thumbColor:ColorUtil().getColor(context, ColorEnums.wizzColor) ,
+                          thumbVisibility: true,
+                          thickness: 1,
+                          trackVisibility: true,
+                          controller: controller,
+                          child: ListView.builder(
+                            controller: controller,
+                            itemCount:   viewModel.searchAssignStock(viewModel.allAssignStock!,viewModel.query).length,
+                            itemBuilder: (context,index){
+                              AllAssignStock model = viewModel.searchAssignStock(viewModel.allAssignStock!,viewModel.query)[index];
+                              return Card(
+                                  shape: cardShape(context),
+                                  color: ColorUtil().getColor(context, ColorEnums.background),
+                                  elevation: 4,
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child:Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(model.serialNumber ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                const SizedBox(height: 4,),
+                                                Text(model.productName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                const SizedBox(height: 4,),
+                                                Text(mmDDYDate(model.stockDate ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                const SizedBox(height: 4,),
+
+                                              ],
+                                            )
+                                          ),
+                                          Checkbox(
+                                            activeColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                                            checkColor: AppColors.white,
+                                            value: model.check,
+                                            onChanged: (check) {
+                                              viewModel.setAssignStockCheckbox(index,check!,viewModel.searchAssignStock(viewModel.allAssignStock!,viewModel.query));
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                  )
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                     Padding(
+                       padding: const EdgeInsets.only(left: 8,right: 8,bottom: 16),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           SizedBox(
+                             width: sizeWidth(context).width*0.4,
+                             height: 50,
+                             child: ElevatedButton(
+                                 onPressed: ()async{
+                                   viewModel.setQuery("");
+                                   viewModel.addPoolListWithModel(viewModel.searchAssignStock(viewModel.allAssignStock!,viewModel.query));
+                                   Navigator.pop(context);
+                                 },
+                                 style: elevatedButtonStyle(context),
+                                 child: Text("save".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                             ),
+                           ),
+                           SizedBox(
+                             width: sizeWidth(context).width*0.4,
+                             height: 50,
+                             child: ElevatedButton(
+                                 onPressed: ()async{
+                                   Navigator.pop(context);
+                                 },
+                                 style: elevatedButtonStyle(context),
+                                 child: Text("cancel".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                             ),
+                           ),
+                         ],
+                       ),
+                     )
+
+                    ]
+                ),
+              );
+            },
+          ),
+        );
+      }
+  );
+}
 selectOverrideNameBase(BuildContext context,AdminOverrideVm viewModel){
   viewModel.query="";
 
@@ -7008,6 +7142,7 @@ showComAmountDetail(BuildContext context,SalesVm viewModel, model,int saleId){
                         ],
                       ),
                       const SizedBox(height: 4,),
+                      if(model.eligibleRoleName !=null)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

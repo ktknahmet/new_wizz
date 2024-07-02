@@ -34,14 +34,34 @@ class ImporterInventoryReportGrid extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((e) {
-        return  Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            e.value.toString(),
-            style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-          ),
+        if(e.value =="Assign"){
+          return  Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.value.toString(),
+              style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+            ),
 
-        );
+          );
+        }else if(e.value =="Not Assign"){
+          return  Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.value.toString(),
+              style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.error)),
+            ),
+
+          );
+        }else{
+          return  Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.value.toString(),
+              style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+            ),
+
+          );
+        }
       }).toList(),
     );
   }

@@ -20,6 +20,7 @@ class ApiEndpoints {
   static const String overrideUser="/override-users";
   static const String overrideUserDelete="/override-users-delete";
   static const String warehouses="/warehouses";
+  static const String allAssignStock="/stock-pools/all-details";
   static const String deleteWarehouses="/delete-warehouse";
   static const String updateWarehouses="/update-warehouse";
   static const String postOverride="/overrides/commissions";

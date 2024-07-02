@@ -37,6 +37,8 @@ class WarehouseVm extends ChangeNotifier{
   TextEditingController distInfo = TextEditingController(text:"selectDist".tr());
   List<AllOrganisations>? organisations;
   int type=1;
+  int totalAssign=0;
+  int totalNotAssign=0;
   List<StockReportDataDetails>? dataDetails;
   List<Map<String, bool>> gridMap = [];
 

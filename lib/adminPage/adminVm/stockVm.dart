@@ -36,6 +36,8 @@ import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../adminModel/inventoryModel/allAssignStock.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class StockVm extends ChangeNotifier{
@@ -54,6 +56,7 @@ class StockVm extends ChangeNotifier{
   List<PoolDistributor>? distributorList;
   List<AllOrganisations>? organisations;
   List<PoolStockProduct> poolStock=[];
+  List<AllAssignStock>? allAssignStock;
   List<WarehouseList>? warehouseList;
   List<StockDealer>? stockDealer;
   StockPostResponse? postResponse;
@@ -77,27 +80,144 @@ class StockVm extends ChangeNotifier{
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
 
+  void addPoolListWithModel(List<AllAssignStock> list) {
+    // Seçilen elemanları tutacak geçici bir liste oluşturalım
+    List<PoolListDetails> selectedDetails = [];
 
-  addPoolList(String serial){
-    PoolListDetails details = PoolListDetails(
-      productName: "HYLA EST",
-      serialNumber: serial,
-      distributorId: distId ?? 0,
-      distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
-      distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
-      isPaid: isPaid,
-      paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+    // Seçili olanları geçici listeye ekleyelim
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].check == true) {
+        PoolListDetails details = PoolListDetails(
+          poolDetailId: list[i].poolDetailId,
+          stockPoolId: list[i].stockPoolId,
+          productId: list[i].productId,
+          productName: list[i].productName,
+          stockDate: list[i].stockDate,
+          quantity: list[i].quantity,
+          serialNumber: list[i].serialNumber,
+          distributorId: list[i].distributorId,
+          assignedToDistributor: list[i].assignedToDistributor,
+          isPaid: list[i].isPaid,
+          paidDate: list[i].paidAt,
+          importerWarehouseName: list[i].importerWarehouseName,
+          distWarehouseName: list[i].distributorWarehouseName,
+        );
 
-    );
-    poolList.add(details);
+        selectedDetails.add(details);
+      }
+    }
+
+    if (poolList.isEmpty || poolList.isNotEmpty) {
+      PoolListDetails firstDetail = PoolListDetails(
+        poolDetailId: list[0].poolDetailId,
+        stockPoolId: list[0].stockPoolId,
+        productId: list[0].productId,
+        productName: list[0].productName,
+        stockDate: list[0].stockDate,
+        quantity: list[0].quantity,
+        serialNumber: list[0].serialNumber,
+        distributorId: list[0].distributorId,
+        assignedToDistributor: list[0].assignedToDistributor,
+        isPaid: list[0].isPaid,
+        paidDate: list[0].paidAt,
+        importerWarehouseName: list[0].importerWarehouseName,
+        distWarehouseName: list[0].distributorWarehouseName,
+      );
+
+      poolList.add(firstDetail);
+
+      // Seçilen diğer elemanları kontrol edelim
+      for (int i = 1; i < selectedDetails.length; i++) {
+        bool existsInPoolList = false;
+
+        // Seri numarası kontrolü yapalım
+        for (var existingDetail in poolList) {
+          if (existingDetail.serialNumber == selectedDetails[i].serialNumber) {
+            existsInPoolList = true;
+            break; // Eşleşme bulunduğunda döngüden çıkalım
+          }
+        }
+        // Eğer seri numarası poolList içinde yoksa, ekleyelim
+        if (!existsInPoolList) {
+          poolList.add(selectedDetails[i]);
+        }
+      }
+    }
+    notifyListeners();
+  }
+  addPoolList(BuildContext context,String serial){
+    PoolListDetails details;
+    if(poolList.isEmpty){
+      details= PoolListDetails(
+          productName: "HYLA EST",
+          serialNumber: serial,
+          distributorId: distId ?? 0,
+          distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
+          distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
+          isPaid: isPaid,
+          paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+
+      );
+      poolList.add(details);
+    }else{
+      bool check = false;
+      for(int i=0;i<poolList.length;i++){
+        if(poolList[i].serialNumber == serial){
+          check = true;
+        }
+      }
+      if(!check){
+        details= PoolListDetails(
+            productName: "HYLA EST",
+            serialNumber: serial,
+            distributorId: distId ?? 0,
+            distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
+            distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
+            isPaid: isPaid,
+            paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+
+        );
+        poolList.add(details);
+      }else{
+        snackBarDesign(context, StringUtil.error, "thisSerialWasAdd".tr());
+      }
+    }
+
+    notifyListeners();
+  }
+
+  setAssignStockCheckbox(int index,bool value,List<AllAssignStock> list){
+    list[index].check = value;
     notifyListeners();
   }
   clearDistWarehouseName(){
     distWarehouseName.clear();
     notifyListeners();
   }
+  setPaidWithIndex(List<PoolListDetails> list ,int index){
+    if(list[index].isPaid == true){
+      list[index].isPaid = false;
+      list[index].paidDate = null;
+    }else{
+      list[index].isPaid = true;
+      list[index].paidDate = formatDate(DateTime.now().toString());
+    }
+
+    notifyListeners();
+  }
   setPaid(){
     isPaid = !isPaid;
+    if(poolList.isNotEmpty){
+      for(int i=0;i<poolList.length;i++){
+        if(isPaid==true){
+          poolList[i].isPaid =true;
+          poolList[i].paidDate = formatDate(DateTime.now().toString());
+        }else{
+          poolList[i].isPaid =false;
+        }
+      }
+
+    }
     notifyListeners();
   }
   setProductId(int id){
@@ -121,7 +241,6 @@ class StockVm extends ChangeNotifier{
       if(poolList[i].distWarehouseId ==null){
         poolList[i].distWarehouseId = id;
         poolList[i].distWarehouseName = distWarehouseName.text;
-        print("aktekin ${poolList[i].distWarehouseId}");
       }
     }
     notifyListeners();
@@ -205,8 +324,9 @@ class StockVm extends ChangeNotifier{
     notifyListeners();
   }
 
-  deletePoolListItem(List<PoolListDetails> details,int index){
-    details.removeAt(index);
+  deletePoolListItem(String serial){
+    poolList.removeWhere((element) =>
+    element.serialNumber == serial);
   }
 
   List<AllOrganisations> searchOrganisation(List<AllOrganisations> list, String query) {
@@ -267,9 +387,21 @@ class StockVm extends ChangeNotifier{
       return list;
     }
     List<StockDealer> filteredList = list.where((value) =>
-        value.name!.toString().toLowerCase().contains(query.toLowerCase()) ||
-        value.email!.toString().toLowerCase().contains(query.toLowerCase()) ||
-        value.phone!.toString().toLowerCase().contains(query.toLowerCase())
+    (value.name != null && value.name!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.email != null && value.email!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.phone != null && value.phone!.toString().toLowerCase().contains(query.toLowerCase()))
+    ).toList();
+    return filteredList;
+  }
+
+  List<AllAssignStock> searchAssignStock(List<AllAssignStock> list, String query) {
+    if (query.isEmpty) {
+      return list;
+    }
+    List<AllAssignStock> filteredList = list.where((value) =>
+    (value.serialNumber != null && value.serialNumber!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.importerWarehouseName != null && value.importerWarehouseName!.toString().toLowerCase().contains(query.toLowerCase())) ||
+        (value.productName != null && value.productName!.toString().toLowerCase().contains(query.toLowerCase()))
     ).toList();
     return filteredList;
   }
@@ -279,7 +411,7 @@ class StockVm extends ChangeNotifier{
       return list;
     }
     List<AllOrganisations> filteredList = list.where((value) =>
-    value.name!.toString().toLowerCase().contains(query.toLowerCase())
+    (value.name != null && value.name!.toString().toLowerCase().contains(query.toLowerCase()))
     ).toList();
     return filteredList;
   }
@@ -459,9 +591,7 @@ class StockVm extends ChangeNotifier{
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
-      await apiService.allOrganisations().then((value) {
-        organisations = value;
-      });
+      organisations = await apiService.allOrganisations();
 
     } catch (error) {
       if (error is DioException) {
@@ -498,6 +628,35 @@ class StockVm extends ChangeNotifier{
         print("General error: $error");
       }
     } finally {
+      notifyListeners();
+
+    }
+  }
+
+  Future<void>getAllAssignList(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+    await showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      allAssignStock = await apiService.getAssignStock();
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      await showProgress(context, false);
       notifyListeners();
 
     }
@@ -859,7 +1018,7 @@ class StockVm extends ChangeNotifier{
         if(value == false){
           snackBarDesign(context, StringUtil.error, "thisSerialWasAdd"),
         }else{
-          addPoolList(serialNum),
+          addPoolList(context,serialNum),
         }
       });
 

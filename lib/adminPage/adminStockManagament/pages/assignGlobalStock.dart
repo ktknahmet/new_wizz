@@ -134,17 +134,13 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                       ),
                       SizedBox(
                         width: sizeWidth(context).width*0.3,
-                        child: TextField(
-                          onSubmitted: (String value){
-                            if(value.length ==8){
-                              //tüm poollarda arama yapacak ve ekleme yapacak
-                            }else{
-
-                            }
-                          },
-                          decoration: searchTextDesign(context, "search"),
-                          cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
-                          style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: ()async{
+                               await getAssignStockList();
+                            },
+                            style: elevatedButtonStyle(context),
+                            child: Text("search".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                         ),
                       ),
 
@@ -189,7 +185,35 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 4,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: sizeWidth(context).width*0.4,
+                        child: TextField(
+                          onChanged: (value){
+                            viewModel.setQuery(value);
+                            viewModel.searchProduct(viewModel.poolList,viewModel.query);
+                          },
+                          decoration: searchTextDesign(context, "search"),
+                          cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                          style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                        ),
+                      ),
+                      SizedBox(
+                        width: sizeWidth(context).width*0.4,
+                        child: ElevatedButton(
+                          onPressed: () async{
+                            await post();
+                          },
+                          style: elevatedButtonStyle(context),
+                          child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4,),
                   RefreshIndicator(
                     onRefresh: getList,
                     color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -203,9 +227,9 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                         controller: controller,
                         child: ListView.builder(
                           controller: controller,
-                          itemCount:  viewModel.poolList.length,
+                          itemCount:  viewModel.searchProduct(viewModel.poolList,viewModel.query).length,
                           itemBuilder: (context,index){
-                            PoolListDetails value = viewModel.poolList[index];
+                            PoolListDetails value = viewModel.searchProduct(viewModel.poolList,viewModel.query)[index];
 
                               return Dismissible(
                                 background: Container(
@@ -214,7 +238,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                 ),
                                 key: UniqueKey(),
                                 onDismissed: (DismissDirection direction){
-                                  viewModel.deletePoolListItem(viewModel.poolList, index);
+                                  viewModel.deletePoolListItem(value.serialNumber!);
                                 },
                                 child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -251,13 +275,13 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                               ],
                                             ),
                                             const SizedBox(height: 4,),
-                                            if(value.distributorId !=0)
+
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text("distWarehouse".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
 
-                                                  value.distWarehouseId !=null ?
+                                                  value.distWarehouseName ==null ?
                                                   SizedBox(
                                                     height:30,
                                                     child: ElevatedButton(
@@ -268,7 +292,6 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                                         if(viewModel.warehouseList!.isNotEmpty){
                                                           Map<String,dynamic> warehouseMap ={};
                                                           warehouseMap = await selectWarehouseList(context,viewModel);
-
 
                                                           if(warehouseMap["distId"] !=null){
                                                             viewModel.setDistSpesificWarehouse(index,warehouseMap["distId"],warehouseMap["warehouseName"]);
@@ -287,7 +310,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text("isPaid?".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                Text(value.isPaid ==true ? "Yes" : "No",
+                                                Text(value.isPaid ==true ? "Paid" : "UnPaid",
                                                   style: value.isPaid ==true ?
                                                   CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.wizzColor))
                                                       :CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.error)),)
@@ -302,6 +325,20 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                                   Text(mmDDYDate(value.paidDate),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                 ],
                                               ),
+                                            const SizedBox(height: 4,),
+                                            SizedBox(
+                                              width: sizeWidth(context).width*0.9,
+                                              child: ElevatedButton(
+                                                  onPressed: ()async{
+                                                    bool check = await areYouSure(context);
+                                                    if(check){
+                                                      viewModel.setPaidWithIndex(viewModel.searchProduct(viewModel.poolList,viewModel.query), index);
+                                                    }
+                                                  },
+                                                  style: elevatedButtonStyle(context),
+                                                  child: Text(value.isPaid ==true ? "switchUnPaid".tr() : "switchPaid".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ),
+                                            ),
 
                                           ],
                                         ),
@@ -316,22 +353,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: sizeWidth(context).width*0.80,
-                        child: ElevatedButton(
-                          onPressed: () async{
-                            await post();
-                          },
-                          style: elevatedButtonStyle(context),
-                          child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                        ),
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             );
@@ -386,5 +408,13 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
     await showProgress(context, true);
     await viewModel.getWarehouse(context,id);
     await showProgress(context, false);
+  }
+  getAssignStockList()async{
+    await viewModel.getAllAssignList(context);
+    clearFocus(context);
+    if(viewModel.allAssignStock!.isNotEmpty){
+      selectAssignStockList(context,viewModel);
+    }
+
   }
 }

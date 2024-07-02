@@ -15,6 +15,7 @@ import '../../../utils/style/ReportAppBar.dart';
 import '../../../utils/style/WidgetStyle.dart';
 import '../../../widgets/Extension.dart';
 import 'ImporterInventoryReportGrid.dart';
+// ignore_for_file: use_build_context_synchronously
 
 class ImporterInventoryReport extends StatefulWidget {
   const ImporterInventoryReport({super.key});
@@ -162,6 +163,53 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                           ],
                         ),
                       const SizedBox(height: 8,),
+                      if(viewModel.dataDetails !=null)
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black87,
+                              border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child: Column(
+                                        children: [
+                                          Text("assigned".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                          Text("${viewModel.totalAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child: Column(
+                                        children: [
+                                          Text("notAssigned".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                          Text("${viewModel.totalNotAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child: Column(
+                                        children: [
+                                          Text("total".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                          Text("${viewModel.totalNotAssign+viewModel.totalAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8,),
                         if(gridSource !=null)
                         SizedBox(
                           height: justList(context, sizeWidth(context).height),
@@ -178,7 +226,6 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                                   selectionColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
                                   filterIconColor:ColorUtil().getColor(context, ColorEnums.textTitleLight),),
                                 child: SfDataGrid(
-                    
                                   controller: dataGridController,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility: GridLinesVisibility.both,
@@ -273,6 +320,20 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
     await viewModel.stockReportAllData(context, x,y,viewModel.distId,StringUtil.export);
     gridSource = ImporterInventoryReportGrid(data: viewModel.dataDetails!,context: context);
 
+    // paid edilmiş ve edilmemiş olanlarda gelecek pending payment assign edilmiş fakat paid edilmiş cancel payment
+    // warehouse adı da gelecek
+    if(viewModel.dataDetails !=null){
+      viewModel.totalAssign =0;
+      viewModel.totalNotAssign =0;
+      for(int i=0;i<viewModel.dataDetails!.length;i++){
+        if(viewModel.dataDetails![i].assignedToDistributor==true){
+          viewModel.totalAssign++;
+        }else{
+          viewModel.totalNotAssign +=1;
+        }
+
+      }
+    }
 
   }
 }

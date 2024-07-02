@@ -83,6 +83,7 @@ import 'package:wizzsales/model/stockCheckIn/returnStock.dart';
 import 'package:wizzsales/model/stockModel/assignDealerList.dart';
 import 'package:wizzsales/service/ServiceModule.dart';
 
+import '../../adminPage/adminModel/inventoryModel/allAssignStock.dart';
 import '../../adminPage/adminModel/postGoals/PostGoals.dart';
 
 part 'ApiService.g.dart';
@@ -272,6 +273,9 @@ abstract class ApiService {
   @GET(ApiEndpoints.warehouses)
   Future<List<WarehouseList>> getWarehouses(
       @Query("distributor_id") int? distId);
+
+  @GET(ApiEndpoints.allAssignStock)
+  Future<List<AllAssignStock>> getAssignStock();
 
   @POST(ApiEndpoints.warehouses)
   Future<String> postWarehouse(@Body() WarehousePost warehousePost);

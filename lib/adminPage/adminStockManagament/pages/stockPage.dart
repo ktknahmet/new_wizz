@@ -204,7 +204,7 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                                             child:Text("assignedStocks".tr(),style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                           ),
                                           const SizedBox(width: 8), // Araya bir boşluk ekleyebilirsiniz
-                                          Text("${model.assignedProductQuantity!.toString()}/${viewModel.getPoolHistory![index].totalQuantity!.toString()}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                          Text("${model.assignedProductQuantity!.toString()}/${model.totalQuantity!.toString()}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                         ],
                                       ),
                                       const SizedBox(height: 4,),
@@ -215,7 +215,7 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                                             child:Text("savedStock".tr(),style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                           ),
                                           const SizedBox(width: 8), // Araya bir boşluk ekleyebilirsiniz
-                                          Text("${model.totalSavedStockOfPool!.toString()}/${viewModel.getPoolHistory![index].totalQuantity!.toString()}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                          Text("${model.totalSavedStockOfPool!.toString()}/${model.totalQuantity!.toString()}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                         ],
                                       ),
                                       const SizedBox(height: 4,),
@@ -226,7 +226,7 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                                             child:Text("status".tr(),style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                           ),
                                           const SizedBox(width: 8), // Araya bir boşluk ekleyebilirsiniz
-                                          Text(model.poolStatus!.toUpperCase(),style:viewModel.getPoolHistory![index].poolStatus!.toUpperCase() =="PROCESSING"
+                                          Text(model.poolStatus!.toUpperCase(),style:model.poolStatus!.toUpperCase() =="PROCESSING"
                                               ? CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.error))
                                               :CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.wizzColor),))
                                         ],
@@ -301,6 +301,7 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
    await viewModel.poolHistory(context);
   }
   post() async{
+    clearFocus(context);
     int begin=0;
     int end=0;
     if(startSerial.text.isNotEmpty){

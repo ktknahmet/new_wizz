@@ -846,6 +846,9 @@ String convertToFormattedString(dynamic number) {
 String getDecimalPlaces(dynamic numberString, int decimalCount) {
   String value = numberString.toString();
 
+  if(value.isEmpty){
+    return value;
+  }
   if (!value.contains('.')) {
     return value;
   }

@@ -104,15 +104,12 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                            )
                          ],
                        ),
-
                        const SizedBox(height: 8,),
                        Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                          children: [
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: SizedBox(
-                               width: sizeWidth(context).width*0.40,
+                            SizedBox(
+                               width: sizeWidth(context).width*0.30,
                                height: 40,
                                child: TextField(
                                  onChanged: (value){
@@ -124,10 +121,10 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                  style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
                                ),
                              ),
-                           ),
+
                            Container(
                              decoration: containerDecoration(context),
-                             width: sizeWidth(context).width*0.50,
+                             width: sizeWidth(context).width*0.35,
                              height: 40,
                              child: Padding(
                                padding: const EdgeInsets.all(8.0),
@@ -149,6 +146,16 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                                    );
                                  }).toList(),
                                ),
+                             ),
+                           ),
+                           SizedBox(
+                             width: sizeWidth(context).width*0.2,
+                             child: ElevatedButton(
+                               onPressed: ()async{
+                                 await post();
+                               },
+                               style: elevatedButtonStyle(context),
+                               child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                              ),
                            ),
                          ],
@@ -330,23 +337,6 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
                            ),
                          ],
                        ),
-                       Padding(
-                         padding: const EdgeInsets.only(bottom: 8),
-                         child: Align(
-                           alignment: Alignment.bottomCenter,
-                           child: SizedBox(
-                             width: sizeWidth(context).width*0.80,
-                             child: ElevatedButton(
-                               onPressed: ()async{
-                                 await post();
-                               },
-                               style: elevatedButtonStyle(context),
-                               child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                             ),
-                           ),
-                         ),
-                       ),
-
                      ],
                    ),
                  ),

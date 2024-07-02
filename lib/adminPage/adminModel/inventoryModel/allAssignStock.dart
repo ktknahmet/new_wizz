@@ -1,14 +1,14 @@
 // To parse this JSON data, do
 //
-//     final poolListDetails = poolListDetailsFromJson(jsonString);
+//     final allAssignStock = allAssignStockFromJson(jsonString);
 
 import 'dart:convert';
 
-List<PoolListDetails> poolListDetailsFromJson(String str) => List<PoolListDetails>.from(json.decode(str).map((x) => PoolListDetails.fromJson(x)));
+List<AllAssignStock> allAssignStockFromJson(String str) => List<AllAssignStock>.from(json.decode(str).map((x) => AllAssignStock.fromJson(x)));
 
-String poolListDetailsToJson(List<PoolListDetails> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String allAssignStockToJson(List<AllAssignStock> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class PoolListDetails {
+class AllAssignStock {
   int? poolDetailId;
   int? stockPoolId;
   int? productId;
@@ -19,12 +19,12 @@ class PoolListDetails {
   int? distributorId;
   bool? assignedToDistributor;
   bool? isPaid;
-  String? paidDate;
+  dynamic paidAt;
   String? importerWarehouseName;
-  String? distWarehouseName;
-  int? distWarehouseId;
+  String? distributorWarehouseName;
+  bool? check;
 
-  PoolListDetails({
+  AllAssignStock({
     this.poolDetailId,
     this.stockPoolId,
     this.productId,
@@ -35,13 +35,13 @@ class PoolListDetails {
     this.distributorId,
     this.assignedToDistributor,
     this.isPaid,
-    this.paidDate,
+    this.paidAt,
     this.importerWarehouseName,
-    this.distWarehouseName,
-    this.distWarehouseId,
+    this.distributorWarehouseName,
+    this.check = false
   });
 
-  factory PoolListDetails.fromJson(Map<String, dynamic> json) => PoolListDetails(
+  factory AllAssignStock.fromJson(Map<String, dynamic> json) => AllAssignStock(
     poolDetailId: json["pool_detail_id"],
     stockPoolId: json["stock_pool_id"],
     productId: json["product_id"],
@@ -52,9 +52,9 @@ class PoolListDetails {
     distributorId: json["distributor_id"],
     assignedToDistributor: json["assigned_to_distributor"],
     isPaid: json["is_paid"],
-    paidDate: json["paid_at"],
+    paidAt: json["paid_at"],
     importerWarehouseName: json["importer_warehouse_name"],
-    distWarehouseName: json["distributor_warehouse_name"],
+    distributorWarehouseName: json["distributor_warehouse_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -68,8 +68,9 @@ class PoolListDetails {
     "distributor_id": distributorId,
     "assigned_to_distributor": assignedToDistributor,
     "is_paid": isPaid,
-    "paid_at": paidDate,
+    "paid_at": paidAt,
     "importer_warehouse_name": importerWarehouseName,
-    "distributor_warehouse_name": distWarehouseName,
+    "distributor_warehouse_name": distributorWarehouseName,
   };
 }
+

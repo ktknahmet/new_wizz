@@ -133,7 +133,6 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                   ),
                                 ),
                               ),
-
                                 Card(
                                   shape: cardShape(context),
                                   color: ColorUtil().getColor(context, ColorEnums.background),
@@ -141,7 +140,6 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -164,7 +162,6 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -179,13 +176,10 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                       const SizedBox(height: 4,),
                                       if(viewModel.commissionDetails!.isNotEmpty)
                                       SizedBox(
-                                        height: sizeWidth(context).height*0.13,
+                                        height: viewModel.commissionDetails!.length*35,
                                         child: ListView.builder(
                                           itemCount: viewModel.commissionDetails!.length,
                                           itemBuilder: (context,index){
-
-
-                                            // commissionDetails listesini sıralayalım
                                             List<CommissionWinner> sortedCommissionDetails = viewModel.commissionDetails!.toList();
                                             sortedCommissionDetails.sort((a, b) {
                                               int aIndex = roleOrder.indexOf(a.eligibleRoleName ?? '');
@@ -207,7 +201,6 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                                         style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                                     ),
                                                     Expanded(
-
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.end,
                                                           mainAxisAlignment: MainAxisAlignment.end,
@@ -215,7 +208,6 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                                           GestureDetector(
                                                                 onTap:(){
                                                                   showComAmountDetail(context,viewModel,model,widget.sale.id!);
-
                                                               },
                                                                 child: Text("\$${model.commAmount ?? "0"}", style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)))),
                                                             const Divider(
@@ -225,15 +217,11 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                                         )),
                                                   ],
                                                 ),
-
-
                                               ],
                                             );
                                           },
                                         ),
                                       ),
-
-
                                     ],
                                   ),
                                 ),
@@ -419,15 +407,16 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                             cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
                                             onChanged: (value) {
                                               if(percentage.text.isNotEmpty && widget.sale.price !=null && widget.sale.price!.isNotEmpty){
-                                                if(int.parse(percentage.text)>100){
+                                                percentage.text = getDecimalPlaces(value, 2);
+                                                percentage.text = percentage.text.replaceAll(",", ".");
+                                                if(double.parse(percentage.text)>100){
                                                   percentage.text="100";
                                                 }
-                                                if(int.parse(percentage.text)<0){
+                                                if(double.parse(percentage.text)<0){
                                                   percentage.text="0";
                                                 }
                                                 dynamic x = (double.parse(widget.sale.price ?? "0.0")) * (double.parse(percentage.text)/100);
-                                                financeRecerve.text = x.toString();
-
+                                                financeRecerve.text = getDecimalPlaces(x, 2);
                                               }else{
                                                 financeRecerve.text="";
                                                 percentage.text ="";
@@ -542,7 +531,7 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        accountNumber(context, "receiveAmount", receive),
+                                        accountCreate(context, "receiveAmount", receive),
                                       ],
                                     ),
                                   ),
@@ -633,7 +622,7 @@ class _CommissionDetailsState extends State<CommissionDetails> {
   postAmount() async {
     PostReceiveAmount receiveAmount = PostReceiveAmount(
         saleId: widget.sale.id!,
-        receiveAmount: receive.text
+        receiveAmount: receive.text.replaceAll(",", ".")
     );
     if (receive.text.isNotEmpty) {
       await viewModel.postReceive(context, receiveAmount,widget.sale.id!);
@@ -646,7 +635,7 @@ class _CommissionDetailsState extends State<CommissionDetails> {
   justPostAmount() async {
     PostReceiveAmount receiveAmount = PostReceiveAmount(
         saleId: widget.sale.id!,
-        receiveAmount: receive.text
+        receiveAmount: receive.text.replaceAll(",", ".")
     );
     if (receive.text.isNotEmpty) {
       await viewModel.postReceive(context, receiveAmount,widget.sale.id!);
