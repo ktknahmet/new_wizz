@@ -212,7 +212,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
   }
 
   Future<void> getList()async{
-    await viewModel.getOverrideWinner(context,null,null);
+    await viewModel.getOverrideWinner(context,null,null,null);
     viewModel.search.clear();
     viewModel.search.add("All");
     for(int i=0;i<viewModel.overrideWinner!.length;i++){

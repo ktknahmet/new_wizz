@@ -1362,11 +1362,13 @@ class _ApiService implements ApiService {
   Future<List<AdminOverrideWinner>> getOverrideWinner(
     String? beginDate,
     String? endDate,
+    int? userId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'begin_date': beginDate,
       r'end_date': endDate,
+      r'user_id': userId,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

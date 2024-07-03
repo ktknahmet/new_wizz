@@ -329,7 +329,7 @@ class _CommissionPageState extends State<CommissionPage> {
                              ),
                            ),
                          const SizedBox(height: 8,),
-                         if(viewModel.commissionWinner != null)
+                         if(viewModel.commissionWinner != null && viewModel.commissionWinner!.isNotEmpty)
                            Column(
                              children: [
                                SizedBox(
@@ -368,12 +368,12 @@ class _CommissionPageState extends State<CommissionPage> {
                                        viewModel.setQuery(newValue);
                                        viewModel.searchComWinner(viewModel.commissionWinner!, newValue);
                                        viewModel.addComDetail(viewModel.searchComWinner(viewModel.commissionWinner!,viewModel.query).length);
-                                    
+
                                      },
                                      items: viewModel.paidUnPaidList.map((value) {
                                        return DropdownMenuItem<String>(
                                          value: value,
-                                    
+
                                          child: Row(
                                            children: [
                                              Text(value,style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
@@ -685,7 +685,6 @@ class _CommissionPageState extends State<CommissionPage> {
     }
   }
   post(int id) async{
-    //eğer adjust edilen varsa adjust olacak yoksa com amount pay edilecek
     PayPost post = PayPost(calcPoolSaleId: id);
     await viewModel.postComPay(context,post,getList);
 

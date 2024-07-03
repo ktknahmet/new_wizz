@@ -3676,7 +3676,7 @@ selectAssignStockList(BuildContext context,StockVm viewModel){
                                    Navigator.pop(context);
                                  },
                                  style: elevatedButtonStyle(context),
-                                 child: Text("save".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                 child: Text("select".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                              ),
                            ),
                            SizedBox(
@@ -5224,12 +5224,13 @@ showComSaleDetails(BuildContext context,List<ComSaleDetails> details){
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            Text("\$${item.financepercentage ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                            Text("${item.financepercentage ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                           ],
 
                                         ),
                                       ],
                                     ),
+                                  const SizedBox(height: 4,),
                                   if(item.receiveAmount !=null)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5246,21 +5247,6 @@ showComSaleDetails(BuildContext context,List<ComSaleDetails> details){
                                         ),
                                       ],
                                     ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                          width:sizeWidth(context).width*0.40,
-                                          child: Text("commission".tr(),style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Text("\$${item.comision ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                        ],
-
-                                      ),
-                                    ],
-                                  ),
                                   const SizedBox(height: 4,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

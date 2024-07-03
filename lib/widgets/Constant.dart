@@ -1030,7 +1030,7 @@ Future<Map<String, List<StockReportDataDetails>>> groupByDistributor(List<StockR
   Map<String, List<StockReportDataDetails>> groupedData = {};
 
   for (var detail in detailsList) {
-    String distributorKey = detail.distributorId == 0 ? 'Not Assigned' : detail.distName!;
+    String distributorKey = detail.distributorId == 0 ? 'All' : detail.distName!;
 
     if (groupedData.containsKey(distributorKey)) {
       groupedData[distributorKey]!.add(detail);

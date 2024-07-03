@@ -1,5 +1,6 @@
 class DistributorSubType {
   int? id;
+  int? userId;
   int? organisation_id;
   String? name;
   String? salesrolename;
@@ -10,6 +11,7 @@ class DistributorSubType {
 
   DistributorSubType({
     this.id,
+    this.userId,
     this.organisation_id,
     this.name,
     this.salesrolename,
@@ -21,6 +23,7 @@ class DistributorSubType {
   factory DistributorSubType.fromJson(Map<String, dynamic> json) {
     return DistributorSubType(
         id: json['id'],
+        userId: json['user_id'],
         organisation_id: json['organisation_id'],
         name: json['name'],
         salesrolename: json['salesrolename'],
@@ -33,6 +36,7 @@ class DistributorSubType {
   Map toJson() {
     return {
       'id' : id,
+      "user_id":userId,
       'organisation_id':organisation_id,
       'name' : name,
       'salesrolename' : salesrolename,

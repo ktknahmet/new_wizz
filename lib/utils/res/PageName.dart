@@ -85,6 +85,7 @@ class PageName{
   static const String setOverrideUserPage ="Set Override User Page";
   static const String addWarehouse ="Add Warehouse";
   static const String setWarehouses ="Set Warehouses";
+  static const String overrideReportDist ="Override Report Dist";
   static const String saleDetails="Sale Details";
   static const String myLeads ="My Leads";
   static const String totalLeadsReport="Total Leads Report";

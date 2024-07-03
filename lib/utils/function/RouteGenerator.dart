@@ -33,6 +33,7 @@ import 'package:wizzsales/adminPage/adminOverride/overridePage.dart';
 import 'package:wizzsales/adminPage/adminOverride/overrideSettings.dart';
 import 'package:wizzsales/adminPage/adminOverride/productCost.dart';
 import 'package:wizzsales/adminPage/adminOverride/report/overrideReport.dart';
+import 'package:wizzsales/adminPage/adminOverride/reportForDist/reportForDist.dart';
 import 'package:wizzsales/adminPage/adminOverride/searchOverride.dart';
 import 'package:wizzsales/adminPage/adminOverride/setOverrideUser.dart';
 import 'package:wizzsales/adminPage/adminPaperWork/adminManagePaper.dart';
@@ -175,6 +176,9 @@ class RouteGenerator {
 
       case '/${PageName.stockManagement}':
         return MaterialPageRoute(builder: (_) =>   StockManagement("importerInventory".tr()));
+
+      case '/${PageName.overrideReportDist}':
+        return MaterialPageRoute(builder: (_) =>   OverrideReportDist("overrideDetails".tr()));
 
       case '/${PageName.importerSummary}':
         return MaterialPageRoute(builder: (_) =>   ImporterSummary("importerInventorySummary".tr()));

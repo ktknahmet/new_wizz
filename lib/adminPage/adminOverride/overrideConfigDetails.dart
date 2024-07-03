@@ -146,7 +146,7 @@ class _AdminOverrideState extends State<AdminOverride> {
                                              children: [
                                                SizedBox(
                                                    width:sizeWidth(context).width*0.3,
-                                                   child: Text("organisation".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                                   child: Text("distPurchases".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                                Expanded(
                                                  child: Column(
                                                    crossAxisAlignment: CrossAxisAlignment.end,
@@ -180,7 +180,7 @@ class _AdminOverrideState extends State<AdminOverride> {
                                              children: [
                                                SizedBox(
                                                    width:sizeWidth(context).width*0.40,
-                                                   child: Text("distributor".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                                   child: Text("overrideRecipient".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                                Expanded(
                                                  child: Column(
                                                    crossAxisAlignment: CrossAxisAlignment.end,
@@ -229,6 +229,7 @@ class _AdminOverrideState extends State<AdminOverride> {
     );
   }
   Future<void>getList() async{
+   total =0;
    await viewModel.getOverrideList(context);
    if(viewModel.allOverride!.isNotEmpty){
      for(int i=0;i<viewModel.allOverride!.length;i++){

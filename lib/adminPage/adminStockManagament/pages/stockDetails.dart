@@ -124,7 +124,6 @@ class _StockDetailsState extends State<StockDetails> {
                             ),
                             SizedBox(
                               width: sizeWidth(context).width*0.3,
-                              height: 40,
                               child: TextField(
                                 onChanged: (value){
                                   viewModel.setQuery(value);
@@ -358,7 +357,7 @@ class _StockDetailsState extends State<StockDetails> {
   }
   postPay(int id,int index)async{
     PostStockPay pay = PostStockPay(poolDetailId: id);
-    await viewModel.postPay(context, pay,widget.id);
+    await viewModel.postPay(context, pay,index);
   }
   Future<void> getWarehouses(int? id)async{
     await viewModel.getWarehouse(context,id);

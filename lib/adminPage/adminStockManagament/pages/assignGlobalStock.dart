@@ -341,7 +341,6 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
 
   }
   post() async{
-
     for(int i=0;i<viewModel.poolList.length;i++){
       PoolListDetails value = viewModel.poolList[i];
       if(value.assignedToDistributor ==false && value.distributorId !=0){
@@ -361,7 +360,6 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
     }else{
       snackBarDesign(context, StringUtil.error, "pleaseAssignDist".tr());
     }
-
   }
 
   Future<void> getWarehouses(int? id)async{
@@ -379,6 +377,6 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
   }
   postPay(int id,int index)async{
     PostStockPay pay = PostStockPay(poolDetailId: id);
-    await viewModel.postPayAllAssign(context, pay,id,index);
+    await viewModel.postPay(context, pay,index);
   }
 }

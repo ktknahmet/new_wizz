@@ -13,13 +13,14 @@ class OverrideGridData extends DataGridSource {
   DataGridController dataGridController = DataGridController();
   OverrideGridData({required List<AdminOverrideWinner?> data, required this.context}) {
     cData = data.map<DataGridRow>((e) => DataGridRow(cells: [
-      DataGridCell<String>(columnName: 'overrideAmount'.tr(), value: "\$${e!.overrideAmount ?? "0.00"}"),
+      DataGridCell<String>(columnName: 'overrideCalDate'.tr(), value:mmDDYDate(e!.calculatedDate)),
+      DataGridCell<String>(columnName: 'overrideAmount'.tr(), value: "\$${e.overrideAmount ?? "0.00"}"),
       DataGridCell<String>(columnName: "puchases".tr(), value:e.organisationName ?? ""),
       DataGridCell<String>(columnName: "overrideType".tr(), value:e.overrideType ?? ""),
       DataGridCell<String>(columnName: 'overrideReceiveBy'.tr(), value: e.userName ?? ""),
       DataGridCell<String>(columnName: 'product'.tr(), value: e.productName ?? ""),
       DataGridCell<String>(columnName: 'enterSerialNumber'.tr(), value:e.serialNumber ?? ""),
-      DataGridCell<String>(columnName: 'overrideCalDate'.tr(), value:mmDDYDate(e.calculatedDate)),
+
 
     ]))
         .toList();

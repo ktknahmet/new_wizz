@@ -249,7 +249,8 @@ abstract class ApiService {
   @GET(ApiEndpoints.overrideWinner)
   Future<List<AdminOverrideWinner>> getOverrideWinner(
       @Query("begin_date") String? beginDate,
-      @Query("end_date") String? endDate);
+      @Query("end_date") String? endDate,
+      @Query("user_id") int? userId);
 
   @GET(ApiEndpoints.overrideWinner)
   Future<List<AdminOverrideWinner>> getOverrideWinnerDetail(

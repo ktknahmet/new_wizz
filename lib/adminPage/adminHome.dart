@@ -41,7 +41,7 @@ class _AdminHomeState extends BaseStatefulPageState<AdminHome> {
       value: viewModel,
       child: Consumer<AppStateNotifier>(
         builder: (context,value,_){
-          if(viewModel.detailsReportModel == null){
+          if(viewModel.detailsReportModel == null || viewModel.overrideUserList == null){
             return spinKit(context);
           }else{
             return SingleChildScrollView(
@@ -642,6 +642,31 @@ class _AdminHomeState extends BaseStatefulPageState<AdminHome> {
                             ),
                           ),
                         ),
+                        Visibility(
+                          visible: viewModel.check==true ? true : false,
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, '/${PageName.overrideReportDist}');
+                            },
+                            child: SizedBox(
+                              width: sizeWidth(context).width * 0.4,
+                              height: sizeWidth(context).height*0.11,
+                              child: Card(
+                                color: ColorUtil().getColor(context, ColorEnums.background),
+                                elevation: 4,
+                                shape: cardShape(context),
+                                child:  Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Image.asset("assets/standart.png",width: double.infinity,height: sizeWidth(context).height*0.05,),
+                                    Text("overrideDetails".tr(),textAlign: TextAlign.center, style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                    const SizedBox(height: 4,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
 
                       ],
                     ),
@@ -660,7 +685,13 @@ class _AdminHomeState extends BaseStatefulPageState<AdminHome> {
     index = await pref.getInt(context, SharedUtils.profileIndex);
     loginUser ??= await getUser(context);
     user ??= await getUserUser(context);
-
+    await viewModel.getOverrideUser(context);
     await viewModel.detailReport(context, loginUser!.profiles![index].id!, loginUser!.profiles![index].organisation_id!);
+    
+    List<int> loginId =[];
+    for(int i=0;i<loginUser!.profiles!.length;i++){
+      loginId.add(loginUser!.profiles![i].userId!);
+    }
+    await viewModel.checkOverrideUser(context,loginId);
   }
 }

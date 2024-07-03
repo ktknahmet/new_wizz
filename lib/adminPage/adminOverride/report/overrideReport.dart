@@ -225,6 +225,16 @@ class _OverrideReportState extends State<OverrideReport> {
 
                                 },
                                 columns: <GridColumn>[
+
+                                  GridColumn(
+                                      visible:  getStatusVisibility("overrideCalDate".tr(), viewModel.gridMap),
+                                      columnName: 'overrideCalDate'.tr(),
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'overrideCalDate'.tr(),
+                                            style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                          ))),
                                   GridColumn(
                                       visible: getStatusVisibility("overrideAmount".tr(), viewModel.gridMap),
                                       columnName: 'overrideAmount'.tr(),
@@ -284,15 +294,6 @@ class _OverrideReportState extends State<OverrideReport> {
                                             style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
                                           ))),
 
-                                  GridColumn(
-                                      visible:  getStatusVisibility("overrideCalDate".tr(), viewModel.gridMap),
-                                      columnName: 'overrideCalDate'.tr(),
-                                      label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            'overrideCalDate'.tr(),
-                                            style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
-                                          ))),
 
                                 ],
                               ),
@@ -315,7 +316,7 @@ class _OverrideReportState extends State<OverrideReport> {
   }
   Future<void> getList(String begin,String end)async{
     showProgress(context, true);
-    await viewModel.getOverrideWinner(context,begin,end);
+    await viewModel.getOverrideWinner(context,begin,end,null);
     showProgress(context, false);
     gridSource = OverrideGridData(data: viewModel.overrideWinner!,context: context);
     orgMap= calculateOverrideAmountsByOrg(viewModel.overrideWinner!);

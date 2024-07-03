@@ -65,7 +65,7 @@ class StockVm extends ChangeNotifier{
   List<StockProduct> products =[];
   int? productId;
   PermissionStatus? status;
-
+  Set<String> uniqueSerialNumber = {};
   LoginUser? loginUser;
   TextEditingController distWarehouseName = TextEditingController();
   int? distWarehouseId;
@@ -81,10 +81,9 @@ class StockVm extends ChangeNotifier{
 
   void addPoolListWithModel(List<AllAssignStock> list) {
     // Seçilen elemanları tutacak geçici bir liste oluşturalım
-    List<PoolListDetails> selectedDetails = [];
 
     for (int i = 0; i < list.length; i++) {
-      if (list[i].check == true) {
+      if (list[i].check == true && !uniqueSerialNumber.contains(list[i].serialNumber)) {
         PoolListDetails details = PoolListDetails(
           poolDetailId: list[i].poolDetailId,
           stockPoolId: list[i].stockPoolId,
@@ -99,49 +98,13 @@ class StockVm extends ChangeNotifier{
           paidDate: list[i].paidAt,
           distWarehouseId: distWarehouseId,
           importerWarehouseName: list[i].importerWarehouseName,
-          distWarehouseName: distWarehouseName.text.isEmpty ? list[i].distributorWarehouseName : distWarehouseName.text,
-
+          distWarehouseName: distWarehouseName.text.isEmpty
+              ? list[i].distributorWarehouseName
+              : distWarehouseName.text,
         );
 
-        selectedDetails.add(details);
-      }
-    }
-
-    if (poolList.isEmpty || poolList.isNotEmpty) {
-      PoolListDetails firstDetail = PoolListDetails(
-        poolDetailId: list[0].poolDetailId,
-        stockPoolId: list[0].stockPoolId,
-        productId: list[0].productId,
-        productName: list[0].productName,
-        stockDate: list[0].stockDate,
-        quantity: list[0].quantity,
-        serialNumber: list[0].serialNumber,
-        distributorId: distId ?? list[0].distributorId,
-        assignedToDistributor: list[0].assignedToDistributor,
-        isPaid: list[0].isPaid,
-        paidDate: list[0].paidAt,
-        distWarehouseId: distWarehouseId,
-        importerWarehouseName: list[0].importerWarehouseName,
-        distWarehouseName: distWarehouseName.text.isEmpty ? list[0].distributorWarehouseName : distWarehouseName.text,
-      );
-
-      poolList.add(firstDetail);
-
-      // Seçilen diğer elemanları kontrol edelim
-      for (int i = 1; i < selectedDetails.length; i++) {
-        bool existsInPoolList = false;
-
-        // Seri numarası kontrolü yapalım
-        for (var existingDetail in poolList) {
-          if (existingDetail.serialNumber == selectedDetails[i].serialNumber) {
-            existsInPoolList = true;
-            break; // Eşleşme bulunduğunda döngüden çıkalım
-          }
-        }
-        // Eğer seri numarası poolList içinde yoksa, ekleyelim
-        if (!existsInPoolList) {
-          poolList.add(selectedDetails[i]);
-        }
+        poolList.add(details);
+        uniqueSerialNumber.add(list[i].serialNumber!);
       }
     }
     notifyListeners();
@@ -210,14 +173,10 @@ class StockVm extends ChangeNotifier{
     notifyListeners();
   }
   setPaidWithIndex(List<PoolListDetails> list ,int index){
-    if(list[index].isPaid == true){
-      list[index].isPaid = false;
-      list[index].paidDate = null;
-    }else{
-      list[index].isPaid = true;
-      list[index].paidDate = formatDate(DateTime.now().toString());
-    }
 
+    list[index].isPaid = true;
+    list[index].paidDate = formatDate(DateTime.now().toString());
+    print("ahmet ak $index  -- ${list[index].isPaid}");
     notifyListeners();
   }
 
@@ -343,8 +302,8 @@ class StockVm extends ChangeNotifier{
 
     List<PoolListDetails> filteredList = list.where((resource) =>
         (resource.serialNumber != null && resource.serialNumber!.toLowerCase().contains(query.toLowerCase())) ||
-        (resource.distributorId != null && resource.distributorId!.toString().toLowerCase().contains(getOrgName(organisations!,query)!))||
-        (resource.importerWarehouseName != null && resource.importerWarehouseName!.toLowerCase().contains(query.toLowerCase()))).toList();
+        (resource.distributorId != null && resource.distributorId!.toString().toLowerCase().contains(getOrgName(organisations!,query)!))/*||
+        (resource.importerWarehouseName != null && resource.importerWarehouseName!.toLowerCase().contains(query.toLowerCase()))*/).toList();
 
   
     return filteredList;
@@ -824,7 +783,7 @@ class StockVm extends ChangeNotifier{
     }
   }
 
-  Future<void>postPay(BuildContext context,PostStockPay pay,int id) async{
+  Future<void>postPay(BuildContext context,PostStockPay pay,int index) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
@@ -833,7 +792,7 @@ class StockVm extends ChangeNotifier{
     notifyListeners();
     try {
       await apiService.postStockPay(pay).then((value) => {
-        getStockList(context,id)
+        setPaidWithIndex(searchProduct(poolList,query),index)
       });
 
     } catch (error) {
@@ -854,36 +813,7 @@ class StockVm extends ChangeNotifier{
     }
   }
 
-  Future<void>postPayAllAssign(BuildContext context,PostStockPay pay,int id,int index) async{
-    String token = await pref.getString(context, SharedUtils.userToken);
-    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
-    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
-    showProgress(context, true);
-    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
-    notifyListeners();
-    try {
-      await apiService.postStockPay(pay).then((value) => {
-      setPaidWithIndex(searchProduct(poolList,query), index),
 
-      });
-
-    } catch (error) {
-      if (error is DioException) {
-        final res = error.response;
-        if (res?.statusCode == 400) {
-          snackBarDesign(context, StringUtil.error, res!.data);
-        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
-          await deleteToken(context);
-        }
-      } else {
-        // DioException değilse genel bir hata durumu
-        print("General error: $error");
-      }
-    } finally {
-      showProgress(context, false);
-      notifyListeners();
-    }
-  }
 
   Future<void>postDistWarehouse(BuildContext context,PostDistInventoryWarehouse postDistInventoryWarehouse,Function() function) async{
     String token = await pref.getString(context, SharedUtils.userToken);

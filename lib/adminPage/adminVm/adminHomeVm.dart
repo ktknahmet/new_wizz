@@ -11,15 +11,40 @@ import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 
+import '../../model/OLD/User.dart';
+import '../adminModel/overrideModel/overrideUserList.dart';
+
 class AdminHomeVm extends ChangeNotifier{
   SharedPref pref = SharedPref();
+  List<OverrideUserList>? overrideUserList;
   DetailReportModel? detailsReportModel;
   String currentDay=day[2];
   dynamic totalSales=0;
   dynamic totalDemos=0;
   dynamic totalLeads=0;
-
+  bool check = false;
   String? userType;
+
+
+
+  checkOverrideUser(BuildContext context,List<int> userId)async{
+
+    if(overrideUserList !=null){
+      if(overrideUserList!.isNotEmpty){
+        for(int i=0;i<overrideUserList!.length;i++){
+          for(int j=0;j<userId.length;j++){
+
+            if(overrideUserList![i].id == userId[j]){
+              print("talha can ${overrideUserList![i].id} -- ${userId[j]}");
+              check = true;
+            }
+          }
+
+        }
+      }
+    }
+    notifyListeners();
+  }
   updateMode(String mode) async {
     await pref.setString(SharedUtils.admin, mode);
     userType = mode;
@@ -160,6 +185,34 @@ class AdminHomeVm extends ChangeNotifier{
         final res = error.response;
         if (res?.statusCode == 400) {
           snackBarDesign(context, StringUtil.error, res!.data!);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      notifyListeners();
+
+    }
+
+  }
+  Future<void>getOverrideUser(BuildContext context) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      overrideUserList = await apiService.allOverrideUser();
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
         } else if (res?.statusCode == 401 || res?.statusCode == 403) {
           await deleteToken(context);
         }

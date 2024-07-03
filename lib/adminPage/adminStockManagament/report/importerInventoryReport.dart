@@ -229,7 +229,7 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                                       width: sizeWidth(context).width*0.30,
                                       child:Text("total".tr(),style: CustomTextStyle().bold16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
                                     ),
-                                    Text("${viewModel.totalNotAssign+viewModel.totalAssign+viewModel.totalPaidAssign + viewModel.totalUnPaidAssign}",style: CustomTextStyle().bold16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    Text("${viewModel.totalNotAssign+viewModel.totalAssign}",style: CustomTextStyle().bold16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
                                   ],
                                 ),
 
@@ -367,8 +367,7 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
     await showProgress(context, false);
     gridSource = ImporterInventoryReportGrid(data: viewModel.dataDetails!,context: context);
 
-    // paid edilmiş ve edilmemiş olanlarda gelecek pending payment assign edilmiş fakat paid edilmiş cancel payment
-    // warehouse adı da gelecek
+
     if(viewModel.dataDetails !=null){
       viewModel.totalAssign =0;
       viewModel.totalNotAssign =0;

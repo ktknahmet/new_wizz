@@ -61,8 +61,27 @@ class AdminOverrideVm extends ChangeNotifier{
   String currentDay=overrideSummary[0];
   List<String> search =[];
   List<Map<String, bool>> gridMap = [];
+  int? overrideUserId;
 
+  checkOverrideUser(BuildContext context,List<int> userId)async{
 
+    if(overrideUserList !=null){
+      if(overrideUserList!.isNotEmpty){
+        for(int i=0;i<overrideUserList!.length;i++){
+          for(int j=0;j<userId.length;j++){
+
+            if(overrideUserList![i].id == userId[j]){
+              print("talha can ${overrideUserList![i].id} -- ${userId[j]}");
+              overrideUserId = overrideUserList![i].id;
+            }
+          }
+
+        }
+      }
+    }
+   notifyListeners();
+
+  }
   setOverrideWinner(){
     payDate.clear();
     overrideWinner = null;
@@ -362,9 +381,7 @@ class AdminOverrideVm extends ChangeNotifier{
       }
     } finally {
       notifyListeners();
-
     }
-
   }
 
   //overrideList
@@ -392,20 +409,20 @@ class AdminOverrideVm extends ChangeNotifier{
       }
     } finally {
       notifyListeners();
-
     }
-
   }
 
   //override winner
-  Future<void>getOverrideWinner(BuildContext context,String? beginDate,String? endDate) async{
+  Future<void>getOverrideWinner(BuildContext context,String? beginDate,String? endDate,int? userId) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+
     ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
     notifyListeners();
     try {
-      overrideWinner = await apiService.getOverrideWinner(beginDate,endDate);
+      overrideWinner = await apiService.getOverrideWinner(beginDate,endDate,userId);
 
     } catch (error) {
       if (error is DioException) {
@@ -416,14 +433,11 @@ class AdminOverrideVm extends ChangeNotifier{
           await deleteToken(context);
         }
       } else {
-        // DioException değilse genel bir hata durumu
         print("General error: $error");
       }
     } finally {
       notifyListeners();
-
     }
-
   }
   //override winnerDetail
   Future<void>getOverrideWinnerDetail(BuildContext context,String? payDate) async{
@@ -464,10 +478,8 @@ class AdminOverrideVm extends ChangeNotifier{
     notifyListeners();
     try {
       await apiService.postOverride(postOverride).then((value) => {
-
         Navigator.pop(context),
         snackBarDesign(context, StringUtil.success,"overrideAdded".tr()),
-
       });
 
     } catch (error) {
@@ -703,5 +715,6 @@ class AdminOverrideVm extends ChangeNotifier{
     }
 
   }
+
 
 }
