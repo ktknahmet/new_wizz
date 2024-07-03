@@ -240,7 +240,7 @@ class _MyProgressState extends BaseStatefulPageState<MyProgress> {
                                     ),
                                     const SizedBox(height: 8,),
                                     Text(
-                                      viewModel.sales.toString(),
+                                      "${viewModel.sales.toString()}/${viewModel.estimatedSales}",
                                       style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
                                     ),
                                   ],

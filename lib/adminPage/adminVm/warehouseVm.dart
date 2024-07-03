@@ -39,9 +39,18 @@ class WarehouseVm extends ChangeNotifier{
   int type=1;
   int totalAssign=0;
   int totalNotAssign=0;
+  int totalPaidAssign=0;
+  int totalUnPaidAssign =0;
   List<StockReportDataDetails>? dataDetails;
   List<Map<String, bool>> gridMap = [];
+  Map<String, List<StockReportDataDetails>> groupedDetails = {};
+  String? selectedDistributor;
 
+
+  setSelectedDist(String value){
+    selectedDistributor = value;
+    notifyListeners();
+  }
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
     notifyListeners();
@@ -102,6 +111,19 @@ class WarehouseVm extends ChangeNotifier{
     }
     List<AllOrganisations> filteredList = list.where((resource) =>
     (resource.name != null && resource.name!.toLowerCase().contains(query.toLowerCase()))).toList();
+
+    return filteredList;
+  }
+
+  List<StockReportDataDetails> searchInventorySummary(List<StockReportDataDetails> list, String query) {
+
+    if (query.isEmpty) {
+      return list;
+    }
+    List<StockReportDataDetails> filteredList = list.where((resource) =>
+    (resource.serialNumber != null && resource.serialNumber!.toLowerCase().contains(query.toLowerCase())) ||
+        (resource.productName != null && resource.productName!.toLowerCase().contains(query.toLowerCase())) ||
+        (resource.distName != null && resource.distName!.toLowerCase().contains(query.toLowerCase()))).toList();
 
     return filteredList;
   }
@@ -287,7 +309,7 @@ class WarehouseVm extends ChangeNotifier{
   Future<void>stockReportAllData(BuildContext context,String? begin,String? end,int? distId,String? export) async{
     String token = await pref.getString(context, SharedUtils.userToken);
 
-    showProgress(context, true);
+
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     notifyListeners();
     try {
@@ -306,7 +328,7 @@ class WarehouseVm extends ChangeNotifier{
         print("General error: $error");
       }
     } finally {
-      showProgress(context, false);
+
       notifyListeners();
 
     }

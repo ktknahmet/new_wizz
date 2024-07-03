@@ -22,6 +22,8 @@ class ImporterInventoryReportGrid extends DataGridSource {
       DataGridCell<String>(columnName: 'assigned'.tr(), value: e.assignedToDistributor == true ? "Assign" :"Not Assign"),
       DataGridCell<String>(columnName: 'product'.tr(), value: e.productName ?? ""),
       DataGridCell<String>(columnName: 'distributor'.tr(), value: e.distName ?? ""),
+      DataGridCell<String>(columnName: 'isPaid?'.tr(), value: e.isPaid == true ? mmDDYDate(e.paidAt ?? "") :""),
+      DataGridCell<String>(columnName: 'saleProgress'.tr(), value: e.saleProgress ?? ""),
     ])).toList();
   }
 

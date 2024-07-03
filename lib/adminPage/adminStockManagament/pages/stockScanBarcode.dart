@@ -357,8 +357,6 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
      await viewModel.getOrganisations(context);
    }
 
-
-
    if(viewModel.stockProduct!.isNotEmpty){
      if(viewModel.products.isEmpty){
        for(int i=0;i<viewModel.stockProduct!.length;i++){

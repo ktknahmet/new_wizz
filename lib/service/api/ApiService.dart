@@ -275,7 +275,9 @@ abstract class ApiService {
       @Query("distributor_id") int? distId);
 
   @GET(ApiEndpoints.allAssignStock)
-  Future<List<AllAssignStock>> getAssignStock();
+  Future<List<AllAssignStock>> getAssignStock(
+      @Query("serial_number") String? serial
+      );
 
   @POST(ApiEndpoints.warehouses)
   Future<String> postWarehouse(@Body() WarehousePost warehousePost);

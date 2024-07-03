@@ -5864,7 +5864,7 @@ showContractPostFile(BuildContext context,ContractVm viewModel){
 }
 barcodeSetDist(BuildContext context,StockVm viewModel){
   ScrollController controller = ScrollController();
-  viewModel.orgQuery ="";
+  viewModel.query ="";
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -5892,7 +5892,7 @@ barcodeSetDist(BuildContext context,StockVm viewModel){
                                 child: TextField(
                                   onChanged: (value){
                                     viewModel.setQuery(value);
-                                    viewModel.searchOrganisation(viewModel.organisations!,viewModel.orgQuery);
+                                    viewModel.searchOrganisation(viewModel.organisations!,viewModel.query);
                                   },
                                   decoration: searchTextDesign(context, "search"),
                                   cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -5912,9 +5912,9 @@ barcodeSetDist(BuildContext context,StockVm viewModel){
                           height: sizeWidth(context).height*0.75,
                           child: ListView.builder(
                             controller: controller,
-                            itemCount: viewModel.searchOrganisation(viewModel.organisations!,viewModel.orgQuery).length,
+                            itemCount: viewModel.searchOrganisation(viewModel.organisations!,viewModel.query).length,
                             itemBuilder: (context,index){
-                              AllOrganisations model = viewModel.searchOrganisation(viewModel.organisations!,viewModel.orgQuery)[index];
+                              AllOrganisations model = viewModel.searchOrganisation(viewModel.organisations!,viewModel.query)[index];
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Card(
@@ -6902,7 +6902,7 @@ showAdjustSale(BuildContext context,SalesVm viewModel,int id,int saleId){
                                               adjustAmount: adjust,
                                               note: note.text
                                           );
-                                          await viewModel.postComAdjust(context, post,saleId);
+                                          await viewModel.postComAdjust(context, post);
                                         }else{
                                           Navigator.pop(context);
                                           snackBarDesign(context, StringUtil.error, "requiredAdjust".tr());

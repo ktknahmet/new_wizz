@@ -11,6 +11,10 @@ class StockReportDataDetails {
   bool? assignedToDistributor;
   String? productName;
   String? distName;
+  bool? isPaid;
+  String? paidAt;
+  String? saleProgress;
+  String? lastProgressAt;
 
   StockReportDataDetails({
     this.poolDetailId,
@@ -24,7 +28,11 @@ class StockReportDataDetails {
     this.updatedAt,
     this.assignedToDistributor,
     this.productName,
-    this.distName
+    this.distName,
+    this.isPaid,
+    this.paidAt,
+    this.saleProgress,
+    this.lastProgressAt
   });
 
   factory StockReportDataDetails.fromJson(Map<String, dynamic> json) => StockReportDataDetails(
@@ -40,6 +48,10 @@ class StockReportDataDetails {
     assignedToDistributor: json["assigned_to_distributor"],
     productName: json["product_name"],
     distName: json["distributor_name"],
+    isPaid: json["is_paid"],
+    paidAt: json["paid_at"],
+    saleProgress: json["in_sale_process"],
+    lastProgressAt: json["last_process_at"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -55,5 +67,9 @@ class StockReportDataDetails {
     "assigned_to_distributor": assignedToDistributor,
     "product_name": productName,
     "distributor_name": distName,
+    "is_paid": isPaid,
+    "paid_at": paidAt,
+    "in_sale_process": saleProgress,
+    "last_process_at": lastProgressAt,
   };
 }

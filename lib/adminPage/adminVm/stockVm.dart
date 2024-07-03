@@ -61,12 +61,11 @@ class StockVm extends ChangeNotifier{
   List<StockDealer>? stockDealer;
   StockPostResponse? postResponse;
   String detailsPostResponse="";
-  bool isPaid = false;
   List<PoolDistributor> postList=[];
   List<StockProduct> products =[];
   int? productId;
   PermissionStatus? status;
-  String orgQuery="";
+
   LoginUser? loginUser;
   TextEditingController distWarehouseName = TextEditingController();
   int? distWarehouseId;
@@ -84,7 +83,6 @@ class StockVm extends ChangeNotifier{
     // Seçilen elemanları tutacak geçici bir liste oluşturalım
     List<PoolListDetails> selectedDetails = [];
 
-    // Seçili olanları geçici listeye ekleyelim
     for (int i = 0; i < list.length; i++) {
       if (list[i].check == true) {
         PoolListDetails details = PoolListDetails(
@@ -95,12 +93,14 @@ class StockVm extends ChangeNotifier{
           stockDate: list[i].stockDate,
           quantity: list[i].quantity,
           serialNumber: list[i].serialNumber,
-          distributorId: list[i].distributorId,
+          distributorId: distId ?? list[i].distributorId,
           assignedToDistributor: list[i].assignedToDistributor,
           isPaid: list[i].isPaid,
           paidDate: list[i].paidAt,
+          distWarehouseId: distWarehouseId,
           importerWarehouseName: list[i].importerWarehouseName,
-          distWarehouseName: list[i].distributorWarehouseName,
+          distWarehouseName: distWarehouseName.text.isEmpty ? list[i].distributorWarehouseName : distWarehouseName.text,
+
         );
 
         selectedDetails.add(details);
@@ -116,12 +116,13 @@ class StockVm extends ChangeNotifier{
         stockDate: list[0].stockDate,
         quantity: list[0].quantity,
         serialNumber: list[0].serialNumber,
-        distributorId: list[0].distributorId,
+        distributorId: distId ?? list[0].distributorId,
         assignedToDistributor: list[0].assignedToDistributor,
         isPaid: list[0].isPaid,
         paidDate: list[0].paidAt,
+        distWarehouseId: distWarehouseId,
         importerWarehouseName: list[0].importerWarehouseName,
-        distWarehouseName: list[0].distributorWarehouseName,
+        distWarehouseName: distWarehouseName.text.isEmpty ? list[0].distributorWarehouseName : distWarehouseName.text,
       );
 
       poolList.add(firstDetail);
@@ -145,17 +146,24 @@ class StockVm extends ChangeNotifier{
     }
     notifyListeners();
   }
-  addPoolList(BuildContext context,String serial){
-    PoolListDetails details;
+  addPoolList(BuildContext context,AllAssignStock stock,String serial){
+
     if(poolList.isEmpty){
-      details= PoolListDetails(
-          productName: "HYLA EST",
-          serialNumber: serial,
-          distributorId: distId ?? 0,
-          distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
-          distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
-          isPaid: isPaid,
-          paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+      PoolListDetails details = PoolListDetails(
+        poolDetailId: stock.poolDetailId,
+        stockPoolId: stock.stockPoolId,
+        productId: stock.productId,
+        productName: stock.productName,
+        stockDate: stock.stockDate,
+        quantity: stock.quantity,
+        serialNumber: stock.serialNumber,
+        distributorId: distId ?? stock.distributorId,
+        assignedToDistributor: stock.assignedToDistributor,
+        isPaid: stock.isPaid,
+        paidDate: stock.paidAt,
+        distWarehouseId: distWarehouseId,
+        importerWarehouseName: stock.importerWarehouseName,
+        distWarehouseName: distWarehouseName.text.isEmpty ? stock.distributorWarehouseName : distWarehouseName.text,
 
       );
       poolList.add(details);
@@ -167,14 +175,21 @@ class StockVm extends ChangeNotifier{
         }
       }
       if(!check){
-        details= PoolListDetails(
-            productName: "HYLA EST",
-            serialNumber: serial,
-            distributorId: distId ?? 0,
-            distWarehouseId: distWarehouseName.text.isEmpty ? null : distId,
-            distWarehouseName: distWarehouseName.text.isEmpty ? null : distWarehouseName.text,
-            isPaid: isPaid,
-            paidDate: isPaid == true ? formatDate(DateTime.now().toString()) : null
+        PoolListDetails details = PoolListDetails(
+          poolDetailId: stock.poolDetailId,
+          stockPoolId: stock.stockPoolId,
+          productId: stock.productId,
+          productName: stock.productName,
+          stockDate: stock.stockDate,
+          quantity: stock.quantity,
+          serialNumber: stock.serialNumber,
+          distributorId: distId ?? stock.distributorId,
+          assignedToDistributor: stock.assignedToDistributor,
+          isPaid: stock.isPaid,
+          paidDate: stock.paidAt,
+          distWarehouseId: distWarehouseId,
+          importerWarehouseName: stock.importerWarehouseName,
+          distWarehouseName: distWarehouseName.text.isEmpty ? stock.distributorWarehouseName : distWarehouseName.text,
 
         );
         poolList.add(details);
@@ -205,21 +220,7 @@ class StockVm extends ChangeNotifier{
 
     notifyListeners();
   }
-  setPaid(){
-    isPaid = !isPaid;
-    if(poolList.isNotEmpty){
-      for(int i=0;i<poolList.length;i++){
-        if(isPaid==true){
-          poolList[i].isPaid =true;
-          poolList[i].paidDate = formatDate(DateTime.now().toString());
-        }else{
-          poolList[i].isPaid =false;
-        }
-      }
 
-    }
-    notifyListeners();
-  }
   setProductId(int id){
     productId = id;
     notifyListeners();
@@ -228,17 +229,15 @@ class StockVm extends ChangeNotifier{
     products.add(product);
     notifyListeners();
   }
-  setPaidPaidDate(int index){
-    poolList[index].isPaid = true;
-    poolList[index].paidDate = formatDate(DateTime.now().toString());
-    notifyListeners();
-  }
+
 
   setAllDistIdWith(String distName,int id){
     distWarehouseName.text = distName;
+    distWarehouseId = id;
 
     for(int i=0;i<poolList.length;i++){
       if(poolList[i].distWarehouseId ==null){
+        poolList[i].distributorId = distId;
         poolList[i].distWarehouseId = id;
         poolList[i].distWarehouseName = distWarehouseName.text;
       }
@@ -341,10 +340,13 @@ class StockVm extends ChangeNotifier{
     if (query.isEmpty) {
       return list;
     }
+
     List<PoolListDetails> filteredList = list.where((resource) =>
-    (resource.serialNumber != null && resource.serialNumber!.toLowerCase().contains(query.toLowerCase())) ||
-        (resource.distWarehouseName != null && resource.distWarehouseName!.toLowerCase().contains(query.toLowerCase()))||
+        (resource.serialNumber != null && resource.serialNumber!.toLowerCase().contains(query.toLowerCase())) ||
+        (resource.distributorId != null && resource.distributorId!.toString().toLowerCase().contains(getOrgName(organisations!,query)!))||
         (resource.importerWarehouseName != null && resource.importerWarehouseName!.toLowerCase().contains(query.toLowerCase()))).toList();
+
+  
     return filteredList;
   }
 
@@ -431,15 +433,18 @@ class StockVm extends ChangeNotifier{
   }
    checkBeforeScan(BuildContext context, QRViewController qrViewController) {
 
-
     qrViewController.scannedDataStream.listen((scanData) async {
       result = scanData;
       if(result!.code!.length !=8){
         snackBarDesign(context, StringUtil.error, "serialIdMust8".tr());
         return;
       }else{
+        await getAllAssignList(context,result!.code);
+        if(allAssignStock!.isNotEmpty){
+          addPoolList(context,allAssignStock![0],result!.code!);
+        }
 
-        checkStockBefore(context, result!.code!);
+
       }
       qrViewController.resumeCamera();
       notifyListeners();
@@ -633,7 +638,7 @@ class StockVm extends ChangeNotifier{
     }
   }
 
-  Future<void>getAllAssignList(BuildContext context) async{
+  Future<void>getAllAssignList(BuildContext context,String? serialNum) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
@@ -641,7 +646,7 @@ class StockVm extends ChangeNotifier{
     ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
     notifyListeners();
     try {
-      allAssignStock = await apiService.getAssignStock();
+      allAssignStock = await apiService.getAssignStock(serialNum);
 
     } catch (error) {
       if (error is DioException) {
@@ -688,9 +693,7 @@ class StockVm extends ChangeNotifier{
 
     AdminApiService apiService = AdminApiService(AdminModule().baseService(token));
     try {
-      await apiService.getPoolList(poolId).then((value) {
-        poolList = value;
-      });
+      poolList =await apiService.getPoolList(poolId);
 
     } catch (error) {
       if (error is DioException) {
@@ -821,7 +824,7 @@ class StockVm extends ChangeNotifier{
     }
   }
 
-  Future<void>postPay(BuildContext context,PostStockPay pay,int id,int index) async{
+  Future<void>postPay(BuildContext context,PostStockPay pay,int id) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
@@ -830,7 +833,7 @@ class StockVm extends ChangeNotifier{
     notifyListeners();
     try {
       await apiService.postStockPay(pay).then((value) => {
-        setPaidPaidDate(index)
+        getStockList(context,id)
       });
 
     } catch (error) {
@@ -838,6 +841,37 @@ class StockVm extends ChangeNotifier{
         final res = error.response;
         if (res?.statusCode == 400) {
          snackBarDesign(context, StringUtil.error, res!.data);
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+    }
+  }
+
+  Future<void>postPayAllAssign(BuildContext context,PostStockPay pay,int id,int index) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.postStockPay(pay).then((value) => {
+      setPaidWithIndex(searchProduct(poolList,query), index),
+
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          snackBarDesign(context, StringUtil.error, res!.data);
         } else if (res?.statusCode == 401 || res?.statusCode == 403) {
           await deleteToken(context);
         }
@@ -1005,38 +1039,5 @@ class StockVm extends ChangeNotifier{
       notifyListeners();
     }
   }
-  checkStockBefore(BuildContext context,String serialNum) async{
-    String token = await pref.getString(context, SharedUtils.userToken);
-    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
-    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
 
-
-    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
-    notifyListeners();
-    try {
-      await apiService.checkStockBefore(serialNum).then((value) => {
-        if(value == false){
-          snackBarDesign(context, StringUtil.error, "thisSerialWasAdd"),
-        }else{
-          addPoolList(context,serialNum),
-        }
-      });
-
-    } catch (error) {
-      if (error is DioException) {
-        final res = error.response;
-        if (res?.statusCode == 400) {
-          snackBarDesign(context, StringUtil.error, res!.data!);
-          Navigator.pop(context);
-        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
-          await deleteToken(context);
-        }
-      } else {
-        // DioException değilse genel bir hata durumu
-        print("General error: $error");
-      }
-    } finally {
-      notifyListeners();
-    }
-  }
 }

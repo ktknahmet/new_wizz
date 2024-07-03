@@ -201,8 +201,9 @@ class SalesVm extends ChangeNotifier{
 
     }
 
+
   }
-  postReceive(BuildContext context,PostReceiveAmount amount,int saleId) async{
+  postReceive(BuildContext context,PostReceiveAmount amount) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
@@ -214,7 +215,6 @@ class SalesVm extends ChangeNotifier{
       await apiService.postSaleAmount(amount).then((value) => {
         postResponse = value,
         snackBarDesign(context, StringUtil.success, "updatedCommissionInfo".tr()),
-        getComDetails(context, saleId)
       });
 
     } catch (error) {
@@ -237,7 +237,7 @@ class SalesVm extends ChangeNotifier{
 
   }
   //post adjust
-  postComAdjust(BuildContext context,PostAdjust postAdjust,int saleId) async{
+  postComAdjust(BuildContext context,PostAdjust postAdjust) async{
     String token = await pref.getString(context, SharedUtils.userToken);
     String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
     String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
@@ -249,7 +249,7 @@ class SalesVm extends ChangeNotifier{
       await apiService.postComAdjust(postAdjust).then((value) => {
         Navigator.pop(context),
         snackBarDesign(context, StringUtil.success, "updatedCom".tr()),
-        getComDetails(context, saleId)
+
 
       });
 

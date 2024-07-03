@@ -52,6 +52,7 @@ import 'package:wizzsales/adminPage/adminSale/adminSaleTabBar/AdminSaleTabBar.da
 import 'package:wizzsales/adminPage/adminSetting/adminSettings.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/addWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/assignGlobalStock.dart';
+import 'package:wizzsales/adminPage/adminStockManagament/pages/importerSummary.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/setWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/updateWarehouse.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/report/importerInventoryReport.dart';
@@ -174,6 +175,9 @@ class RouteGenerator {
 
       case '/${PageName.stockManagement}':
         return MaterialPageRoute(builder: (_) =>   StockManagement("importerInventory".tr()));
+
+      case '/${PageName.importerSummary}':
+        return MaterialPageRoute(builder: (_) =>   ImporterSummary("importerInventorySummary".tr()));
 
       case '/${PageName.assignGlobalStock}':
         return MaterialPageRoute(builder: (_) =>   AssignGlobalStock("assignStock".tr()));

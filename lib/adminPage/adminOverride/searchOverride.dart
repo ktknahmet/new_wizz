@@ -120,7 +120,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.5,
-                                           child: Text("overrideReceiveBy".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("overrideReceiveBy".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(model.userName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -133,7 +133,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("overrideType".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("overrideType".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(model.overrideType ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -144,7 +144,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("product".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("product".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(model.productName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -155,7 +155,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("enterSerialNumber".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("enterSerialNumber".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(model.serialNumber ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -166,7 +166,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("overrideAmount".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("overrideAmount".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text("\$${model.overrideAmount ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -177,7 +177,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("puchases".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("puchases".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(model.organisationName ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],
@@ -188,7 +188,7 @@ class _SearchOverrideState extends BaseStatefulPageState<SearchOverride> {
                                        children: [
                                          SizedBox(
                                            width: sizeWidth(context).width*0.3,
-                                           child: Text("overrideCalDate".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                           child: Text("overrideCalDate".tr(),style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                          ),
                                          Text(mmDDYDate(model.calculatedDate),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                        ],

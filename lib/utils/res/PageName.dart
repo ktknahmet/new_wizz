@@ -79,6 +79,7 @@ class PageName{
   static const String dealerStockList ="Dealer Stock List";
   static const String businessCenter="Business Center";
   static const String liveDemo ="Live Demo";
+  static const String importerSummary ="Importer Summary";
   static const String assignGlobalStock ="Assign Global Stock";
   static const String stockManagement ="Stock Management";
   static const String setOverrideUserPage ="Set Override User Page";

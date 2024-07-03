@@ -85,6 +85,27 @@ class _StockManagementState extends BaseStatefulPageState<StockManagement> {
             ),
           ),
         ),
+        const SizedBox(height: 8,),
+        GestureDetector(
+          onTap: (){
+            Navigator.pushNamed(context, '/${PageName.importerSummary}');
+          },
+          child: Card(
+            shape: cardShape(context),
+            color: ColorUtil().getColor(context, ColorEnums.background),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("importerInventorySummary".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                  Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

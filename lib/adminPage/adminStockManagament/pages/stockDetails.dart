@@ -252,12 +252,11 @@ class _StockDetailsState extends State<StockDetails> {
                                                             Map<String,dynamic> warehouseMap ={};
                                                             warehouseMap = await selectWarehouseList(context,viewModel);
 
-
                                                             if(warehouseMap["distId"] !=null){
                                                               viewModel.setDistSpesificWarehouse(index,warehouseMap["distId"],warehouseMap["warehouseName"]);
                                                             }
                                                           }else{
-                                                            snackBarDesign(context, StringUtil.warning, "You must add warehouse.");
+                                                            snackBarDesign(context, StringUtil.warning, "youHaveToWarehouse".tr());
                                                           }
                                                         },
                                                         style: elevatedButtonStyle(context),
@@ -359,9 +358,9 @@ class _StockDetailsState extends State<StockDetails> {
   }
   postPay(int id,int index)async{
     PostStockPay pay = PostStockPay(poolDetailId: id);
-    await viewModel.postPay(context, pay,widget.id,index);
+    await viewModel.postPay(context, pay,widget.id);
   }
-  Future<void> getWarehouses(int id)async{
+  Future<void> getWarehouses(int? id)async{
     await viewModel.getWarehouse(context,id);
   }
 }

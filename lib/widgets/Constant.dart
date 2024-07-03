@@ -23,6 +23,7 @@ import 'package:wizzsales/model/overrideModel/dealerOverrideWinner.dart';
 import 'package:wizzsales/utils/function/SharedPref.dart';
 import 'package:wizzsales/utils/res/SharedUtils.dart';
 import 'package:wizzsales/widgets/Extension.dart';
+import '../adminPage/adminModel/stockReportModel/stockReportData.dart';
 import '../model/OLD/User.dart';
 
 List<Types> roleList = [
@@ -868,8 +869,10 @@ String moneyFormat(dynamic number) {
 
   // Nokta sayısını say
   int dotCount = '.'.allMatches(value).length;
-
-  // Eğer 1'den fazla nokta varsa, son noktayı virgüle çevir
+  int commaCount = ','.allMatches(value).length;
+  if(commaCount ==1){
+    value = value.toString().replaceAll(",", ".");
+  }
   if (dotCount > 1) {
     int lastDotIndex = value.lastIndexOf('.');
     value = value.substring(0, lastDotIndex) + ',' + value.substring(lastDotIndex + 1);
@@ -999,6 +1002,16 @@ String? getOrganisationName(List<AllOrganisations>? organisations, int distribut
   }
 
 }
+String? getOrgName(List<AllOrganisations>? organisations, String query) {
+  try {
+    return organisations!.firstWhere(
+          (org) => org.name!.toLowerCase().contains(query)
+    ).id.toString();
+  } catch (e) {
+    return "0";
+  }
+
+}
 Future<void> showErrorMessage(BuildContext context,String text) async{
   try{
 
@@ -1011,5 +1024,21 @@ Future<void> showErrorMessage(BuildContext context,String text) async{
     return Future.error("hata mesajı :${error.toString()}");
   }
 
+}
+
+Future<Map<String, List<StockReportDataDetails>>> groupByDistributor(List<StockReportDataDetails> detailsList) async{
+  Map<String, List<StockReportDataDetails>> groupedData = {};
+
+  for (var detail in detailsList) {
+    String distributorKey = detail.distributorId == 0 ? 'Not Assigned' : detail.distName!;
+
+    if (groupedData.containsKey(distributorKey)) {
+      groupedData[distributorKey]!.add(detail);
+    } else {
+      groupedData[distributorKey] = [detail];
+    }
+  }
+
+  return groupedData;
 }
 

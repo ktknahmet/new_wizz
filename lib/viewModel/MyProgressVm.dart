@@ -18,6 +18,7 @@ class MyProgressVm extends ChangeNotifier{
   int progressIndex=3;
   TextEditingController daySelect = TextEditingController(text: "annually".tr());
   int? sales;
+  int estimatedSales=0;
   dynamic averageSalesPrice;
   dynamic closingRatio;
   int? totalDemos;
@@ -44,6 +45,7 @@ class MyProgressVm extends ChangeNotifier{
 
     if(progressIndex ==1){
       totalLeads = 0;
+      estimatedSales=0;
       sales = (reportModel.salesReport!.todayCount ?? 0);
       averageSalesPrice = getDecimalPlaces( reportModel.salesAvgReport!.dailyNetPriceAverage ?? "0",2);
 
@@ -69,13 +71,14 @@ class MyProgressVm extends ChangeNotifier{
         leadGoals = reportModel.userGoals![0].leads ?? 0;
         appointmentGoals = reportModel.userGoals![0].appointments ?? 0;
         demosGoals = reportModel.userGoals![0].demos ?? 0;
-
+        estimatedSales = reportModel.userGoals![0].estimated ?? 0;
         leadActual = reportModel.userGoals![0].actualLeads ?? 0;
         appointmentActual = reportModel.userGoals![0].actualAppointments ?? 0;
         demosActual = reportModel.userGoals![0].actualDemos ?? 0;
       }
       paidCom = reportModel.commission!.paidComDaily ?? 0;
       unPaidCom = reportModel.commission!.notPaidComDaily ?? 0;
+
 
     }
 
@@ -106,7 +109,7 @@ class MyProgressVm extends ChangeNotifier{
        leadGoals = reportModel.userGoals![1].leads ?? 0;
        appointmentGoals = reportModel.userGoals![1].appointments ?? 0;
        demosGoals = reportModel.userGoals![1].demos ?? 0;
-
+       estimatedSales = reportModel.userGoals![1].estimated ?? 0;
        leadActual = reportModel.userGoals![1].actualLeads ?? 0;
        appointmentActual = reportModel.userGoals![1].actualAppointments ?? 0;
        demosActual = reportModel.userGoals![1].actualDemos ?? 0;
@@ -115,7 +118,6 @@ class MyProgressVm extends ChangeNotifier{
       unPaidCom = reportModel.commission!.notPaidComWeekly ?? 0;
 
     }
-
     if(progressIndex ==2){
       totalLeads = 0;
       sales = reportModel.salesReport!.monthlyCount ?? 0;
@@ -146,7 +148,7 @@ class MyProgressVm extends ChangeNotifier{
         leadGoals = reportModel.userGoals![2].leads ?? 0;
         appointmentGoals = reportModel.userGoals![2].appointments ?? 0;
         demosGoals = reportModel.userGoals![2].demos ?? 0;
-
+        estimatedSales = reportModel.userGoals![2].estimated ?? 0;
         leadActual = reportModel.userGoals![2].actualLeads ?? 0;
         appointmentActual = reportModel.userGoals![2].actualAppointments ?? 0;
         demosActual = reportModel.userGoals![2].actualDemos ?? 0;
@@ -178,17 +180,17 @@ class MyProgressVm extends ChangeNotifier{
         dynamic ratio = ((reportModel.demoReportV2!.successSold ?? 0) / (reportModel.demoReportV2!.totalDemoAsAnnual ?? 0));
         closingRatio = (ratio * 100).toString();
 
-        print("ahmet $closingRatio");
+
       }
       if(reportModel.userGoals!.isNotEmpty){
 
-        leadGoals = (reportModel.userGoals![2].leads ?? 0)*3 ;
-        appointmentGoals = (reportModel.userGoals![2].appointments ?? 0) *3;
-        demosGoals = (reportModel.userGoals![2].demos ?? 0) *3 ;
-
-        leadActual = (reportModel.userGoals![2].actualLeads ?? 0)*3;
-        appointmentActual = (reportModel.userGoals![2].actualAppointments ?? 0)*3;
-        demosActual = (reportModel.userGoals![2].actualDemos ?? 0)*3;
+        leadGoals = (reportModel.userGoals![2].leads ?? 0)*12 ;
+        appointmentGoals = (reportModel.userGoals![2].appointments ?? 0) *12;
+        demosGoals = (reportModel.userGoals![2].demos ?? 0) *12 ;
+        estimatedSales = (reportModel.userGoals![2].estimated ?? 0)*12;
+        leadActual = (reportModel.userGoals![2].actualLeads ?? 0)*12;
+        appointmentActual = (reportModel.userGoals![2].actualAppointments ?? 0)*12;
+        demosActual = (reportModel.userGoals![2].actualDemos ?? 0)*12;
       }
       paidCom = reportModel.commission!.paidComAnnual ?? 0;
       unPaidCom = reportModel.commission!.notPaidComAnnual ?? 0;

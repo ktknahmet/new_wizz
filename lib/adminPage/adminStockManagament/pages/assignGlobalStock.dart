@@ -17,6 +17,7 @@ import '../../../widgets/Extension.dart';
 import '../../../widgets/WidgetExtension.dart';
 import '../../adminModel/stockModel/pool/poolListDetails.dart';
 import '../../adminModel/stockModel/product/StockProduct.dart';
+import '../../adminModel/stockPayModel/postStockPay.dart';
 // ignore_for_file: use_build_context_synchronously
 class AssignGlobalStock extends BaseStatefulPage {
   const AssignGlobalStock(super.appBarName, {super.key});
@@ -50,11 +51,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                   if (viewModel.status!.isGranted) SizedBox(
                     height: sizeWidth(context).height*0.12,
                     width: sizeWidth(context).width*0.8,
-                    child: GestureDetector(
-                      onTap: ()async{
-                        await viewModel.checkStockBefore(context, "12344322");
-                      },
-                      child: ClipRRect(
+                    child:  ClipRRect(
                           borderRadius: BorderRadius.circular(24),
                           child: QRView(
                               key: viewModel.qrKey,
@@ -68,7 +65,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                 borderWidth: 10,)
                           )
                       ),
-                    ),
+
                   ) else Column(
                     children: [
                       spinKit(context),
@@ -115,7 +112,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                               await getWarehouses(viewModel.distId);
                               await showProgress(context, false);
                             }else{
-                              snackBarDesign(context, StringUtil.error, "You must select distributor");
+                              snackBarDesign(context, StringUtil.error, "youHaveSelectDist".tr());
                             }
                             if(viewModel.warehouseList!.isNotEmpty){
                               Map<String,dynamic> warehouseMap ={};
@@ -127,7 +124,7 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                               }
                             }else{
                               viewModel.clearDistWarehouseName();
-                              snackBarDesign(context, StringUtil.warning, "You must add warehouse.");
+                              snackBarDesign(context, StringUtil.warning, "youHaveToWarehouse".tr());
                             }
                           },
                         ),
@@ -140,52 +137,14 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                await getAssignStockList();
                             },
                             style: elevatedButtonStyle(context),
-                            child: Text("search".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                            child: Text("allStocks".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                         ),
                       ),
 
                     ],
                   ),
                   const SizedBox(height: 4,),
-                  Card(
-                    shape: cardShape(context),
-                    color: ColorUtil().getColor(context, ColorEnums.background),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Radio(
-                                activeColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                value: true,
-                                groupValue: viewModel.isPaid,
-                                onChanged: (value) async{
-                                  viewModel.setPaid();
-                                },
-                              ),
-                              Text("paid".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context,ColorEnums.textDefaultLight))),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Radio(
-                                activeColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                value: false,
-                                groupValue: viewModel.isPaid,
-                                onChanged: (value) async{
-                                  viewModel.setPaid();
-                                },
-                              ),
-                              Text("unPaid".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context,ColorEnums.textDefaultLight))),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -326,19 +285,20 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
                                                 ],
                                               ),
                                             const SizedBox(height: 4,),
-                                            SizedBox(
-                                              width: sizeWidth(context).width*0.9,
-                                              child: ElevatedButton(
-                                                  onPressed: ()async{
-                                                    bool check = await areYouSure(context);
-                                                    if(check){
-                                                      viewModel.setPaidWithIndex(viewModel.searchProduct(viewModel.poolList,viewModel.query), index);
-                                                    }
-                                                  },
-                                                  style: elevatedButtonStyle(context),
-                                                  child: Text(value.isPaid ==true ? "switchUnPaid".tr() : "switchPaid".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                            if(value.distributorId !=0 && value.isPaid ==false)
+                                              SizedBox(
+                                                width: sizeWidth(context).width*0.9,
+                                                child: ElevatedButton(
+                                                    onPressed: ()async{
+                                                      bool check = await areYouSure(context);
+                                                      if(check){
+                                                        await postPay(value.poolDetailId!,index);
+                                                      }
+                                                    },
+                                                    style: elevatedButtonStyle(context),
+                                                    child: Text("switchPaid".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                ),
                                               ),
-                                            ),
 
                                           ],
                                         ),
@@ -410,11 +370,15 @@ class _AssignGlobalStockState extends BaseStatefulPageState<AssignGlobalStock> {
     await showProgress(context, false);
   }
   getAssignStockList()async{
-    await viewModel.getAllAssignList(context);
+    await viewModel.getAllAssignList(context,null);
     clearFocus(context);
     if(viewModel.allAssignStock!.isNotEmpty){
       selectAssignStockList(context,viewModel);
     }
 
+  }
+  postPay(int id,int index)async{
+    PostStockPay pay = PostStockPay(poolDetailId: id);
+    await viewModel.postPayAllAssign(context, pay,id,index);
   }
 }

@@ -226,37 +226,24 @@ class _StockPageState extends BaseStatefulPageState<StockPage> {
                                             child:Text("status".tr(),style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                           ),
                                           const SizedBox(width: 8), // Araya bir boşluk ekleyebilirsiniz
-                                          Text(model.poolStatus!.toUpperCase(),style:model.poolStatus!.toUpperCase() =="PROCESSING"
-                                              ? CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.error))
-                                              :CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.wizzColor),))
+                                          if(model.assignedProductQuantity! != model.totalQuantity!)
+                                            Text("PROCESSING" ,style:CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.error)))
+                                          else
+                                            Text("COMPLETED" ,style:CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.wizzColor)))
+
                                         ],
                                       ),
                                       const SizedBox(height: 4,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: (){
+                                      SizedBox(
+                                        width:sizeWidth(context).width*0.8,
+                                        child: ElevatedButton(
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, '/${PageName.adminStockDetails}',arguments: {'id':viewModel.getPoolHistory![index].stockPoolId!,'assign':viewModel.getPoolHistory![index].assignedProductQuantity!, 'total':viewModel.getPoolHistory![index].totalSavedStockOfPool!});
 
-                                              Navigator.pushNamed(context, '/${PageName.adminStockDetails}',arguments: {'id':viewModel.getPoolHistory![index].stockPoolId!,'assign':viewModel.getPoolHistory![index].assignedProductQuantity!, 'total':viewModel.getPoolHistory![index].totalSavedStockOfPool!});
-
-                                            },
-                                            style: elevatedButtonStyle(context),
-                                            child:Text("assignedStocks".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                              if(model.poolStatus!.toUpperCase() !="COMPLETED"){
-                                                Navigator.pushNamed(context, '/${PageName.adminScanProduct}',  arguments: {'id':viewModel.getPoolHistory![index].stockPoolId!,'assign':viewModel.getPoolHistory![index].totalSavedStockOfPool!, 'total':viewModel.getPoolHistory![index].totalQuantity!});
-                                              }else{
-                                                snackBarDesign(context, StringUtil.warning, "alreadyCompleted".tr());
-                                              }
-                                            },
-                                            style: elevatedButtonStyle(context),
-                                            child:Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                          ),
-                                        ],
+                                          },
+                                          style: elevatedButtonStyle(context),
+                                          child:Text("assignedStocks".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                        ),
                                       ),
                                       const SizedBox(height: 4,),
                                       if((model.totalSavedStockOfPool ?? 0) < (model.totalQuantity ?? 0))

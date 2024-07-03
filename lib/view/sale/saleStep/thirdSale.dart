@@ -288,9 +288,8 @@ class _DrawDialogState extends State<DrawDialog> {
                     SaleVM.addSaleModel.caddress = draw.caddress;
 
                     if (draw.cphone2 != null && draw.cphone2!.isNotEmpty) {
-                      List<String> numaraParcalari = draw.cphone!.split("-");
-                      String phone = numaraParcalari.length > 1 ? numaraParcalari[1] : "";
-                      SaleVM.addSaleModel.cphone2 = phone;
+
+                      SaleVM.addSaleModel.cphone = extractPhoneNumber(draw.cphone ?? "");
                     }
                     if (draw.sfirstname != null && draw.sfirstname!.isNotEmpty) {
                       SaleVM.addSaleModel.sfirstname = draw.sfirstname;

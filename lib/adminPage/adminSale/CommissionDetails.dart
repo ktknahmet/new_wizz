@@ -282,7 +282,7 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                            ],
                                          ),
                                          const SizedBox(height: 4,),
-                                         Row(
+                                        /* Row(
                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                            children: [
                                              SizedBox(
@@ -293,7 +293,7 @@ class _CommissionDetailsState extends State<CommissionDetails> {
                                              Text("\$${widget.sale.finance ?? "0.00"}.00", style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
                                            ],
                                          ),
-                                         const SizedBox(height: 4,),
+                                         const SizedBox(height: 4,),*/
                                          Row(
                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                            children: [
@@ -588,10 +588,14 @@ class _CommissionDetailsState extends State<CommissionDetails> {
     await viewModel.getComDetails(context, widget.sale.id!);
     await viewModel.getProductCoast(context);
 
-
-    for(int i=0;i<viewModel.commissionDetails!.length;i++){
-      totalComAmount +=double.parse(viewModel.commissionDetails![i].commAmount!);
+    totalComAmount =0;
+    if(viewModel.commissionDetails !=null){
+      for(int i=0;i<viewModel.commissionDetails!.length;i++){
+        print("aktekin ${viewModel.commissionDetails![i].commAmount ?? "ahmet"}");
+        totalComAmount +=double.parse(viewModel.commissionDetails![i].commAmount!);
+      }
     }
+
 
     if(widget.sale.price !=null){
       taxPrice = (double.parse(widget.sale.price!) * double.parse(widget.sale.tax!)) / 100;
@@ -625,8 +629,9 @@ class _CommissionDetailsState extends State<CommissionDetails> {
         receiveAmount: receive.text.replaceAll(",", ".")
     );
     if (receive.text.isNotEmpty) {
-      await viewModel.postReceive(context, receiveAmount,widget.sale.id!);
+      await viewModel.postReceive(context, receiveAmount);
       await post();
+      await getList();
     } else {
       snackBarDesign(context, StringUtil.error, "Receive amount must be bigger than 0");
     }
@@ -638,7 +643,8 @@ class _CommissionDetailsState extends State<CommissionDetails> {
         receiveAmount: receive.text.replaceAll(",", ".")
     );
     if (receive.text.isNotEmpty) {
-      await viewModel.postReceive(context, receiveAmount,widget.sale.id!);
+      await viewModel.postReceive(context, receiveAmount);
+      await getList();
     } else {
       snackBarDesign(context, StringUtil.error, "Receive amount must be bigger than 0");
     }

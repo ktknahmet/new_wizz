@@ -1601,9 +1601,10 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<List<AllAssignStock>> getAssignStock() async {
+  Future<List<AllAssignStock>> getAssignStock(String? serial) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'serial_number': serial};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio

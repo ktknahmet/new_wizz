@@ -8,6 +8,7 @@ import 'package:wizzsales/utils/style/ColorEnums.dart';
 import "package:syncfusion_flutter_core/theme.dart" show SfDataGridTheme, SfDataGridThemeData;
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+import '../../../constants/AppColors.dart';
 import '../../../utils/function/helper/DatepickerHelper.dart';
 import '../../../utils/res/StringUtils.dart';
 import '../../../utils/style/CustomTextStyle.dart';
@@ -174,37 +175,64 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
                                       width: sizeWidth(context).width*0.30,
-                                      child: Column(
-                                        children: [
-                                          Text("assigned".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
-                                          Text("${viewModel.totalAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
-                                        ],
-                                      ),
+                                      child:Text("assigned".tr(),style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
                                     ),
-                                    SizedBox(
-                                      width: sizeWidth(context).width*0.30,
-                                      child: Column(
-                                        children: [
-                                          Text("notAssigned".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
-                                          Text("${viewModel.totalNotAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: sizeWidth(context).width*0.30,
-                                      child: Column(
-                                        children: [
-                                          Text("total".tr(),style: CustomTextStyle().regular18(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
-                                          Text("${viewModel.totalNotAssign+viewModel.totalAssign}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight)))
-                                        ],
-                                      ),
-                                    ),
+                                    Text("${viewModel.totalAssign}",style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
                                   ],
-                                )
+                                ),
+                                const SizedBox(height:4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child:Text("paidAssign".tr(),style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.totalPaidAssign}",style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                  ],
+                                ),
+                                const SizedBox(height:4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child:Text("notAssigned".tr(),style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.totalNotAssign}",style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                  ],
+                                ),
+                                const SizedBox(height:4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child:Text("unPaidAssign".tr(),style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.totalUnPaidAssign}",style: CustomTextStyle().regular16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                const Divider(
+                                  color: AppColors.white,
+
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.30,
+                                      child:Text("total".tr(),style: CustomTextStyle().bold16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.totalNotAssign+viewModel.totalAssign+viewModel.totalPaidAssign + viewModel.totalUnPaidAssign}",style: CustomTextStyle().bold16(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                  ],
+                                ),
+
                               ],
                             ),
                           ),
@@ -223,9 +251,8 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                                   sortIconColor:ColorUtil().getColor(context, ColorEnums.textTitleLight),
                                   gridLineStrokeWidth:0.2,
                                   gridLineColor:ColorUtil().getColor(context, ColorEnums.textTitleLight),
-                                  selectionColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
                                   filterIconColor:ColorUtil().getColor(context, ColorEnums.textTitleLight),),
-                                child: SfDataGrid(
+                                  child: SfDataGrid(
                                   controller: dataGridController,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility: GridLinesVisibility.both,
@@ -237,9 +264,6 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                                   editingGestureType: EditingGestureType.tap,
                                   navigationMode: GridNavigationMode.cell,
                                   selectionMode: SelectionMode.single,
-                                  onCellTap: (DataGridCellTapDetails details) async{
-                    
-                                  },
                                   columns: <GridColumn>[
                     
                     
@@ -285,12 +309,33 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
                                        // visible:  getStatusVisibility("distributor".tr(), viewModel.gridMap),
                                         columnName: 'distributor'.tr(),
                                         label: Container(
-                    
                                             alignment: Alignment.center,
                                             child: Text(
                                               'distributor'.tr(),
                                               style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
                     
+                                            ))),
+                                    GridColumn(
+                                      // visible:  getStatusVisibility("distributor".tr(), viewModel.gridMap),
+                                        columnName: 'isPaid?'.tr(),
+                                        label: Container(
+
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'isPaid?'.tr(),
+                                              style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+
+                                            ))),
+                                    GridColumn(
+                                      // visible:  getStatusVisibility("distributor".tr(), viewModel.gridMap),
+                                        columnName: 'saleProgress'.tr(),
+                                        label: Container(
+
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'saleProgress'.tr(),
+                                              style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+
                                             ))),
                     
                                   ],
@@ -315,9 +360,11 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
     await viewModel.getOrganisations(context);
   }
   Future<void> allList(BuildContext context) async{
+    await showProgress(context, true);
     dynamic x = formatDateString(startDate.text,"MM-dd-yyyy","yyyy-MM-dd");
     dynamic y = formatDateString(endDate.text,"MM-dd-yyyy","yyyy-MM-dd");
     await viewModel.stockReportAllData(context, x,y,viewModel.distId,StringUtil.export);
+    await showProgress(context, false);
     gridSource = ImporterInventoryReportGrid(data: viewModel.dataDetails!,context: context);
 
     // paid edilmiş ve edilmemiş olanlarda gelecek pending payment assign edilmiş fakat paid edilmiş cancel payment
@@ -325,13 +372,21 @@ class _ImporterInventoryReportState extends State<ImporterInventoryReport> {
     if(viewModel.dataDetails !=null){
       viewModel.totalAssign =0;
       viewModel.totalNotAssign =0;
-      for(int i=0;i<viewModel.dataDetails!.length;i++){
-        if(viewModel.dataDetails![i].assignedToDistributor==true){
+      viewModel.totalPaidAssign =0;
+      viewModel.totalUnPaidAssign=0;
+
+      for (int i = 0; i < viewModel.dataDetails!.length; i++) {
+        if (viewModel.dataDetails![i].assignedToDistributor == true) {
           viewModel.totalAssign++;
-        }else{
-          viewModel.totalNotAssign +=1;
+        } else {
+          viewModel.totalNotAssign++;
         }
 
+        if (viewModel.dataDetails![i].assignedToDistributor == true && viewModel.dataDetails![i].isPaid == true) {
+          viewModel.totalPaidAssign++;
+        } else {
+          viewModel.totalUnPaidAssign++;
+        }
       }
     }
 

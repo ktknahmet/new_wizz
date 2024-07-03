@@ -71,6 +71,7 @@ class _SeventhSaleState extends State<SeventhSale> {
 
           selectedFinance = paymentType.name ?? "";
         }
+        print("aktekin ${SaleVM.addSaleModel.finance}");
 
         if (SaleVM.addSaleModel.leadtype != null) {
           DistributorSubType leadType = distributor!.leadtype!.where((element) {
@@ -865,6 +866,8 @@ class _SeventhSaleState extends State<SeventhSale> {
       double val = tPri - down;
       //financed amount
       salesFinancedAmountController.text = '\$${val.toStringAsFixed(2)}';
+
+
 
       //tpri = totalPrice
       // down = downPayment

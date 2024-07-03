@@ -29,12 +29,14 @@ class _AllExpenseState extends State<AllExpense> {
     getList();
     super.initState();
   }
-
-
+  @override
+  void dispose() {
+    deactivate();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
       appBar: AddAppBar(
@@ -220,8 +222,9 @@ class _AllExpenseState extends State<AllExpense> {
       viewModel.setTotal(viewModel.allExpense!,viewModel.expenses);
       if(expenses.isEmpty){
         for(int i=0;i<viewModel.allExpense!.length;i++){
-          if(expenses.contains(viewModel.allExpense![i].expenseName) == false)
+          if(expenses.contains(viewModel.allExpense![i].expenseName) == false) {
             expenses.add(viewModel.allExpense![i].expenseName!);
+          }
         }
         expenses.add("All");
       }
