@@ -41,18 +41,36 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
-                    width: sizeWidth(context).width,
-                    height: 40,
-                    child: TextField(
-                      onChanged: (value){
-                        viewModel.setQuery(value);
-                        viewModel.searchProductCoast(viewModel.productCoast!,viewModel.query);
-                      },
-                      decoration: searchTextDesign(context, "search"),
-                      cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
-                      style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: sizeWidth(context).width*0.6,
+                        height: 40,
+                        child: TextField(
+                          onChanged: (value){
+                            viewModel.setQuery(value);
+                            viewModel.searchProductCoast(viewModel.productCoast!,viewModel.query);
+                          },
+                          decoration: searchTextDesign(context, "search"),
+                          cursorColor:ColorUtil().getColor(context, ColorEnums.wizzColor),
+                          style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
+                        ),
+                      ),
+                      Container(
+                        width: sizeWidth(context).width*0.3,
+                        height: 40,
+                        decoration: containerDecoration(context),
+                        child:  Column(
+                          children: [
+                            Text("total".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                            const SizedBox(height: 4,),
+                            Text("${viewModel.productCoast!.length}",style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8,),
                   RefreshIndicator(
@@ -121,16 +139,32 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                                       ],
                                     ),
                                     const SizedBox(height: 8,),
-                                    SizedBox(
-                                      width: sizeWidth(context).width*0.8,
-                                      height: 30,
-                                      child: ElevatedButton(
-                                          onPressed: (){
-                                            updateProductCoast(context,viewModel,model.costId!);
-                                          },
-                                          style: elevatedButtonStyle(context),
-                                          child: Text("update".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: sizeWidth(context).width*0.4,
+                                          child: ElevatedButton(
+                                              onPressed: (){
+                                                updateProductCoast(context,viewModel,model.costId!);
+                                              },
+                                              style: elevatedButtonStyle(context),
+                                              child: Text("update".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                        ),
+                                        SizedBox(
+                                          width: sizeWidth(context).width*0.4,
+                                          child: ElevatedButton(
+                                              onPressed: ()async{
+                                                bool check = await areYouSure(context);
+                                                if(check){
+                                                 await delete();
+                                                }
+                                              },
+                                              style: elevatedButtonStyle(context),
+                                              child: Text("delete".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                        ),
+                                      ],
+                                    )
               
                                   ],
                                 ),
@@ -161,5 +195,8 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
   }
   Future <void>getList()async{
    await viewModel.getProductCoast(context);
+  }
+  Future<void> delete()async{
+
   }
 }

@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wizzsales/constants/AppColors.dart';
 import 'package:wizzsales/constants/ColorsUtil.dart';
@@ -10,11 +9,8 @@ import 'package:wizzsales/utils/style/CustomTextStyle.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/view/sale/document/saleDocument.dart';
 import 'package:wizzsales/viewModel/MySaleVm.dart';
-import 'package:wizzsales/viewModel/OLD/SalelistMobx.dart';
 import 'package:wizzsales/widgets/Constant.dart';
-import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
-
 import '../../../model/OLD/Sale.dart';
 
 class MySaleApproved extends StatefulWidget {

@@ -126,10 +126,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
                                                   SizedBox(
-                                                      width: sizeWidth(context).width*0.25,
+                                                      width: sizeWidth(context).width*0.2,
                                                       child: Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                                   SizedBox(
-                                                    width: sizeWidth(context).width*0.25,
+                                                    width: sizeWidth(context).width*0.2,
                                                     child: Divider(
                                                       thickness: 2,
                                                       color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -142,36 +142,22 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                         ),
                                       ),
                                       const SizedBox(height: 4,),
-                                      GestureDetector(
-                                        onTap: (){
-                                          openEmail(widget.sale.cemail!);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.20,
-                                                child: Text("email".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            const SizedBox(width: 8,),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  SizedBox(
-                                                      width: sizeWidth(context).width*0.7,
-                                                      child: Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                                  SizedBox(
-                                                    width: sizeWidth(context).width*0.7,
-                                                    child: Divider(
-                                                      thickness: 2,
-                                                      color: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.20,
+                                              child: Text("email".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          const SizedBox(width: 8,),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+
+                                            ],
+                                          ),
+
+                                        ],
                                       ),
                                       const SizedBox(height: 4,),
                                       Row(

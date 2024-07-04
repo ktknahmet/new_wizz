@@ -46,7 +46,6 @@ class StockVm extends ChangeNotifier{
   String query="";
   String stockQuery="";
   int? response;
-  String? postStock;
   List<AssignDealerList>? assignList;
   List<StockHistory>? stockHistory;
   List<GetPoolHistory>? getPoolHistory;
@@ -857,9 +856,8 @@ class StockVm extends ChangeNotifier{
     notifyListeners();
     try {
       await apiService.postStockDealer(stockDealer).then((value) => {
-        postStock =value,
         Navigator.pop(context),
-        snackBarDesign(context, StringUtil.success, postStock!),
+        snackBarDesign(context, StringUtil.success, "addedToDealer".tr()),
         getStock(context)
       });
 

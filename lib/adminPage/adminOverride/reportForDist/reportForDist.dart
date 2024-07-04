@@ -7,11 +7,8 @@ import 'package:wizzsales/utils/basePage/BaseStateful.dart';
 import 'package:wizzsales/utils/style/CustomTextStyle.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
-
 import '../../../constants/ColorsUtil.dart';
-import '../../../utils/function/SharedPref.dart';
 import '../../../utils/function/helper/DatepickerHelper.dart';
-import '../../../utils/res/SharedUtils.dart';
 import '../../../utils/res/StringUtils.dart';
 import '../../../utils/style/ColorEnums.dart';
 import '../../../widgets/WidgetExtension.dart';
@@ -133,15 +130,12 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
                                           children: [
                                             Text("total".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
                                             Text("${viewModel.overrideWinner!.length}",style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-
                                           ],
                                         ),
-
                                       ],
                                     ),
                                   )
                               ),
-
                       ],
                     ),
                     if(viewModel.overrideWinner !=null)
@@ -199,7 +193,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
                                                 child:Text("puchases".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                               ),
                                               Text(model.organisationName ?? "",style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-
                                             ],
                                           ),
                                           const SizedBox(height: 4,),
@@ -211,7 +204,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
                                                 child:Text("overrideType".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                               ),
                                               Text(model.overrideType ?? "",style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-
                                             ],
                                           ),
                                           const SizedBox(height: 4,),
@@ -247,7 +239,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
                                                 child:Text("enterSerialNumber".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                               ),
                                               Text(model.serialNumber ?? "",style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-
                                             ],
                                           ),
                                         ],
@@ -264,7 +255,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
                 ),
               );
             }
-
         },
       ),
     );
@@ -275,7 +265,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
     List<int> loginId =[];
     for(int i=0;i<loginUser!.profiles!.length;i++){
       loginId.add(loginUser!.profiles![i].userId!);
-
     }
      await viewModel.checkOverrideUser(context,loginId);
   }
@@ -283,7 +272,6 @@ class _OverrideReportDistState extends BaseStatefulPageState<OverrideReportDist>
     await showProgress(context, true);
     dynamic x = formatDateString(startDate.text,"MM-dd-yyyy","yyyy-MM-dd");
     dynamic y = formatDateString(endDate.text,"MM-dd-yyyy","yyyy-MM-dd");
-
 
     await viewModel.getOverrideWinner(context,x,y,viewModel.overrideUserId);
 

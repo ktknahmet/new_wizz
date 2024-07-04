@@ -781,7 +781,6 @@ statusCase(int type){
       value ="Not Selected";
       return value;
   }
-
 }
 financeType(int type){
   String value="";

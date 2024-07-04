@@ -76,12 +76,23 @@ class _AdminSaleDetailsState extends State<AdminSaleDetails> {
                                         openDialPad(widget.sale.cphone!);
                                       }
                                     },
-                                    child:  Column(
+                                    child:   Expanded(
+                                      child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                          SizedBox(
+                                              width: sizeWidth(context).width*0.20,
+                                              child: Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          SizedBox(
+                                            width: sizeWidth(context).width*0.20,
+                                            child: Divider(
+                                              thickness: 2,
+                                              color: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                                            ),
+                                          )
                                         ],
                                       ),
+                                    ),
 
                                   ),
                                 ],

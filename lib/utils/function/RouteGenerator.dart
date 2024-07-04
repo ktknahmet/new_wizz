@@ -278,7 +278,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>  const TotalLeads());
 
       case '/${PageName.totalLeadsReport}':
-        return MaterialPageRoute(builder: (_) =>  TotalLeadsReport("leadsReport".tr()));
+        return MaterialPageRoute(builder: (_) =>  const TotalLeadsReport());
 
 
       case '/${PageName.businessCenter}':

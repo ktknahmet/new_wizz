@@ -84,6 +84,8 @@ import 'package:wizzsales/model/stockModel/assignDealerList.dart';
 import 'package:wizzsales/service/ServiceModule.dart';
 
 import '../../adminPage/adminModel/inventoryModel/allAssignStock.dart';
+import '../../adminPage/adminModel/overrideModel/deleteOverrideConfig.dart';
+import '../../adminPage/adminModel/overrideModel/updateOverrideConfig.dart';
 import '../../adminPage/adminModel/postGoals/PostGoals.dart';
 
 part 'ApiService.g.dart';
@@ -261,6 +263,12 @@ abstract class ApiService {
 
   @POST(ApiEndpoints.overrideUserDelete)
   Future<String> deleteOverrideUser(@Body() OverrideUserDelete deleteOverride);
+
+  @POST(ApiEndpoints.deleteOverrideConfig)
+  Future<String> deleteOverrideConfig(@Body() DeleteOverrideConfig delete);
+
+  @POST(ApiEndpoints.updateOverrideConfig)
+  Future<String> updateOverrideConfig(@Body() UpdateOverrideConfig update);
 
   @GET(ApiEndpoints.overrideUser)
   Future<List<OverrideUserList>> allOverrideUser();

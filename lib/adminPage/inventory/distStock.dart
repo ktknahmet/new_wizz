@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizzsales/adminPage/adminModel/stockModel/distStockList/DistStockList.dart';
@@ -27,6 +28,7 @@ class DistStock extends BaseStatefulPage {
 
 class _DistStockState extends BaseStatefulPageState<DistStock> {
   StockVm viewModel = StockVm();
+  ScrollController controller = ScrollController();
 
   int? dealerHands;
   int? pickUp;
@@ -176,7 +178,6 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                           child: TextField(
                             onChanged: (value){
                               viewModel.setStockQuery(value);
-
                               viewModel.searchStockList(viewModel.distStockList!,viewModel.stockQuery);
                             },
                             decoration: searchTextDesign(context, "search"),
@@ -204,12 +205,14 @@ class _DistStockState extends BaseStatefulPageState<DistStock> {
                     thumbVisibility: true,
                     thickness: 1,
                     trackVisibility: true,
+                    controller: controller,
                     child: RefreshIndicator(
                       color: ColorUtil().getColor(context, ColorEnums.wizzColor),
                       onRefresh: getList,
                       child: SizedBox(
                         height: justList(context, sizeWidth(context).height),
                         child: ListView.builder(
+                          controller: controller,
                           itemCount: viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery).length,
                           itemBuilder: (context,index){
                             DistStockList model = viewModel.searchStockList(viewModel.distStockList!, viewModel.stockQuery)[index];

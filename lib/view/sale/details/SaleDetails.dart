@@ -132,10 +132,10 @@ class _SaleDetailsState extends State<SaleDetails> {
                                                   crossAxisAlignment: CrossAxisAlignment.end,
                                                   children: [
                                                     SizedBox(
-                                                        width: sizeWidth(context).width*0.25,
+                                                        width: sizeWidth(context).width*0.2,
                                                         child: Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                                     SizedBox(
-                                                      width: sizeWidth(context).width*0.25,
+                                                      width: sizeWidth(context).width*0.2,
                                                       child: Divider(
                                                         thickness: 2,
                                                         color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -164,11 +164,9 @@ class _SaleDetailsState extends State<SaleDetails> {
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.end,
                                                   children: [
+                                                    Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                                     SizedBox(
-                                                        width: sizeWidth(context).width*0.7,
-                                                        child: Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                                    SizedBox(
-                                                      width: sizeWidth(context).width*0.7,
+                                                      width: sizeWidth(context).width*0.4,
                                                       child: Divider(
                                                         thickness: 2,
                                                         color: ColorUtil().getColor(context, ColorEnums.wizzColor),

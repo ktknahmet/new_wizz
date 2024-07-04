@@ -8,10 +8,12 @@ import 'package:wizzsales/utils/style/AddAppBar.dart';
 import 'package:wizzsales/utils/style/ColorEnums.dart';
 import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
+import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
 import '../../constants/colorsUtil.dart';
 import '../../utils/style/CustomTextStyle.dart';
+import '../adminModel/overrideModel/deleteOverrideConfig.dart';
 
 class AdminOverride extends StatefulWidget {
   const AdminOverride({super.key});
@@ -208,6 +210,35 @@ class _AdminOverrideState extends State<AdminOverride> {
                                                ),
                                              ],
                                            ),
+                                           const SizedBox(height: 4,),
+                                           Row(
+                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                             children: [
+                                               SizedBox(
+                                                 width: sizeWidth(context).width*0.4,
+                                                 child: ElevatedButton(
+                                                     onPressed: ()async{
+                                                       await updateOverrideConfig(context,item.overrideConfigurationId!,viewModel,getList);
+                                                     },
+                                                     style: elevatedButtonStyle(context),
+                                                     child: Text("edit".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                 ),
+                                               ),
+                                               SizedBox(
+                                                 width: sizeWidth(context).width*0.4,
+                                                 child: ElevatedButton(
+                                                     onPressed: ()async{
+                                                       bool check = await areYouSure(context);
+                                                       if(check){
+                                                         await delete(item.overrideConfigurationId!);
+                                                       }
+                                                     },
+                                                     style: elevatedButtonStyle(context),
+                                                     child: Text("delete".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                 ),
+                                               )
+                                             ],
+                                           )
                                          ],
                                        ),
                                      ),
@@ -239,4 +270,11 @@ class _AdminOverrideState extends State<AdminOverride> {
 
    }
   }
+  delete(int id)async{
+    DeleteOverrideConfig config = DeleteOverrideConfig(
+        configId:id
+    );
+    await viewModel.deletedConfig(context, config,getList);
+  }
+
 }

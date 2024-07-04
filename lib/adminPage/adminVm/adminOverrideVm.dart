@@ -29,6 +29,8 @@ import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
 import '../../model/OLD/register/LoginUser.dart';
+import '../adminModel/overrideModel/deleteOverrideConfig.dart';
+import '../adminModel/overrideModel/updateOverrideConfig.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class AdminOverrideVm extends ChangeNotifier{
@@ -585,7 +587,6 @@ class AdminOverrideVm extends ChangeNotifier{
     notifyListeners();
     try {
       await apiService.postProductCoast(post).then((value) => {
-
         Navigator.pop(context),
         snackBarDesign(context, StringUtil.success,"addedProductCoast".tr()),
 
@@ -715,6 +716,79 @@ class AdminOverrideVm extends ChangeNotifier{
     }
 
   }
+  deletedConfig(BuildContext context,DeleteOverrideConfig deleteConfig,Function() func) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
 
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.deleteOverrideConfig(deleteConfig).then((value) => {
+
+        snackBarDesign(context, StringUtil.success,"deletedOverrideConfig".tr()),
+        func()
+
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          Navigator.pop(context);
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+
+    }
+
+  }
+  updateConfig(BuildContext context,UpdateOverrideConfig updateConfig,Function() func) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.updateOverrideConfig(updateConfig).then((value) => {
+        Navigator.pop(context),
+        snackBarDesign(context, StringUtil.success,"updatedOverrideConfig".tr()),
+        func()
+
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          Navigator.pop(context);
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+
+    }
+
+  }
 
 }

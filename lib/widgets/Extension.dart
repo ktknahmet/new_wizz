@@ -89,9 +89,11 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row,Border;
 import 'package:wizzsales/viewModel/SalesVm.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 import '../adminPage/adminModel/overrideModel/overrideWinner.dart';
+import '../adminPage/adminModel/overrideModel/updateOverrideConfig.dart';
 import '../adminPage/adminModel/stockReportModel/stockReportData.dart';
 import 'dart:ui' as ui;
 import 'Constant.dart';
+import 'OLDLibrary.dart';
 
 
   Future<void> postSms(BuildContext context,String message, List<String> recipents) async {
@@ -3015,35 +3017,40 @@ showUserList(BuildContext context,AdminOverrideVm viewModel){
                               OverrideUserList model =viewModel.searchUserList(viewModel.overrideUserList!,viewModel.query)[index];
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: GestureDetector(
-                                  onTap: (){
-                                    viewModel.setUser(model.name!,model.id!);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Card(
-                                      shape: cardShape(context),
-                                      color: ColorUtil().getColor(context, ColorEnums.background),
-                                      elevation: 4,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.person_2_outlined,color: ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-                                            const SizedBox(width: 4,),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("${model.name!} - ${model.menuroles ?? ""}",style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-
-                                                ],
-                                              ),
+                                child: Card(
+                                    shape: cardShape(context),
+                                    color: ColorUtil().getColor(context, ColorEnums.background),
+                                    elevation: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Icon(Icons.person_2_outlined,color: ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                                          const SizedBox(width: 4,),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("${model.name!} - ${model.menuroles ?? ""}",style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                              ],
                                             ),
+                                          ),
+                                          SizedBox(
+                                            width:sizeWidth(context).width*0.3,
+                                            child: ElevatedButton(
+                                              onPressed: (){
+                                                viewModel.setUser(model.name!,model.id!);
+                                                Navigator.pop(context);
+                                              },
+                                              style: elevatedButtonStyle(context),
+                                              child: Text("select".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                            ),
+                                          )
 
-                                          ],
-                                        ),
-                                      )
-                                  ),
+                                        ],
+                                      ),
+                                    )
                                 ),
                               );
                             },
@@ -3061,7 +3068,6 @@ showUserList(BuildContext context,AdminOverrideVm viewModel){
       }
   );
 }
-
 selectUserList(BuildContext context,AdminOverrideVm viewModel){
   viewModel.setQuery("");
   ScrollController controller = ScrollController();
@@ -3139,16 +3145,16 @@ selectUserList(BuildContext context,AdminOverrideVm viewModel){
                                                 ],
                                               ),
                                             ),
-                                           ElevatedButton(
-                                             onPressed: ()async{
-                                               OverrideUserPost overrideUser= OverrideUserPost(
-                                                 userId: model.id
-                                               );
-                                               await viewModel.postOverrideUser(context, overrideUser);
-                                             },
-                                             style: elevatedButtonStyle(context),
-                                             child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                                           )
+                                            ElevatedButton(
+                                              onPressed: ()async{
+                                                OverrideUserPost overrideUser= OverrideUserPost(
+                                                    userId: model.id
+                                                );
+                                                await viewModel.postOverrideUser(context, overrideUser);
+                                              },
+                                              style: elevatedButtonStyle(context),
+                                              child: Text("save".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                            )
                                           ],
                                         ),
                                       )
@@ -3160,6 +3166,81 @@ selectUserList(BuildContext context,AdminOverrideVm viewModel){
                         ),
                       ),
 
+
+                    ]
+                ),
+              );
+            },
+          ),
+        );
+      }
+  );
+}
+updateOverrideConfig(BuildContext context,int id,AdminOverrideVm viewModel,Function() func){
+  TextEditingController amount = TextEditingController();
+  showModalBottomSheet(
+
+      useRootNavigator: true,
+      context: context,
+      backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
+      shape: bottomSheetShape(context),
+      constraints: BoxConstraints(
+        maxWidth:  sizeWidth(context).width,
+      ),
+      builder: (context){
+        return ChangeNotifierProvider.value(
+          value: viewModel,
+          child: Consumer<AdminOverrideVm>(
+            builder: (context,value,_){
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: sizeWidth(context).width*0.4,
+                            child: ElevatedButton(
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                style: elevatedButtonStyle(context),
+                                child: Text("back".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                            ),
+                          ),
+                          SizedBox(
+                            width: sizeWidth(context).width*0.4,
+                            child: ElevatedButton(
+                                onPressed: ()async{
+                                   amount.text = amount.text.replaceAll("\$", "");
+                                   if(amount.text.isNotEmpty){
+                                     UpdateOverrideConfig update = UpdateOverrideConfig(
+                                         configId :id,
+                                         overrideAmount : amount.text
+                                     );
+                                     await viewModel.updateConfig(context,update,func);
+                                  }else{
+                                     Navigator.pop(context);
+                                     snackBarDesign(context, StringUtil.error, "overrideAmountRequired".tr());
+                                   }
+                                },
+                                style: elevatedButtonStyle(context),
+                                child: Text("update".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 8,),
+                      TextField(
+                        maxLines: null,
+                        controller: amount,
+                        style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                        decoration: textFieldTextDesign(context,"overrideAmount"),
+                        cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        inputFormatters: [CurrencyTextInputFormatter(symbol: '\$')],
+                      ),
 
                     ]
                 ),

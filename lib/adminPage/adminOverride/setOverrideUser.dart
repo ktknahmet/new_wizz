@@ -121,7 +121,6 @@ class _SetOverrideUserState extends BaseStatefulPageState<SetOverrideUser> {
                       child: ElevatedButton(
                         onPressed: ()async{
                           if(viewModel.allUsers!.isNotEmpty){
-
                             selectUserList(context,viewModel);
                           }else{
                             snackBarDesign(context, StringUtil.warning, "userListEmpty".tr());

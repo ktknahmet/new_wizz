@@ -117,7 +117,7 @@ class _AddOverrideState extends BaseStatefulPageState<AddOverride> {
                       if(viewModel.overrideUserList!.isNotEmpty){
                         showUserList(context,viewModel);
                       }else{
-                        snackBarDesign(context, StringUtil.warning, "userListEmpty".tr());
+                        snackBarDesign(context, StringUtil.warning, "pleaseSetOverrideUser".tr());
                       }
                     },
                   ),

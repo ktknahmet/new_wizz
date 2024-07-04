@@ -180,8 +180,8 @@ class _MyAppointmentState extends State<MyAppointment> {
                                 itemCount: viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query).length,
                                 itemBuilder: (context,index){
                                   Data item = viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query)[index];
-                                  int startIndex = (viewModel.allAppointment!.length == 1) ? 1 : viewModel.allAppointment!.length;
-                                  List<int> indices = List.generate(viewModel.allAppointment!.length, (index) => startIndex - index);
+                                  int startIndex = (viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query).length == 1) ? 1 : viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query).length;
+                                  List<int> indices = List.generate(viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query).length, (index) => startIndex - index);
                                   return Card(
                                     shape: cardShape(context),
                                     color: ColorUtil().getColor(context, ColorEnums.background),
@@ -434,7 +434,7 @@ class _MyAppointmentState extends State<MyAppointment> {
                                               ],
                                             ),
 
-                                          if(item.astatus! !=6 || item.astatus! !=8 || item.astatus! !=12)
+                                          if(item.astatus! !=6 && item.astatus! !=8)
                                             Column(
                                               children: [
                                                 const SizedBox(height: 4,),

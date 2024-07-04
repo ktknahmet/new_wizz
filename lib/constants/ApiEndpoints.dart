@@ -17,6 +17,8 @@ class ApiEndpoints {
   static const String bonusTypes="/bonus-types";
   static const String bonusOverlapping="/bonus-rules/overlapping";
   static const String allOverride="/overrides/commissions";
+  static const String deleteOverrideConfig ="/overrides/commissions-delete";
+  static const String updateOverrideConfig ="/overrides/commissions-update";
   static const String overrideUser="/override-users";
   static const String overrideUserDelete="/override-users-delete";
   static const String warehouses="/warehouses";
