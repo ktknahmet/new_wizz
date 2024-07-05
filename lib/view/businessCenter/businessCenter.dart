@@ -69,23 +69,23 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
           ),
         ),*/
 
-                Card(
-                  shape: cardShape(context),
-                  color: ColorUtil().getColor(context, ColorEnums.background),
-                  child: SizedBox(
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.pushNamed(context, '/${PageName.expense}');
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("expense".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                            Icon(Icons.arrow_forward_outlined,color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
-                          ],
-                        ),
+                GestureDetector(
+                  onTap: (){
+
+                    Navigator.pushNamed(context, '/${PageName.commReport}');
+                  },
+                  child: Card(
+                    shape: cardShape(context),
+                    color: ColorUtil().getColor(context, ColorEnums.background),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("myCommissions".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                          Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                        ],
                       ),
                     ),
                   ),
@@ -107,7 +107,7 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("bonusList".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                            Text("myBonuses".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                             Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
                           ],
                         ),
@@ -116,10 +116,11 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
                   ),
                 ),
                 const SizedBox(height: 8,),
-                GestureDetector(
-                  onTap: (){
 
-                    Navigator.pushNamed(context, '/${PageName.commReport}');
+                GestureDetector(
+                  onTap: () async{
+
+                    Navigator.pushNamed(context, '/${PageName.goalsReport}');
                   },
                   child: Card(
                     shape: cardShape(context),
@@ -130,13 +131,37 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("comReport".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                          Text("myGoals".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                           Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
                         ],
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 8,),
+                Card(
+                  shape: cardShape(context),
+                  color: ColorUtil().getColor(context, ColorEnums.background),
+                  child: SizedBox(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, '/${PageName.expense}');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("myExpenses".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                            Icon(Icons.arrow_forward_outlined,color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+
                 const SizedBox(height: 8,),
                 GestureDetector(
                   onTap: (){
@@ -180,28 +205,7 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8,),
-                GestureDetector(
-                  onTap: () async{
 
-                    Navigator.pushNamed(context, '/${PageName.goalsReport}');
-                  },
-                  child: Card(
-                    shape: cardShape(context),
-                    color: ColorUtil().getColor(context, ColorEnums.background),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("goalsReport".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                          Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 8,),
                 Visibility(
                   visible: check == true ? true : false,

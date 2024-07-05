@@ -57,448 +57,379 @@ class _SaleDetailsState extends State<SaleDetails> {
           value: viewModel,
           child: Consumer<SalesVm>(
           builder: (context,value,_){
-            if(viewModel.commissionDetails == null){
-              return spinKit(context);
-             }else{
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Card(
-                      color: ColorUtil().getColor(context, ColorEnums.background),
-                      shape: cardShape(context),
-                      child:Column(
-                        children: [
-                          Text("customerInfo".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                if (widget.sale.image !=null) GestureDetector(
-                                  onTap: (){
-                                    showPhoto(context, widget.sale.image!);
-                                  },
-                                  child: ClipOval(
-                                    child: SizedBox.fromSize(
-                                        size: const Size.fromRadius(16),
-                                        // Image radius
-                                        child: FadeInImage.assetNetwork(
-                                          placeholder: 'assets/loading.gif',
-                                          image:widget.sale.image!,
-                                          fit: BoxFit.fill,
-                                          height: 32,
-                                        )
-                                    ),
-                                  ),
-                                ) else Image.asset(
-                                  "assets/uploadPhoto.webp",
-                                  fit: BoxFit.contain,
-                                  height: 32,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("cName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(widget.sale.cname ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        GestureDetector(
-                                          onTap:(){
-                                            openDialPad(widget.sale.cphone!);
-                                            },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.40,
-                                                  child: Text("cPhone".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    SizedBox(
-                                                        width: sizeWidth(context).width*0.2,
-                                                        child: Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                                    SizedBox(
-                                                      width: sizeWidth(context).width*0.2,
-                                                      child: Divider(
-                                                        thickness: 2,
-                                                        color: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 4,),
-                                        GestureDetector(
-                                          onTap: (){
-                                            openEmail(widget.sale.cemail!);
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.20,
-                                                  child: Text("cEmail".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                              const SizedBox(width: 8,),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                                                    SizedBox(
-                                                      width: sizeWidth(context).width*0.4,
-                                                      child: Divider(
-                                                        thickness: 2,
-                                                        color: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.45,
-                                                child: Text("address".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(widget.sale.caddress ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("state".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(widget.sale.cstate ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("city".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(widget.sale.ccity ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        if(widget.sale.sname !=null)
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.40,
-                                                  child: Text("sName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(widget.sale.sname ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        if(widget.sale.sphone !=null)
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.40,
-                                                  child: Text("sPhone".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(widget.sale.sphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        if(widget.sale.semail !=null)
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.40,
-                                                  child: Text("sEmail".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(widget.sale.semail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("salesDate".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(mmDDYDate(widget.sale.date ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Text(widget.sale.note ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ) ,
-                    ),
-
-                    const SizedBox(height: 8,),
-                    Card(
-                      color: ColorUtil().getColor(context, ColorEnums.background),
-                      shape: cardShape(context),
-                      child:Column(
-                        children: [
-                          Text("paymentInfo".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("salesPrice".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("\$${widget.sale.price ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("${context.tr("salesTax")} ${widget.sale.tax ?? "0.0"}%",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("\$${getDecimalPlaces(taxPrice, 2)}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("totalPrice".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("\$${widget.sale.netprice ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("down".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("\$${widget.sale.down ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width:sizeWidth(context).width*0.40,
-                                                child: Text("otherDeduction".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("\$${widget.sale.otherDeductions ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ) ,
-                    ),
-                    const SizedBox(height: 8,),
-                    if(winner.isNotEmpty && winner[0].isCommPaid == true)
-                      Card(
-                        shape: cardShape(context),
-                        color: ColorUtil().getColor(context, ColorEnums.background),
-                        child: Padding(
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Card(
+                    color: ColorUtil().getColor(context, ColorEnums.background),
+                    shape: cardShape(context),
+                    child:Column(
+                      children: [
+                        Text("customerInfo".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                        Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
+                          child: Row(
                             children: [
-                              Text("comInfo".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                              const SizedBox(height: 8,),
-                              if(winner[0].isCommPaid == true)
-                                Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                            width:sizeWidth(context).width*0.40,
-                                            child: Text("payDate".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            children: [
-                                              Text(mmDDYDate(winner[0].payAt ?? ""),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: (){
-                                        Navigator.pushNamed(context, '/${PageName.saleComDetails}',arguments: {"sale":widget.sale});
-                                      },
-                                      child: Row(
+                              if (widget.sale.image !=null) GestureDetector(
+                                onTap: (){
+                                  showPhoto(context, widget.sale.image!);
+                                },
+                                child: ClipOval(
+                                  child: SizedBox.fromSize(
+                                      size: const Size.fromRadius(16),
+                                      // Image radius
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder: 'assets/loading.gif',
+                                        image:widget.sale.image!,
+                                        fit: BoxFit.fill,
+                                        height: 32,
+                                      )
+                                  ),
+                                ),
+                              ) else Image.asset(
+                                "assets/uploadPhoto.webp",
+                                fit: BoxFit.contain,
+                                height: 32,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                  width:sizeWidth(context).width*0.40,
-                                                  child: Text("comAmount".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
-                                                SizedBox(
-                                                   width:sizeWidth(context).width*0.36,
-                                                   child: const Divider(
-                                                    thickness: 2,
-                                                 ),
-                                                 ),
-
-                                            ],
-                                          ),
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("cName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
-                                                Text(winner[0].commAdjustAmount == null ?  ("\$${winner[0].commAmount ?? "0.0"}") : ("\$${winner[0].commAdjustAmount  ?? "0.0"}"),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                Text(widget.sale.cname ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                               ],
                                             ),
                                           ),
-
                                         ],
                                       ),
-                                    ),
+                                      const SizedBox(height: 4,),
+                                      GestureDetector(
+                                        onTap:(){
+                                          openDialPad(widget.sale.cphone!);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                                width:sizeWidth(context).width*0.40,
+                                                child: Text("cPhone".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  SizedBox(
 
-                                  ],
-                                )
+                                                      child: Text(widget.sale.cphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                                  SizedBox(
+                                                    width: sizeWidth(context).width*0.2,
+                                                    child: Divider(
+                                                      thickness: 2,
+                                                      color: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
 
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.20,
+                                              child: Text("cEmail".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          const SizedBox(width: 8,),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(widget.sale.cemail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.45,
+                                              child: Text("address".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(widget.sale.caddress ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("state".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(widget.sale.cstate ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("city".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(widget.sale.ccity ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      if(widget.sale.sname !=null)
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                                width:sizeWidth(context).width*0.40,
+                                                child: Text("sName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(widget.sale.sname ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      if(widget.sale.sphone !=null)
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                                width:sizeWidth(context).width*0.40,
+                                                child: Text("sPhone".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(widget.sale.sphone ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      if(widget.sale.semail !=null)
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                                width:sizeWidth(context).width*0.40,
+                                                child: Text("sEmail".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(widget.sale.semail ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("salesDate".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(mmDDYDate(widget.sale.date ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Text(widget.sale.note ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              );
-           }
+                      ],
+                    ) ,
+                  ),
+
+                  const SizedBox(height: 8,),
+                  Card(
+                    color: ColorUtil().getColor(context, ColorEnums.background),
+                    shape: cardShape(context),
+                    child:Column(
+                      children: [
+                        Text("paymentInfo".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("paymentMethod".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Text(financeType(widget.sale.finance ?? 10),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                            ],
+
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("salesPrice".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text("\$${widget.sale.price ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("${context.tr("salesTax")} ${widget.sale.tax ?? "0.0"}%",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text("\$${getDecimalPlaces(taxPrice, 2)}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("totalPrice".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text("\$${widget.sale.netprice ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("down".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text("\$${widget.sale.down ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width:sizeWidth(context).width*0.40,
+                                              child: Text("otherDeduction".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text("\$${widget.sale.otherDeductions ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ) ,
+                  ),
+
+
+                ],
+              ),
+            );
          },
         ),
        )
@@ -512,18 +443,6 @@ class _SaleDetailsState extends State<SaleDetails> {
     }else{
       taxPrice ="";
     }
-    SharedPref pref = SharedPref();
-    index = await pref.getInt(context, SharedUtils.profileIndex);
-    loginUser ??= await getUser(context);
-    await viewModel.getComDetails(context, widget.sale.id);
-    winner.clear();
-    if(viewModel.commissionDetails !=null){
-      for(int i=0;i<viewModel.commissionDetails!.length;i++){
-        if(loginUser!.name ==viewModel.commissionDetails![i].userName
-            && loginUser!.profiles![index].salesrolename!.contains(viewModel.commissionDetails![i].profileMenurole!)){
-          winner.add(viewModel.commissionDetails![i]);
-        }
-      }
-    }
+
 }
 }

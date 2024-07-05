@@ -88,8 +88,8 @@ import 'package:wizzsales/view/quickSalesEnterValue/QuickSaleValue.dart';
 import 'package:wizzsales/view/reports/leadReport/leadExcelReport/totalLeadsReport.dart';
 import 'package:wizzsales/view/progress/myProgress.dart';
 import 'package:wizzsales/view/reports/appointmentReport/appointmentReport.dart';
-import 'package:wizzsales/view/reports/tabBar/goalsReportTabBar.dart';
 import 'package:wizzsales/view/reports/tabBar/leadReportTabBar.dart';
+import 'package:wizzsales/view/sale/dealerComDetails/dealerComDetails.dart';
 import 'package:wizzsales/view/sale/details/SaleDetails.dart';
 import 'package:wizzsales/view/setAppointment/myAppointment.dart';
 import 'package:wizzsales/view/signature/signature.dart';
@@ -126,7 +126,9 @@ import 'package:wizzsales/view/videoPage/videoPage.dart';
 
 import '../../model/OLD/leadReport/Lead.dart';
 import '../../model/appointmentModel/Data.dart';
+import '../../model/detailsReportModel/DetailReportModel.dart';
 import '../../view/bonus/bonusWinnerList.dart';
+import '../../view/reports/goalsReport/goalsReport.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -176,6 +178,12 @@ class RouteGenerator {
 
       case '/${PageName.stockManagement}':
         return MaterialPageRoute(builder: (_) =>   StockManagement("importerInventory".tr()));
+
+      case '/${PageName.dealerComPage}':
+        Map<String, dynamic>? arguments = settings.arguments as Map<String, dynamic>?;
+
+         Sale sale = arguments!['sale'];
+        return MaterialPageRoute(builder: (_) =>   DealerComDetails(sale));
 
       case '/${PageName.overrideReportDist}':
         return MaterialPageRoute(builder: (_) =>   OverrideReportDist("overrideDetails".tr()));
@@ -455,7 +463,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const LeadReportTabBar());
 
       case '/${PageName.goalsReport}':
-        return MaterialPageRoute(builder: (_) => const GoalsReportTabBar());
+        return MaterialPageRoute(builder: (_) =>  GoalsReportPage("goalsReport".tr()));
         //admin pages
 
       case '/${PageName.adminHome}':

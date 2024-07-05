@@ -27,6 +27,7 @@ import 'package:wizzsales/adminPage/adminModel/commissionModel/postAdjust.dart';
 import 'package:wizzsales/adminPage/adminModel/commissionModel/updateComRate.dart';
 import 'package:wizzsales/adminPage/adminModel/inventoryModel/postDistInventoryWarehouse.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/allOverride.dart';
+import 'package:wizzsales/adminPage/adminModel/overrideModel/deleteProductCoast.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/orgDetails.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/overrideReports.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/overrideType.dart';
@@ -266,6 +267,9 @@ abstract class ApiService {
 
   @POST(ApiEndpoints.deleteOverrideConfig)
   Future<String> deleteOverrideConfig(@Body() DeleteOverrideConfig delete);
+
+  @POST(ApiEndpoints.deleteProductCoast)
+  Future<String> deleteProductCoast(@Body() DeleteProductCoast delete);
 
   @POST(ApiEndpoints.updateOverrideConfig)
   Future<String> updateOverrideConfig(@Body() UpdateOverrideConfig update);

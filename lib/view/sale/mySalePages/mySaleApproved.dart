@@ -102,7 +102,8 @@ class _MySaleApprovedState extends State<MySaleApproved> {
                                                     Text("# ${item.serialid}",style: CustomTextStyle().bold18(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                                     Text(indices[index].toString(), style: CustomTextStyle().bold18(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
                                                   ],
-                                                ),const SizedBox(height: 4,),
+                                                )
+                                                ,const SizedBox(height: 4,),
                                                 Row(
                                                   children: [
                                                     Icon(Icons.location_on_outlined,color: ColorUtil().getColor(context, ColorEnums.wizzColor),),
@@ -233,7 +234,19 @@ class _MySaleApprovedState extends State<MySaleApproved> {
                                                   ],
                                                 ),
                                                 const SizedBox(height: 4,),
+                                                GestureDetector(
+                                                  onTap:(){
+                                                    Navigator.pushNamed(context, '/${PageName.dealerComPage}',arguments: {"sale":item});
 
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Text("seeWinner".tr(),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                                      Icon(Icons.arrow_right,color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
                                             )
                                         ),

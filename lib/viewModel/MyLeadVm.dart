@@ -24,7 +24,10 @@ class MyLeadVm extends ChangeNotifier{
   String query ="";
   String leadType="All";
   List<Map<String, bool>> gridMap = [];
-
+  int totalLead=0;
+  int aptSet=0;
+  int notContacted=0;
+  int sold =0;
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
     notifyListeners();
@@ -104,84 +107,37 @@ class MyLeadVm extends ChangeNotifier{
     }
   }
 
-  leadReportValue(int type,List<LeadReport> report,String name){
-    dynamic value;
+  leadReportValue(List<LeadReport> report,String name){
+    totalLead =0;
+    aptSet =0;
+    notContacted =0;
+    sold =0;
+    if(name !="All"){
 
-    switch(type){
-      case 0:
-        int count=0;
-        if(name !="All"){
-          for(int i=0;i<report.length;i++){
-            if(report[i].lead_type_name == name){
-              count = count+(report[i].leads!.length);
-            }
+      for(int i=0;i<report.length;i++){
+        if(report[i].lead_type_name == name){
 
-          }
-        }else{
-          count=0;
-          for(int i=0;i<report.length;i++){
-            count = count+(report[i].leads!.length);
-          }
+          sold = sold+(report[i].sold_count ?? 0);
+          aptSet = aptSet+(report[i].appointment_set_count ?? 0);
+          totalLead = totalLead+(report[i].leads!.length);
+          notContacted = notContacted+(report[i].not_contacted_lead_count ?? 0);
         }
-        value= count;
-        return getDecimalPlaces(value.toString(),3);
+      }
 
-      case 1:
-        int count=0;
-        for(int i=0;i<report.length;i++){
-          if(name !="All"){
-            for(int i=0;i<report.length;i++){
-              if(report[i].lead_type_name == name){
-                count = count+(report[i].appointment_set_count ?? 0);
-              }
-
-            }
-          }else{
-            count=0;
-            for(int i=0;i<report.length;i++){
-              count = count+(report[i].appointment_set_count ?? 0);
-            }
-          }
-        }
-        value= count;
-        return getDecimalPlaces(value.toString(),3);
-      case 2:
-        int count=0;
-        if(name !="All"){
-          for(int i=0;i<report.length;i++){
-            if(report[i].lead_type_name == name){
-              count = count+(report[i].not_contacted_lead_count ?? 0);
-            }
-
-          }
-        }else{
-          count=0;
-          for(int i=0;i<report.length;i++){
-            count = count+(report[i].not_contacted_lead_count ?? 0);
-          }
-        }
-
-        value= count;
-        return getDecimalPlaces(value.toString(),3);
-
-      case 3:
-        int count=0;
-        if(name !="All"){
-          for(int i=0;i<report.length;i++){
-            if(report[i].lead_type_name == name){
-              count = count+(report[i].sold_count ?? 0);
-            }
-
-          }
-        }else{
-          count=0;
-          for(int i=0;i<report.length;i++){
-            count = count+(report[i].sold_count ?? 0);
-          }
-        }
-        value= count;
-        return getDecimalPlaces(value.toString(),3);
     }
+    else{
+
+      for(int i=0;i<report.length;i++){
+
+        aptSet = aptSet+(report[i].appointment_set_count ?? 0);
+        notContacted = notContacted+(report[i].not_contacted_lead_count ?? 0);
+        sold = sold+(report[i].sold_count ?? 0);
+        totalLead = totalLead+(report[i].leads!.length);
+      }
+
+    }
+    notifyListeners();
+
   }
 
   Future<void>allLeadReport(BuildContext context) async{

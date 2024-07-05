@@ -16,9 +16,9 @@ import 'package:wizzsales/view/setAppointment/editAppointment.dart';
 import 'package:wizzsales/viewModel/MyAppointmentVm.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+import '../../constants/AppColors.dart';
 import '../../model/appointmentModel/Data.dart';
 import '../../utils/res/SharedUtils.dart';
-import '../../widgets/Extension.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class MyAppointment extends StatefulWidget {
@@ -66,32 +66,83 @@ class _MyAppointmentState extends State<MyAppointment> {
                     child: Column(
                       children: [
                         if (viewModel.detailsReportModel == null) spinKit(context)
-                        else SizedBox(
-                          height: sizeWidth(context).height*0.08,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: appointmentDays.length,
-                            itemBuilder: (context,index){
-                              return SizedBox(
-                                width: sizeWidth(context).width*0.23,
-                                child: Card(
-                                      elevation: 2,
-                                      shape: cardShape(context),
-                                      color: ColorUtil().getColor(context, ColorEnums.background),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                        else   Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black87,
+                              border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      child:  Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(appointmentDays[index],style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                            Text(viewModel.appointmentTotalValue(index,viewModel.detailsReportModel!).toString(),style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                          ],
-                                        ),
-                                      )
+                                            Text("yesterday".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(viewModel.yesterdayApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
 
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("daily".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(viewModel.todayApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("weekly".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(viewModel.weekApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("monthly".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(viewModel.monthApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("annual".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(viewModel.yearApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                      ),
+                                    ),
+
+                                  ],
                                 ),
-                              );
-                            },
+                              ],
+                            ),
                           ),
                         ),
 
@@ -112,9 +163,7 @@ class _MyAppointmentState extends State<MyAppointment> {
                               onChanged: (newValue) async{
                                 viewModel.setLeadType(newValue!);
                                 viewModel.setQuery(newValue);
-
                                 viewModel.searchAppointment(viewModel.allAppointment!,viewModel.query);
-
                               },
                               items: viewModel.chooseLead.keys.map((value) {
                                 return DropdownMenuItem<String>(
@@ -158,12 +207,9 @@ class _MyAppointmentState extends State<MyAppointment> {
                                     style: elevatedButtonStyle(context),
                                     child: Text("report".tr(), style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                               ),
-
-
                             ],
                           ),
                         ),
-
                         RefreshIndicator(
                           onRefresh:allAppointment,
                           color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -518,6 +564,7 @@ class _MyAppointmentState extends State<MyAppointment> {
     loginUser ??= await getUser(context);
     await viewModel.detailReport(context, loginUser!.profiles![index].id!, loginUser!.profiles![index].organisation_id!);
 
+    viewModel.appointmentTotalValue(viewModel.detailsReportModel!);
     viewModel.chooseLead["All"]=-1;
     for(int i =0;i<viewModel.allAppointment!.length;i++){
       String status = statusCase(viewModel.allAppointment![i].astatus!).toString();

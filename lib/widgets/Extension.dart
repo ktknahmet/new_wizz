@@ -263,42 +263,38 @@ selectMySaleType(BuildContext context){
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
-            height: sizeWidth(context).height*0.30,
+            height: sizeWidth(context).height*0.20,
             child: Column(
 
               children: [
-                Text("Choose sales",style: CustomTextStyle().black18(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':1});
-                            },
-                            style: elevatedButtonStyle(context),
-                            child:Text("approved".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                Text("chooseSales".tr(),style: CustomTextStyle().black18(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                 Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':1});
+                          },
+                          style: elevatedButtonStyle(context),
+                          child:Text("approved".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
 
-                          ),
-                          ElevatedButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':2});
-                            },
-                            style: elevatedButtonStyle(context),
-                            child:Text("pending".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                        ),
+                        ElevatedButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':2});
+                          },
+                          style: elevatedButtonStyle(context),
+                          child:Text("pending".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
 
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ),
-                )
+
+                 )
               ],
             ),
           ),
@@ -322,7 +318,7 @@ selectOfficeSaleType(BuildContext context){
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Choose sales",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+              Text("chooseSales".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

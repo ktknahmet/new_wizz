@@ -38,6 +38,11 @@ class MyAppointmentVm extends ChangeNotifier{
   dynamic soldTotal;
   dynamic notContactedTotal;
   List<Map<String, bool>> gridMap = [];
+  int yesterdayApt=0;
+  int todayApt=0;
+  int weekApt=0;
+  int monthApt=0;
+  int yearApt=0;
 
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
@@ -105,44 +110,21 @@ class MyAppointmentVm extends ChangeNotifier{
  }
 
 
-  appointmentTotalValue(int type,DetailReportModel reportModel){
-    int value=0;
+  appointmentTotalValue(DetailReportModel reportModel){
+    yesterdayApt=0;
+    todayApt=0;
+    weekApt =0;
+    monthApt =0;
+    yearApt =0;
 
-    switch(type){
-      case 0:
-
-        for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-          value =value+ (reportModel.leadsReport!.leadReports![i].yesterdayAppointmentSet ?? 0);
-        }
-        return getDecimalPlaces(value.toString(),3);
-      case 1:
-
-        for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-          value =value+ (reportModel.leadsReport!.leadReports![i].daliyAppointmentSet ?? 0);
-
-        }
-        return getDecimalPlaces(value.toString(),3);
-      case 2:
-
-        for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-          value =value+ (reportModel.leadsReport!.leadReports![i].weeklyAppointmentSet ?? 0);
-        }
-        return getDecimalPlaces(value.toString(),3);
-      case 3:
-
-        for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-          value = value+(reportModel.leadsReport!.leadReports![i].monthlyAppointmentSet ?? 0);
-
-        }
-
-        return getDecimalPlaces(value.toString(),3);
-      case 4:
-        for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-          value =value+ (reportModel.leadsReport!.leadReports![i].annualyAppointmentSet ?? 0);
-
-        }
-        return getDecimalPlaces(value.toString(),3);
+    for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+      yesterdayApt =yesterdayApt+ (reportModel.leadsReport!.leadReports![i].yesterdayAppointmentSet ?? 0);
+      todayApt =todayApt+ (reportModel.leadsReport!.leadReports![i].daliyAppointmentSet ?? 0);
+      weekApt =weekApt+ (reportModel.leadsReport!.leadReports![i].weeklyAppointmentSet ?? 0);
+      monthApt =todayApt+ (reportModel.leadsReport!.leadReports![i].monthlyAppointmentSet ?? 0);
+      yearApt =todayApt+ (reportModel.leadsReport!.leadReports![i].annualyAppointmentSet ?? 0);
     }
+    notifyListeners();
   }
 
   List<DemoLeadReportModel> reportValues(int value,DetailReportModel reportModel){

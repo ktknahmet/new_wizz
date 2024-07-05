@@ -19,7 +19,8 @@ import '../document/saleDocument.dart';
 
 class MySaleTotalSale extends StatefulWidget {
   final List<Sale> sale;
-  const MySaleTotalSale(this.sale,{super.key});
+  final int size;
+  const MySaleTotalSale(this.sale,this.size,{super.key});
 
   @override
   State<MySaleTotalSale> createState() => _MySaleTotalSaleState();
@@ -76,8 +77,8 @@ class _MySaleTotalSaleState extends State<MySaleTotalSale> {
                                   enableTooltip: true,
                                   width: 0.3,
                                   name: "mySales".tr(),
-                                  borderRadius:const BorderRadius.only(
-                                      topRight: Radius.circular(4),bottomRight: Radius.circular(4)),
+                                  borderRadius:const BorderRadius.all(
+                                      Radius.circular(12)),
                                   dataSource:  chartData,
                                   xValueMapper: (TotalSale data,_) => data.key.tr(),
                                   yValueMapper: (TotalSale data,_) => data.value,
@@ -118,7 +119,8 @@ class _MySaleTotalSaleState extends State<MySaleTotalSale> {
                                 itemCount: widget.sale.length >5 ? 5 : widget.sale.length,
                                 itemBuilder: (context,index) {
                                   Sale item = widget.sale[index];
-
+                                  int startIndex =  widget.size;
+                                  List<int> indices = List.generate(widget.size, (index) => startIndex - index);
 
                                   return Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,10 +140,8 @@ class _MySaleTotalSaleState extends State<MySaleTotalSale> {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      Text("# ${item.serialid}",
-                                                        style: CustomTextStyle().bold18(
-                                                            ColorUtil().getColor(
-                                                                context, ColorEnums.textTitleLight)),),
+                                                      Text("# ${item.serialid}", style: CustomTextStyle().bold18(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                      Text(indices[index].toString(), style: CustomTextStyle().bold18(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
 
                                                     ],
                                                   ),
@@ -342,7 +342,6 @@ class _MySaleTotalSaleState extends State<MySaleTotalSale> {
       TotalSale totalSale2 = TotalSale("monthly",saleOfficeMobx.myOfficeTotal![0]!.masales!);
       TotalSale totalSale3 = TotalSale("annual",saleOfficeMobx.myOfficeTotal![0]!.yasales!);
 
-      print("veriler :${saleOfficeMobx.myOfficeTotal![0]!.masales!}");
       chartData.add(totalSale);
       chartData.add(totalSale1);
       chartData.add(totalSale2);

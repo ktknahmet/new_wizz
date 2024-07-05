@@ -47,20 +47,18 @@ class _MyProgressState extends BaseStatefulPageState<MyProgress> {
                         alignment: Alignment.centerLeft,
                         child: Container(
                           width: sizeWidth(context).width*0.30,
-                          height: 40,
+                          height: 50,
                           decoration: decorationTransparent(context),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              decoration: emptyDecoration(context),
-                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-                              cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                              controller: viewModel.daySelect,
-                              readOnly: true,
-                              onTap: (){
-                                selectProgressReport(context,viewModel);
-                              },
-                            ),
+                          child: TextField(
+                            textAlign: TextAlign.center,
+                            decoration: emptyDecoration(context),
+                            style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                            cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                            controller: viewModel.daySelect,
+                            readOnly: true,
+                            onTap: (){
+                              selectProgressReport(context,viewModel);
+                            },
                           ),
                         ),
                       ),

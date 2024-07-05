@@ -22,55 +22,9 @@ class _SalePageState extends BaseStatefulPageState<SalePage> {
 
     return  Column(
       children: [
-        SizedBox(
-          height: 50,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/${PageName.addSale}',arguments: {'demoId':null});
-            },
-            child: Card(
-              shape: cardShape(context),
-              color: ColorUtil().getColor(context, ColorEnums.background),
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8,right: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("addSale".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                    Icon(Icons.add, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8,),
-        SizedBox(
-          height: 50,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':0});
 
-            },
-            child: Card(
-              shape: cardShape(context),
-              color: ColorUtil().getColor(context, ColorEnums.background),
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8,right: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("mySale".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                    Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8,),
+
+        /*const SizedBox(height: 8,),
         SizedBox(
           height: 50,
           child: GestureDetector(
@@ -94,7 +48,7 @@ class _SalePageState extends BaseStatefulPageState<SalePage> {
               ),
             ),
           ),
-        ),
+        ),*/
         const SizedBox(height: 8,),
         SizedBox(
           height: 50,
@@ -143,7 +97,55 @@ class _SalePageState extends BaseStatefulPageState<SalePage> {
             ),
           ),
         ),
+        const SizedBox(height: 8,),
+        SizedBox(
+          height: 50,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/${PageName.addSale}',arguments: {'demoId':null});
+            },
+            child: Card(
+              shape: cardShape(context),
+              color: ColorUtil().getColor(context, ColorEnums.background),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8,right: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("addSale".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                    Icon(Icons.add, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8,),
+        SizedBox(
+          height: 50,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/${PageName.mySaleTabBar}',arguments: {'index':0});
 
+            },
+            child: Card(
+              shape: cardShape(context),
+              color: ColorUtil().getColor(context, ColorEnums.background),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8,right: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("mySale".tr(), style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                    Icon(Icons.arrow_forward_outlined, color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

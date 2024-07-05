@@ -12,6 +12,7 @@ import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
+import '../../constants/AppColors.dart';
 import '../../utils/style/CustomTextStyle.dart';
 
 class TotalLeads extends StatefulWidget {
@@ -62,33 +63,70 @@ class _TotalLeadsState extends State<TotalLeads> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: sizeWidth(context).height*0.08,
-                          child:  ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 4,
-                            itemBuilder: (context,index){
-                              return SizedBox(
-                                width: sizeWidth(context).width*0.32,
-                                child: Card(
-                                      elevation: 2,
-                                      shape: cardShape(context),
-                                      color: ColorUtil().getColor(context, ColorEnums.background),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(viewModel.leadReportName(index),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                            Text(viewModel.leadReportValue(index,viewModel.leadReports!,viewModel.leadType).toString(),style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                          ],
-                                        ),
-                                      )
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.black87,
+                              border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      child:  Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Column(
+                                            children: [
+                                              Text("totalLeadCount".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                              Text(viewModel.totalLead.toString(), style: CustomTextStyle().bold10(AppColors.white)),
 
+                                            ],
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Column(
+                                            children: [
+                                              Text("appointmentSet".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                              Text(viewModel.aptSet.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                            ],
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Column(
+                                            children: [
+                                              Text("notContacted".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                              Text(viewModel.notContacted.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                            ],
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Column(
+                                            children: [
+                                              Text("sold".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                              Text(viewModel.sold.toString(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            ],
+                                          )
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 8,),
@@ -110,7 +148,7 @@ class _TotalLeadsState extends State<TotalLeads> {
                               value: viewModel.leadType,
                               onChanged: (newValue) async{
                                 viewModel.setLeadType(newValue!);
-
+                                viewModel.leadReportValue(viewModel.leadReports!,viewModel.leadType);
                               },
                               items: viewModel.chooseLead.map((value) {
                                 return DropdownMenuItem<String>(
@@ -290,17 +328,14 @@ class _TotalLeadsState extends State<TotalLeads> {
                                                   style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.wizzColor)),)),
                                             Expanded(
                                               child: Column(
-
                                                         crossAxisAlignment: CrossAxisAlignment.end,
                                                         children: [
                                                           Icon(Icons.arrow_forward,color: ColorUtil().getColor(context, ColorEnums.wizzColor),)
-                                                        ],
-                                                      ))
+                                                        ],))
                                                 ],
                                               ),
                                             ),
                                           const SizedBox(height: 4,),
-
                                         ],
                                       ),
                                     ),
@@ -329,6 +364,7 @@ class _TotalLeadsState extends State<TotalLeads> {
       for(int i =0;i<viewModel.leadReports!.length;i++){
         viewModel.chooseLead.add(viewModel.leadReports![i].lead_type_name!);
       }
+      viewModel.leadReportValue(viewModel.leadReports!,viewModel.leadType);
 
     }
   }

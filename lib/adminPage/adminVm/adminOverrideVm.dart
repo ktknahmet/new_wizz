@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wizzsales/adminPage/adminModel/commissionModel/comSaleDetails/ComSaleDetails.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/allOverride.dart';
+import 'package:wizzsales/adminPage/adminModel/overrideModel/deleteProductCoast.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/orgDetails.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/overrideReports.dart';
 import 'package:wizzsales/adminPage/adminModel/overrideModel/overrideType.dart';
@@ -729,6 +730,43 @@ class AdminOverrideVm extends ChangeNotifier{
 
         snackBarDesign(context, StringUtil.success,"deletedOverrideConfig".tr()),
         func()
+
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+        if (res?.statusCode == 400) {
+          Navigator.pop(context);
+          snackBarDesign(context, StringUtil.error, res!.data);
+
+        } else if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }
+      } else {
+        // DioException değilse genel bir hata durumu
+        print("General error: $error");
+      }
+    } finally {
+      showProgress(context, false);
+      notifyListeners();
+
+    }
+
+  }
+  deletedProductCoast(BuildContext context,DeleteProductCoast delete) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+    showProgress(context, true);
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.deleteProductCoast(delete).then((value) => {
+
+        snackBarDesign(context, StringUtil.success,"deleted".tr()),
+        getProductCoast(context)
 
       });
 

@@ -14,6 +14,7 @@ class PageName{
   static const String myAccount="My Account";
   static const String notification="Notification";
   static const String contests ="Contests";
+  static const String dealerComPage ="Dealer Com Details";
   static const String profile ="Profile";
   static const String uploadPhoto ="Upload Picture";
   static const String updateEmail ="Update Email";

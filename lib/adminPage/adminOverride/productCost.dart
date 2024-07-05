@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wizzsales/adminPage/adminModel/overrideModel/deleteProductCoast.dart';
 import 'package:wizzsales/adminPage/adminModel/productCoastModel/productCoastList.dart';
 import 'package:wizzsales/adminPage/adminVm/adminOverrideVm.dart';
 import 'package:wizzsales/constants/ColorsUtil.dart';
@@ -45,7 +46,7 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: sizeWidth(context).width*0.6,
+                        width: sizeWidth(context).width*0.5,
                         height: 40,
                         child: TextField(
                           onChanged: (value){
@@ -66,7 +67,6 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                             Text("total".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                             const SizedBox(height: 4,),
                             Text("${viewModel.productCoast!.length}",style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
-
                           ],
                         ),
                       ),
@@ -102,7 +102,7 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                                           width: sizeWidth(context).width*0.3,
                                           child: Text("amount".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                         ),
-                                        Text("\$${model.costAmount ?? "0.0"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                        Text("\$${model.costAmount ?? "0.00"}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                       ],
                                     ),
                                     const SizedBox(height: 8,),
@@ -157,7 +157,7 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                                               onPressed: ()async{
                                                 bool check = await areYouSure(context);
                                                 if(check){
-                                                 await delete();
+                                                 await delete(model.costId!);
                                                 }
                                               },
                                               style: elevatedButtonStyle(context),
@@ -165,7 +165,6 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
                                         ),
                                       ],
                                     )
-              
                                   ],
                                 ),
                               ),
@@ -196,7 +195,10 @@ class _ProductCostState extends BaseStatefulPageState<ProductCost> {
   Future <void>getList()async{
    await viewModel.getProductCoast(context);
   }
-  Future<void> delete()async{
-
+  Future<void> delete(int id)async{
+    DeleteProductCoast delete = DeleteProductCoast(
+      coastId: id
+    );
+   await viewModel.deletedProductCoast(context,delete);
   }
 }

@@ -26,6 +26,7 @@ class MySaleTab extends StatefulWidget {
 class _MySaleTabState extends State<MySaleTab> {
   SaleOfficeMobx saleListMobx = SaleOfficeMobx();
   List<Sale> sales=[];
+  int size=0;
   @override
   void initState() {
     getList();
@@ -78,8 +79,8 @@ class _MySaleTabState extends State<MySaleTab> {
                       tabs:  [
 
                         Tab(child: Text("${context.tr("totalSales")}: ${saleListMobx.approvedMySale!.total!+saleListMobx.pendingMySale!.total!}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),),
-                        Tab(child: Text(context.tr("approved"),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),),
-                        Tab(child: Text("${context.tr("pending")}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),),
+                        Tab(child: Text("${context.tr("approved")}: ${saleListMobx.approvedMySale!.total!}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),),
+                        Tab(child: Text("${context.tr("pending")}: ${saleListMobx.pendingMySale!.total!}",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),),
 
                       ],
                     ),
@@ -89,7 +90,7 @@ class _MySaleTabState extends State<MySaleTab> {
                   color: ColorUtil().getColor(context, ColorEnums.background),
                   child:   TabBarView(
                     children: [
-                      MySaleTotalSale(sales),
+                      MySaleTotalSale(sales,size),
                       const MySaleApproved(),
                       const MySalePending(),
 
@@ -109,7 +110,7 @@ class _MySaleTabState extends State<MySaleTab> {
     await saleListMobx.getPendingMySale(context,1);
 
     sales.addAll(saleListMobx.approvedMySale!.data!+saleListMobx.pendingMySale!.data!);
-
-
+    size = saleListMobx.approvedMySale!.total!+saleListMobx.pendingMySale!.total!;
+    print("aktekin ${sales.length}");
   }
 }

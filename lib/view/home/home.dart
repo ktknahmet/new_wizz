@@ -113,26 +113,23 @@ class _HomeState extends BaseStatefulPageState<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Container(
+                            height: 50,
                             width: sizeWidth(context).width*0.30,
-                            height: 43,
                             decoration: decorationTransparent(context),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                decoration: emptyDecoration(context),
-                                style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-                                cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
-                                controller: viewModel.daySelect,
-                                readOnly: true,
-                                onTap: (){
-                                  selectGraphReport(context,viewModel);
-                                },
-                              ),
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              decoration: emptyDecoration(context),
+                              style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
+                              cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
+                              controller: viewModel.daySelect,
+                              readOnly: true,
+                              onTap: (){
+                                selectGraphReport(context,viewModel);
+                              },
                             ),
                           ),
                           const SizedBox(width: 8,),
                           SizedBox(
-                            height: 42,
                             child: ElevatedButton(
                               onPressed: (){
                                 Navigator.pushNamed(context, '/${PageName.liveDemo}');

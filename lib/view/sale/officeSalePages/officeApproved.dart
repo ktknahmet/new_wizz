@@ -243,6 +243,19 @@ class _OfficeApprovedState extends State<OfficeApproved> {
                                                   ],
                                                 ),
                                                 const SizedBox(height: 4,),
+                                                GestureDetector(
+                                                  onTap:(){
+                                                    Navigator.pushNamed(context, '/${PageName.dealerComPage}',arguments: {"sale":item});
+
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Text("seeWinner".tr(),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                                      Icon(Icons.arrow_right,color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                                                    ],
+                                                  ),
+                                                ),
 
                                               ],
                                             )
