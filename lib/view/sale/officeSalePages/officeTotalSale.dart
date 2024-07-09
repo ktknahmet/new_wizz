@@ -25,7 +25,8 @@ import '../document/saleDocument.dart';
 
 class OfficeTotalSale extends StatefulWidget {
   final List<Sale> sale;
-  const OfficeTotalSale(this.sale,{super.key});
+  final int size;
+  const OfficeTotalSale(this.sale,this.size,{super.key});
 
   @override
   State<OfficeTotalSale> createState() => _OfficeTotalSaleState();
@@ -80,13 +81,13 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                         isVisible: true,
                         iconWidth: 8,
                         isResponsive:true,
-                        alignment: ChartAlignment.near
+                        alignment: ChartAlignment.near,
                     ),
                     series : [
                       BarSeries<TotalSale, String>(
                         color: ColorUtil().getColor(context,ColorEnums.wizzColor),
                         enableTooltip: true,
-                        width: 0.3,
+                        width: 0.2,
                         name: "totalSales".tr(),
                         borderRadius:const BorderRadius.only(
                             topRight: Radius.circular(4),bottomRight: Radius.circular(4)),
@@ -94,6 +95,7 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                         xValueMapper: (TotalSale data,_) => data.key.tr(),
                         yValueMapper: (TotalSale data,_) => data.value,
                         dataLabelSettings: DataLabelSettings(
+                            offset: const Offset(0,7),
                             isVisible: true,
                             textStyle: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textTitleLight))
                         ),
@@ -114,7 +116,6 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
               ),
             ),
             const SizedBox(height: 4,),
-            const SizedBox(height: 4,),
             if(widget.sale.isNotEmpty)
               Column(
                 children: [
@@ -131,7 +132,8 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                           itemCount: widget.sale.length >5 ? 5 : widget.sale.length,
                           itemBuilder: (context,index) {
                             Sale item = widget.sale[index];
-
+                            int startIndex =  widget.size;
+                            List<int> indices = List.generate(widget.size, (index) => startIndex - index);
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -154,6 +156,7 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                                                   style: CustomTextStyle().bold18(
                                                       ColorUtil().getColor(
                                                           context, ColorEnums.textTitleLight)),),
+                                                Text(indices[index].toString(), style: CustomTextStyle().bold18(ColorUtil().getColor(context, ColorEnums.textTitleLight))),
 
                                               ],
                                             ),
@@ -196,83 +199,74 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                                                     Icon(Icons.person, color: ColorUtil().getColor(
                                                         context, ColorEnums.wizzColor),),
                                                     const SizedBox(width: 4,),
-                                                    Text(item.cname!,
-                                                      style: CustomTextStyle().semiBold12(
-                                                          ColorUtil().getColor(
-                                                              context, ColorEnums.textTitleLight)),),
+                                                    Text(item.cname!, style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
                                                   ],
                                                 )
+                                              ],
+                                            ),
+                                            const SizedBox(height: 4,),
+                                            GestureDetector(
+                                              onTap: (){
+                                                openDialPad(item.cphone!);
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.phone, color: ColorUtil().getColor(
+                                                      context, ColorEnums.wizzColor),),
+                                                  const SizedBox(width: 4,),
+                                                  Text(item.cphone!, style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                ],
+                                              )
+                                            ),
+                                            const SizedBox(height: 4,),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.email_outlined, color: ColorUtil().getColor(
+                                                    context, ColorEnums.wizzColor),),
+                                                const SizedBox(width: 4,),
+                                                Text(item.cemail!, style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 4,),
+                                            Divider(
+                                              color: ColorUtil().getColor(
+                                                  context, ColorEnums.wizzColor),
+                                            ),
+                                            const SizedBox(height: 4,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text("${context.tr("payMethod")} : ${financeType(item.finance ?? 10)}", style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
+                                                Text("\$${item.netprice ?? "0.00"}",style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+
                                               ],
                                             ),
                                             Divider(
                                               color: ColorUtil().getColor(
                                                   context, ColorEnums.wizzColor),
                                             ),
-                                            const SizedBox(height: 8,),
-                                            Wrap(
+                                            const SizedBox(height: 4,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Wrap(
-                                                    children: [
-                                                      if(item.distributor != null && item.distributor!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("DST",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.distributor!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
+                                                  if(item.dealer != null && item.dealer!.name !=null)
+                                                    Column(
+                                                      children: [
+                                                        Text("DL",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
+                                                        const SizedBox(height: 4,),
+                                                        Text(item.dealer!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
+                                                      ],
+                                                    ),
+                                                  const SizedBox(width: 8,),
+                                                  if(item.da != null && item.da!.name !=null)
+                                                    Column(
 
-                                                      const SizedBox(width: 8,),
-                                                      if(item.sm != null && item.sm!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("SM",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.sm!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
-
-                                                      const SizedBox(width: 8,),
-                                                      if(item.dps != null && item.dps!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("DPS",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.dps!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
-
-                                                      const SizedBox(width: 8,),
-                                                      if(item.leader != null && item.leader!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("TL",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.leader!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
-
-                                                      const SizedBox(width: 8,),
-                                                      if(item.dealer != null && item.dealer!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("DL",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.dealer!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
-                                                      const SizedBox(width: 8,),
-                                                      if(item.da != null && item.da!.name !=null)
-                                                        Column(
-                                                          children: [
-                                                            Text("DA",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
-                                                            const SizedBox(height: 4,),
-                                                            Text(item.da!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
-                                                          ],
-                                                        ),
-
-                                                    ],
-                                                  ),
+                                                      children: [
+                                                        Text("DA",style: CustomTextStyle().regular8(ColorUtil().getColor(context, ColorEnums.textTitleLight),),),
+                                                        const SizedBox(height: 4,),
+                                                        Text(item.da!.name!,style:CustomTextStyle().bold10(ColorUtil().getColor(context, ColorEnums.textTitleLight),),)
+                                                      ],
+                                                    ),
                                                 ]
                                             ),
                                             if(item.status==1)
@@ -308,9 +302,20 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
                                                   ),
                                                 ),
                                               ],
-                                            )
+                                            ),
+                                            GestureDetector(
+                                                onTap: (){
+                                                  Navigator.pushNamed(context, '/${PageName.saleComDetails}',arguments: {"sale":item});
 
-
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text("comDetails".tr(),style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                                    Icon(Icons.arrow_right,color: ColorUtil().getColor(context, ColorEnums.textDefaultLight),)
+                                                  ],
+                                                ),
+                                              ),
                                           ],
                                         )
                                     ),
@@ -366,6 +371,7 @@ class _OfficeTotalSaleState extends State<OfficeTotalSale> {
         chartData.add(totalSale2);
         chartData.add(totalSale3);
       }
+
 
   }
 }

@@ -124,7 +124,7 @@ class _StockHistoryPageState extends State<StockHistoryPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 4,),
-                                    if(item.changeType=="paid")
+                                    if(item.changeType=="paid" && item.distributorName !=null)
                                       Column(
                                         children: [
                                           Row(

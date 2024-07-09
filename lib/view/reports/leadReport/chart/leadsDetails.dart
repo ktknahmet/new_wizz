@@ -144,16 +144,16 @@ class _LeadsDetailsState extends State<LeadsDetails> {
         for(int i=0;i<mobx.leadReports!.length;i++){
           switch(leadType){
             case "Sold":
-              total = total+mobx.leadReports![i]!.sold_count!;
-              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.lead_type_name!, mobx.leadReports![i]!.sold_count!));
+              total = total+mobx.leadReports![i]!.soldCount!;
+              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.leadTypeName!, mobx.leadReports![i]!.soldCount!));
               break;
             case "Appointment Set":
-              total = total+mobx.leadReports![i]!.appointment_set_count!;
-              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.lead_type_name!, mobx.leadReports![i]!.appointment_set_count!));
+              total = total+mobx.leadReports![i]!.aptSetCount!;
+              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.leadTypeName!, mobx.leadReports![i]!.aptSetCount!));
               break;
             case "Not Contacted":
-              total = total+mobx.leadReports![i]!.not_contacted_lead_count!;
-              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.lead_type_name!, mobx.leadReports![i]!.not_contacted_lead_count!));
+              total = total+mobx.leadReports![i]!.notContacted!;
+              leadModel.add(DemoLeadReportModel(mobx.leadReports![i]!.leadTypeName!, mobx.leadReports![i]!.notContacted!));
               break;
           }
         }

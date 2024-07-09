@@ -15,6 +15,7 @@ import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
 
+import '../../constants/AppColors.dart';
 import '../../utils/function/helper/DatepickerHelper.dart';
 
 class AdminComWinner extends StatefulWidget {
@@ -69,114 +70,53 @@ class _AdminComWinnerState extends State<AdminComWinner> {
                       }*/else{
                         return Column(
                           children: [
-                            Align(
-                              alignment:Alignment.centerLeft,
-                              child: Wrap(
-                                children: [
-                                  SizedBox(
-                                    width:sizeWidth(context).width*0.27,
-                                    height:sizeWidth(context).height*0.12,
-                                    child: Card(
-                                      shape: cardShape(context),
-                                      color: ColorUtil().getColor(context, ColorEnums.background),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "totalPaidCom".tr(),textAlign: TextAlign.center,
-                                              style: CustomTextStyle().black10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                            ),
-                                            const SizedBox(height: 8,),
-                                            Text(
-                                              "\$${moneyFormat(viewModel.paidCom)}",
-                                              style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                            Container(
+
+                              decoration: BoxDecoration(
+                                  color: Colors.black87,
+                                  border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("totalPaidCom".tr(), style: CustomTextStyle().semiBold12(AppColors.white)),
+                                        Text("\$${moneyFormat(viewModel.paidCom)}", style: CustomTextStyle().bold12(AppColors.white)),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width:sizeWidth(context).width*0.27,
-                                    height:sizeWidth(context).height*0.12,
-                                    child: Card(
-                                      shape: cardShape(context),
-                                      color: ColorUtil().getColor(context, ColorEnums.background),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "totalUnPaidCom".tr(),textAlign: TextAlign.center,
-                                              style: CustomTextStyle().black10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                            ),
-                                            const SizedBox(height: 8,),
-                                            Text(
-                                              "\$${moneyFormat(viewModel.unPaidCom)}",
-                                              style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("totalUnPaidCom".tr(), style: CustomTextStyle().semiBold12(AppColors.white)),
+                                        Text("\$${moneyFormat(viewModel.unPaidCom)}", style: CustomTextStyle().bold12(AppColors.white)),
+                                      ],
                                     ),
-                                  ),
-                                    SizedBox(
-                                      width:sizeWidth(context).width*0.27,
-                                      height:sizeWidth(context).height*0.12,
-                                      child: Card(
-                                        shape: cardShape(context),
-                                        color: ColorUtil().getColor(context, ColorEnums.background),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "saleTotal".tr(),textAlign: TextAlign.center,
-                                                style: CustomTextStyle().black10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                              ),
-                                              const SizedBox(height: 8,),
-                                              Text(
-                                                "${viewModel.commissionWinner == null ? 0 : viewModel.commissionWinner!.length}",
-                                                style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("saleTotal".tr(), style: CustomTextStyle().semiBold12(AppColors.white)),
+                                        Text("${viewModel.commissionWinner == null ? 0 : viewModel.commissionWinner!.length}", style: CustomTextStyle().bold12(AppColors.white)),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("totalRevenue".tr(), style: CustomTextStyle().semiBold12(AppColors.white)),
+                                        Text("\$${moneyFormat(totalSalesPrice)}", style: CustomTextStyle().bold12(AppColors.white)),
+                                      ],
                                     ),
 
-                                    SizedBox(
-                                      width:sizeWidth(context).width*0.27,
-                                      height:sizeWidth(context).height*0.12,
-                                      child: Card(
-                                        shape: cardShape(context),
-                                        color: ColorUtil().getColor(context, ColorEnums.background),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "totalRevenue".tr(),textAlign: TextAlign.center,
-                                                style: CustomTextStyle().black10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                              ),
-                                              const SizedBox(height: 8,),
-                                              Text(
-                                                "\$${moneyFormat(totalSalesPrice)}",
-                                                style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
+
                              Divider(
                               thickness: 1,
                               color: ColorUtil().getColor(context, ColorEnums.wizzColor),

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wizzsales/adminPage/adminApiService/adminApiService.dart';
-import 'package:wizzsales/adminPage/adminBonus/bonusModel.dart';
+import 'package:wizzsales/adminPage/adminBonus/model/bonusModel.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/bonusOverlapping.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/bonusRuleList.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/bonusTypes.dart';

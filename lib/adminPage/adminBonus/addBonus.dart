@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizzsales/adminPage/adminBonus/bonusModel.dart';
+import 'package:wizzsales/adminPage/adminBonus/model/bonusModel.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/bonusOverlapping.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/bonusRule.dart';
 import 'package:wizzsales/adminPage/adminModel/bonusModel/postBonus.dart';
@@ -55,6 +55,7 @@ class _AdminAddBonusState extends State<AdminAddBonus> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorUtil().getColor(context,ColorEnums.background),
       appBar: CheckBackBar(
         name: "addBonus".tr(),
         check: viewModel.checkSave,

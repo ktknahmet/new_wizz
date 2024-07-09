@@ -315,24 +315,45 @@ class LeadReports {
     this.totalAppointmentSet,
     this.totalSold,
     this.lastMonthNotContacted,
+    this.lastMonthNotInterested,
+    this.lastMonthAptCanceled,
+    this.lastMonthAptRescheduled,
+    this.lastMonthNotHome,
+    this.lastMonthSold,
+    this.lastMonthDns,
     this.lastMonthlyNotContactedDayCount,
     this.lastMonthAppointmentSet,
     this.lastMonthlyAppointmentSetDayCount,
     this.lastMonthSaleSold,
     this.lastMonthlySaleSoldDayCount,
     this.annualyNotContacted,
+    this.annualyNotInterested,
+    this.annualyAptCanceled,
+    this.annualyAptRescheduled,
+    this.annualyNotHome,
+    this.annualyDns,
     this.annualyNotContactedMonthly,
     this.annualyAppointmentSet,
     this.annualyAppointmentSetMonthly,
     this.annualySold,
     this.annualySoldMonthly,
-    this.monthlyNotContacted,
+    this.monthlyNotInterested,
+    this.monthlyNotAptCanceled,
+    this.monthlyNotAptRescheduled,
+    this.monthlyNotHome,
+    this.monthlySold,
+    this.monthlyDns,
     this.monthlyNotContactedDayCount,
     this.monthlyAppointmentSet,
     this.monthlyAppointmentSetDayCount,
     this.monthlySaleSold,
     this.monthlySaleSoldDayCount,
     this.weeklyNotContacted,
+    this.weeklyNotInterested,
+    this.weeklyAptCanceled,
+    this.weeklyAptRescheduled,
+    this.weeklyNotHome,
+    this.weeklyDns,
     this.weeklyNotContactedDayCount,
     this.weeklyAppointmentSet,
     this.weeklyAppointmentSetDayCount,
@@ -341,7 +362,12 @@ class LeadReports {
     this.daliyNotContacted,
     this.daliyAppointmentSet,
     this.daliyAppointmentSetHourly,
+    this.daliyNotInterested,
+    this.daliyAptCanceled,
+    this.daliyAptRescheduled,
+    this.daliyNotHome,
     this.daliySold,
+    this.daliyDns,
     this.yesterdayNotContacted,
     this.yesterdayAppointmentSet,
     this.yesterdayAppointmentSetHourly,
@@ -351,23 +377,45 @@ class LeadReports {
   int? totalAppointmentSet;
   int? totalSold;
   int? lastMonthNotContacted;
+  int? lastMonthNotInterested;
+  int? lastMonthAptCanceled;
+  int? lastMonthAptRescheduled;
+  int? lastMonthNotHome;
+  int? lastMonthSold;
+  int? lastMonthDns;
   List<MonthlyNotContactedDayCount>? lastMonthlyNotContactedDayCount;
   int? lastMonthAppointmentSet;
   List<MonthlyAppointmentSetDayCount>? lastMonthlyAppointmentSetDayCount;
   int? lastMonthSaleSold;
   List<MonthlySaleSoldDayCount>? lastMonthlySaleSoldDayCount;
+  int? annualyNotInterested;
+  int? annualyAptCanceled;
+  int? annualyAptRescheduled;
+  int? annualyNotHome;
+  int? annualyDns;
   int? annualyNotContacted;
   List<AnnualyNotContactedMonthly>? annualyNotContactedMonthly;
   int? annualyAppointmentSet;
   List<AnnualyAppointmentSetMonthly>? annualyAppointmentSetMonthly;
   int?  annualySold;
   List<AnnualySoldMonthly>? annualySoldMonthly;
+  int? monthlyNotInterested;
+  int? monthlyNotAptCanceled;
+  int? monthlyNotAptRescheduled;
+  int? monthlyNotHome;
+  int? monthlySold;
+  int? monthlyDns;
   int? monthlyNotContacted;
   List<MonthlyNotContactedDayCount>? monthlyNotContactedDayCount;
   int? monthlyAppointmentSet;
   List<MonthlyAppointmentSetDayCount>? monthlyAppointmentSetDayCount;
   int? monthlySaleSold;
   List<MonthlySaleSoldDayCount>? monthlySaleSoldDayCount;
+  int? weeklyNotInterested;
+  int? weeklyAptCanceled;
+  int? weeklyAptRescheduled;
+  int? weeklyNotHome;
+  int? weeklyDns;
   int? weeklyNotContacted;
   List<WeeklyNotContactedDayCount>? weeklyNotContactedDayCount;
   int? weeklyAppointmentSet;
@@ -377,7 +425,12 @@ class LeadReports {
   int? daliyNotContacted;
   int? daliyAppointmentSet;
   List<YesterdayHourlyCount>? daliyAppointmentSetHourly;
+  int? daliyNotInterested;
+  int? daliyAptCanceled;
+  int? daliyAptRescheduled;
+  int? daliyNotHome;
   int? daliySold;
+  int? daliyDns;
   int? yesterdayNotContacted;
   int? yesterdayAppointmentSet;
   List<YesterdayHourlyCount>? yesterdayAppointmentSetHourly;
@@ -388,23 +441,44 @@ class LeadReports {
     totalAppointmentSet = json['total_appointment_set'];
     totalSold = json['total_sold'];
     lastMonthNotContacted = json['lastmonthly_not_contacted'];
+    lastMonthNotInterested = json['lastmonthly_not_interested'];
+    lastMonthAptCanceled = json['lastmonthly_appointment_cancalled'];
+    lastMonthAptRescheduled = json['lastmonthly_appintment_rescheduled'];
+    lastMonthNotHome = json['lastmonthly_not_home'];
+    lastMonthDns = json['lastmonthly_dns'];
     lastMonthlyNotContactedDayCount = List.from(json['lastmonthly_not_contacted_day_count']).map((e)=>MonthlyNotContactedDayCount.fromJson(e)).toList();
     lastMonthAppointmentSet = json['lastmonthly_appointment_set'];
     lastMonthlyAppointmentSetDayCount = List.from(json['lastmonthly_appointment_set_day_count']).map((e)=>MonthlyAppointmentSetDayCount.fromJson(e)).toList();
     lastMonthSaleSold = json['lastmonthly_sale_sold'];
     lastMonthlySaleSoldDayCount = List.from(json['lastmonthly_sale_sold_day_count']).map((e)=>MonthlySaleSoldDayCount.fromJson(e)).toList();
+    annualyNotInterested = json['annualy_not_interested'];
+    annualyAptCanceled = json['annualy_appointment_cancalled'];
+    annualyAptRescheduled = json['annualy_appintment_rescheduled'];
+    annualyNotHome = json['annualy_not_home'];
+    annualyDns = json['annualy_dns'];
     annualyNotContacted = json['annualy_not_contacted'];
     annualyNotContactedMonthly = List.from(json['annualy_not_contacted_monthly']).map((e)=>AnnualyNotContactedMonthly.fromJson(e)).toList();
     annualyAppointmentSet = json['annualy_appointment_set'];
     annualyAppointmentSetMonthly = List.from(json['annualy_appointment_set_monthly']).map((e)=>AnnualyAppointmentSetMonthly.fromJson(e)).toList();
     annualySold = json['annualy_sold'];
     annualySoldMonthly = List.from(json['annualy_sold_monthly']).map((e)=>AnnualySoldMonthly.fromJson(e)).toList();
+    monthlyNotInterested = json['monthly_not_interested'];
+    monthlyNotAptCanceled = json['monthly_appointment_cancalled'];
+    monthlyNotAptRescheduled = json['monthly_appintment_rescheduled'];
+    monthlyNotHome = json['monthly_not_home'];
+    monthlySold = json['monthly_sold'];
+    monthlyDns = json['monthly_dns'];
     monthlyNotContacted = json['monthly_not_contacted'];
     monthlyNotContactedDayCount = List.from(json['monthly_not_contacted_day_count']).map((e)=>MonthlyNotContactedDayCount.fromJson(e)).toList();
     monthlyAppointmentSet = json['monthly_appointment_set'];
     monthlyAppointmentSetDayCount = List.from(json['monthly_appointment_set_day_count']).map((e)=>MonthlyAppointmentSetDayCount.fromJson(e)).toList();
     monthlySaleSold = json['monthly_sale_sold'];
     monthlySaleSoldDayCount = List.from(json['monthly_sale_sold_day_count']).map((e)=>MonthlySaleSoldDayCount.fromJson(e)).toList();
+    weeklyNotInterested = json['weekly_not_interested'];
+    weeklyAptCanceled = json['weekly_appointment_cancalled'];
+    weeklyAptRescheduled = json['weekly_appintment_rescheduled'];
+    weeklyNotHome = json['weekly_not_home'];
+    weeklyDns = json['weekly_dns'];
     weeklyNotContacted = json['weekly_not_contacted'];
     weeklyNotContactedDayCount = List.from(json['weekly_not_contacted_day_count']).map((e)=>WeeklyNotContactedDayCount.fromJson(e)).toList();
     weeklyAppointmentSet = json['weekly_appointment_set'];
@@ -414,7 +488,12 @@ class LeadReports {
     daliyNotContacted = json['daliy_not_contacted'];
     daliyAppointmentSet = json['daliy_appointment_set'];
     daliyAppointmentSetHourly = List.from(json['daliy_appointment_set_hourly']).map((e)=>YesterdayHourlyCount.fromJson(e)).toList();
+    daliyNotInterested = json['daliy_not_interested'];
+    daliyAptCanceled = json['daliy_appointment_cancalled'];
+    daliyAptRescheduled = json['daliy_appintment_rescheduled'];
+    daliyNotHome = json['daliy_not_home'];
     daliySold = json['daliy_sold'];
+    daliyDns = json['daliy_dns'];
     yesterdayNotContacted = json['yesterday_not_contacted'];
     yesterdayAppointmentSet = json['yesterday_appointment_set'];
     yesterdayAppointmentSetHourly =  List.from(json['yesterday_appointment_set_hourly']).map((e)=>YesterdayHourlyCount.fromJson(e)).toList();
@@ -426,12 +505,29 @@ class LeadReports {
     data['total_not_contacted_lead'] = totalNotContactedLead;
     data['total_appointment_set'] = totalAppointmentSet;
     data['total_sold'] = totalSold;
+    data['lastmonthly_not_contacted'] = lastMonthNotContacted;
+    data['lastmonthly_not_interested'] = lastMonthNotInterested;
+    data['lastmonthly_appointment_cancalled'] = lastMonthAptCanceled;
+    data['lastmonthly_appintment_rescheduled'] = lastMonthAptRescheduled;
+    data['lastmonthly_not_home'] = lastMonthNotHome;
+    data['lastmonthly_sold'] = lastMonthSold;
+    data['annualy_not_interested'] = annualyNotInterested;
+    data['annualy_appointment_cancalled'] = annualyAptCanceled;
+    data['annualy_appintment_rescheduled'] = annualyAptRescheduled;
+    data['annualy_not_home'] = annualyNotHome;
+    data['annualy_dns'] = annualyDns;
     data['annualy_not_contacted'] = annualyNotContacted;
     data['annualy_not_contacted_monthly'] = annualyNotContactedMonthly!.map((e)=>e.toJson()).toList();
     data['annualy_appointment_set'] = annualyAppointmentSet;
     data['annualy_appointment_set_monthly'] = annualyAppointmentSetMonthly!.map((e)=>e.toJson()).toList();
     data['annualy_sold'] = annualySold;
     data['annualy_sold_monthly'] = annualySoldMonthly!.map((e)=>e.toJson()).toList();
+    data['monthly_not_interested'] = monthlyNotInterested;
+    data['monthly_appointment_cancalled'] = monthlyNotAptCanceled;
+    data['monthly_appintment_rescheduled'] = monthlyNotAptRescheduled;
+    data['monthly_not_home'] = monthlyNotHome;
+    data['monthly_sold'] = monthlySold;
+    data['monthly_dns'] = monthlyDns;
     data['monthly_not_contacted'] = monthlyNotContacted;
     data['monthly_not_contacted_day_count'] = monthlyNotContactedDayCount!.map((e)=>e.toJson()).toList();
     data['monthly_appointment_set'] = monthlyAppointmentSet;
@@ -439,6 +535,11 @@ class LeadReports {
     data['monthly_sale_sold'] = monthlySaleSold;
     data['monthly_sale_sold_day_count'] = monthlySaleSoldDayCount!.map((e)=>e.toJson()).toList();
     data['weekly_not_contacted'] = weeklyNotContacted;
+    data['weekly_not_interested'] = weeklyNotInterested;
+    data['weekly_appointment_cancalled'] = weeklyAptCanceled;
+    data['weekly_appintment_rescheduled'] = weeklyAptRescheduled;
+    data['weekly_not_home'] = weeklyNotHome;
+    data['weekly_dns'] = weeklyDns;
     data['weekly_not_contacted_day_count'] = weeklyNotContactedDayCount!.map((e)=>e.toJson()).toList();
     data['weekly_appointment_set'] = weeklyAppointmentSet;
     data['weekly_appointment_set_day_count'] = weeklyAppointmentSetDayCount!.map((e)=>e.toJson()).toList();
@@ -447,7 +548,12 @@ class LeadReports {
     data['daliy_not_contacted'] = daliyNotContacted;
     data['daliy_appointment_set'] = daliyAppointmentSet;
     data['daliy_appointment_set_hourly'] = daliyAppointmentSetHourly;
+    data['daliy_not_interested'] = daliyNotInterested;
+    data['daliy_appointment_cancalled'] = daliyAptCanceled;
+    data['daliy_appintment_rescheduled'] = daliyAptRescheduled;
+    data['daliy_not_home'] = daliyNotHome;
     data['daliy_sold'] = daliySold;
+    data['daliy_dns'] = daliyDns;
     data['yesterday_not_contacted'] = yesterdayNotContacted;
     data['yesterday_appointment_set'] = yesterdayAppointmentSet;
     data['yesterday_appointment_set_hourly'] = yesterdayAppointmentSetHourly;

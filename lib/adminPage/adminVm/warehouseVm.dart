@@ -43,14 +43,16 @@ class WarehouseVm extends ChangeNotifier{
   int totalUnPaidAssign =0;
   List<StockReportDataDetails>? dataDetails;
   List<Map<String, bool>> gridMap = [];
-  Map<String, List<StockReportDataDetails>> groupedDetails = {};
-  String? selectedDistributor;
+  Map<String, Map<String, List<StockReportDataDetails>>> groupedDetails = {};
+
+  String? selectedDistributor ="all".tr();
 
 
   setSelectedDist(String value){
     selectedDistributor = value;
     notifyListeners();
   }
+
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
     notifyListeners();

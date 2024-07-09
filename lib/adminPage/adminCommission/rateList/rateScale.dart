@@ -207,7 +207,7 @@ class _CommissionState extends State<Commission> {
                                               width:sizeWidth(context).width*0.43,
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  Navigator.pushNamed(context, '/${PageName.adminCommissionWinner}',arguments: {"id":model.calcPoolId});
+                                                  Navigator.pushNamed(context, '/${PageName.commDetails}',arguments: {"id":model.calcPoolId});
                   
                                                 },
                                                 style: elevatedButtonStyle(context),

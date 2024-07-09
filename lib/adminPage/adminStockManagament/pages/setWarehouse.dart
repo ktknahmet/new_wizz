@@ -143,7 +143,7 @@ class _SetWarehousesState extends BaseStatefulPageState<SetWarehouses> {
                                       children: [
                                         SizedBox(
                                             width: sizeWidth(context).width*0.4,
-                                            child: Text("warehouseName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                            child: Text(item.warehouseType == "distributor" ? "stockRoom".tr() :"warehouseName".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.end,

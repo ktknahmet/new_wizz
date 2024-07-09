@@ -15,6 +15,10 @@ class StockReportDataDetails {
   String? paidAt;
   String? saleProgress;
   String? lastProgressAt;
+  int? importerWarehouseId;
+  String? importerWarehouseName;
+  int? distWarehouseId;
+  String? distWarehouseName;
 
   StockReportDataDetails({
     this.poolDetailId,
@@ -32,7 +36,11 @@ class StockReportDataDetails {
     this.isPaid,
     this.paidAt,
     this.saleProgress,
-    this.lastProgressAt
+    this.lastProgressAt,
+    this.importerWarehouseId,
+    this.importerWarehouseName,
+    this.distWarehouseId,
+    this.distWarehouseName
   });
 
   factory StockReportDataDetails.fromJson(Map<String, dynamic> json) => StockReportDataDetails(
@@ -52,6 +60,10 @@ class StockReportDataDetails {
     paidAt: json["paid_at"],
     saleProgress: json["in_sale_process"],
     lastProgressAt: json["last_process_at"],
+    importerWarehouseId: json["importer_warehouse_id"],
+    importerWarehouseName: json["importer_warehouse_name"],
+    distWarehouseId: json["distributor_warehouse_id"],
+    distWarehouseName: json["distributor_warehouse_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -71,5 +83,9 @@ class StockReportDataDetails {
     "paid_at": paidAt,
     "in_sale_process": saleProgress,
     "last_process_at": lastProgressAt,
+    "importer_warehouse_id": importerWarehouseId,
+    "importer_warehouse_name": importerWarehouseName,
+    "distributor_warehouse_id": distWarehouseId,
+    "distributor_warehouse_name": distWarehouseName,
   };
 }

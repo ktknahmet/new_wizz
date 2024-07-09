@@ -26,7 +26,7 @@ class _UpdateSocialState extends BaseStatefulPageState<UpdateSocial> {
   TextEditingController instagram = TextEditingController();
   TextEditingController tiktok = TextEditingController();
   TextEditingController facebook = TextEditingController();
-
+  TextEditingController youtube = TextEditingController();
   @override
   void initState() {
     getAccount();
@@ -45,9 +45,10 @@ class _UpdateSocialState extends BaseStatefulPageState<UpdateSocial> {
                 socialMediaAccount(context,"addInstagram", instagram, "instagram.png"),
                 const SizedBox(height: 16,),
                 socialMediaAccount(context,"addFacebook", facebook, "facebook.png"),
-
                 const SizedBox(height: 16,),
                 socialMediaAccount(context,"addTiktok", tiktok, "tiktok.png"),
+                const SizedBox(height: 16,),
+                socialMediaAccount(context,"addYoutube", youtube, "youtube.png"),
 
 
                 Expanded(
@@ -88,6 +89,7 @@ class _UpdateSocialState extends BaseStatefulPageState<UpdateSocial> {
       twitter.text = viewModel.socialMedia![0].twitter_user_name ?? "";
       instagram.text = viewModel.socialMedia![0].instagram_user_name ?? "";
       tiktok.text = viewModel.socialMedia![0].tiktok_user_name ?? "";
+      youtube.text = viewModel.socialMedia![0].tiktok_user_name ?? "";
     }
   }
   post() async{

@@ -14,11 +14,17 @@ class MyLeadGrid extends DataGridSource {
     cData = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
 
-      DataGridCell<String>(columnName: 'leadType'.tr(), value: e!.lead_type_name ?? ""),
-      DataGridCell<int>(columnName: 'total'.tr(), value: (e.appointment_set_count ?? 0)+(e.not_contacted_lead_count ?? 0)+(e.sold_count ?? 0)),
-      DataGridCell<int>(columnName: 'appointmentSet'.tr(), value: e.appointment_set_count ?? 0),
-      DataGridCell<int>(columnName: 'notContacted'.tr(), value: e.not_contacted_lead_count ?? 0),
-      DataGridCell<int>(columnName: 'sold'.tr(), value: e.sold_count ?? 0),
+      DataGridCell<String>(columnName: 'leadType'.tr(), value: e!.leadTypeName ?? ""),
+      DataGridCell<int>(columnName: 'total'.tr(), value: (e.aptSetCount ?? 0)+(e.notContacted ?? 0)
+          +(e.soldCount ?? 0)+(e.notInterested ?? 0)+(e.aptCanceled ?? 0)+(e.aptRescheduled ?? 0)+(e.notHomeCount ?? 0)+(e.dns ?? 0)),
+      DataGridCell<int>(columnName: 'appointmentSet'.tr(), value: e.aptSetCount ?? 0),
+      DataGridCell<int>(columnName: 'notContacted'.tr(), value: e.notContacted ?? 0),
+      DataGridCell<int>(columnName: 'sold'.tr(), value: e.soldCount ?? 0),
+      DataGridCell<int>(columnName: 'notInterested'.tr(), value: e.notInterested ?? 0),
+      DataGridCell<int>(columnName: 'aptCanceled'.tr(), value: e.aptCanceled ?? 0),
+      DataGridCell<int>(columnName: 'aptRescheduled'.tr(), value: e.aptRescheduled ?? 0),
+      DataGridCell<int>(columnName: 'notHome'.tr(), value: e.notHomeCount ?? 0),
+      DataGridCell<int>(columnName: 'dns'.tr(), value: e.dns ?? 0),
 
     ]))
         .toList();

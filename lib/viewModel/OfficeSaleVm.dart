@@ -43,6 +43,7 @@ class OfficeSaleVm extends ChangeNotifier{
     pendingSale = await SaleVM.getSaleList(context,0,page);
     notifyListeners();
   }
+
   Future<void>getCancelSale(BuildContext context,int page) async{
     cancelSale = await SaleVM.getSaleList(context,2,page);
     notifyListeners();

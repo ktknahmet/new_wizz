@@ -11,47 +11,67 @@ import 'package:wizzsales/model/OLD/leadReport/Lead.dart';
   String? leadReportToJson(LeadReport data) => json.encode(data.toJson());
 
   class LeadReport {
-    String? lead_type_name;
-    int? not_contacted_lead_count;
-    int? appointment_set_count;
-    int? sold_count;
-    int? not_contacted_lead_as_weekly_count;
-    int? appointment_set_as_weekly_count;
-    int? sold_as_weekly_count;
+    String? leadTypeName;
+    int? notContacted;
+    int? aptSetCount;
+    int? soldCount;
+    int? notInterested;
+    int? aptCanceled;
+    int? aptRescheduled;
+    int? notHomeCount;
+    int? dns;
+    int? notContactedWeek;
+    int? aptSetWeekly;
+    int? soldWeekly;
     List<Lead>? leads;
 
     LeadReport({
-      this.lead_type_name,
-      this.not_contacted_lead_count,
-      this.appointment_set_count,
-      this.sold_count,
-      this.not_contacted_lead_as_weekly_count,
-      this.appointment_set_as_weekly_count,
-      this.sold_as_weekly_count,
+      this.leadTypeName,
+      this.notContacted,
+      this.aptSetCount,
+      this.soldCount,
+      this.notInterested,
+      this.aptCanceled,
+      this.aptRescheduled,
+      this.notHomeCount,
+      this.dns,
+      this.notContactedWeek,
+      this.aptSetWeekly,
+      this.soldWeekly,
       this.leads,
     });
 
     factory LeadReport.fromJson(Map<dynamic, dynamic> json) => LeadReport(
-      lead_type_name: json["lead_type_name"],
-      not_contacted_lead_count: json["not_contacted_lead_count"],
-      appointment_set_count: json["appointment_set_count"],
-      sold_count: json["sold_count"],
-      not_contacted_lead_as_weekly_count: json["not_contacted_lead_as_weekly_count"],
-      appointment_set_as_weekly_count: json["appointment_set_as_weekly_count"],
-      sold_as_weekly_count: json["sold_as_weekly_count"],
+      leadTypeName: json["lead_type_name"],
+      notContacted: json["not_contacted_lead_count"],
+      aptSetCount: json["appointment_set_count"],
+      soldCount: json["sold_count"],
+      notInterested: json["not_interested_count"],
+      aptCanceled: json["appointment_cancalled_count"],
+      aptRescheduled: json["appintment_rescheduled_count"],
+      notHomeCount: json["not_home_count"],
+      dns: json["dns_count"],
+      notContactedWeek: json["not_contacted_lead_as_weekly_count"],
+      aptSetWeekly: json["appointment_set_as_weekly_count"],
+      soldWeekly: json["sold_as_weekly_count"],
       leads: json["leads"] != null ? List<Lead>.from(json["leads"].map((x) => Lead.fromJson(x))) : [],
 
     );
 
     Map<dynamic, dynamic> toJson() => {
-      "lead_type_name": lead_type_name,
-      "not_contacted_lead_count": not_contacted_lead_count,
-      "appointment_set_count": appointment_set_count,
-      "sold_count": sold_count,
-      "not_contacted_lead_as_weekly_count": not_contacted_lead_as_weekly_count,
-      "appointment_set_as_weekly_count": appointment_set_as_weekly_count,
-      "sold_as_weekly_count": sold_as_weekly_count,
-      "leads": List<Lead?>.from(leads!.map((x) => x!.toJson())),
+      "lead_type_name": leadTypeName,
+      "not_contacted_lead_count": notContacted,
+      "appointment_set_count": aptSetCount,
+      "sold_count": soldCount,
+      "not_interested_count": notInterested,
+      "appointment_cancalled_count": aptCanceled,
+      "appintment_rescheduled_count": aptRescheduled,
+      "not_home_count": notHomeCount,
+      "dns_count": dns,
+      "not_contacted_lead_as_weekly_count": notContactedWeek,
+      "appointment_set_as_weekly_count": aptSetWeekly,
+      "sold_as_weekly_count": soldWeekly,
+      "leads": List<Lead?>.from(leads!.map((x) => x.toJson())),
 
     };
   }

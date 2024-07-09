@@ -27,7 +27,13 @@ class MyLeadVm extends ChangeNotifier{
   int totalLead=0;
   int aptSet=0;
   int notContacted=0;
-  int sold =0;
+  int sold=0;
+  int notInterested=0;
+  int aptCanceled=0;
+  int aptRescheduled=0;
+  int notHome=0;
+  int dns=0;
+
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
     notifyListeners();
@@ -56,7 +62,7 @@ class MyLeadVm extends ChangeNotifier{
       return list;
     }
     List<LeadReport> filteredList = list.where((value) =>
-        value.lead_type_name!.toLowerCase().contains(query.toLowerCase())).toList();
+        value.leadTypeName!.toLowerCase().contains(query.toLowerCase())).toList();
 
     return filteredList;
   }
@@ -109,10 +115,24 @@ class MyLeadVm extends ChangeNotifier{
 
   leadReportValue(List<LeadReport> report,String name){
     totalLead =0;
-    aptSet =0;
-    notContacted =0;
-    sold =0;
-    if(name !="All"){
+    aptSet=0;
+    notContacted=0;
+    sold=0;
+    notInterested=0;
+    aptCanceled=0;
+    aptRescheduled=0;
+    notHome=0;
+    dns=0;
+
+    for(int i=0;i<report.length;i++){
+
+      aptSet = aptSet+(report[i].aptSetCount ?? 0);
+      notContacted = notContacted+(report[i].notContacted ?? 0);
+      sold = sold+(report[i].soldCount ?? 0);
+      totalLead = totalLead+(report[i].leads!.length);
+    }
+
+    /*if(name !="All"){
 
       for(int i=0;i<report.length;i++){
         if(report[i].lead_type_name == name){
@@ -135,7 +155,7 @@ class MyLeadVm extends ChangeNotifier{
         totalLead = totalLead+(report[i].leads!.length);
       }
 
-    }
+    }*/
     notifyListeners();
 
   }

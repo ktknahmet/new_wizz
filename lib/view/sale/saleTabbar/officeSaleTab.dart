@@ -25,6 +25,7 @@ class OfficeSaleTab extends StatefulWidget {
 class _OfficeSaleTabState extends State<OfficeSaleTab> {
   SaleOfficeMobx saleListMobx = SaleOfficeMobx();
   final List<Sale> sales=[];
+  int size=0;
   @override
   void initState() {
     getList();
@@ -87,7 +88,7 @@ class _OfficeSaleTabState extends State<OfficeSaleTab> {
                   color: ColorUtil().getColor(context, ColorEnums.background),
                   child:   TabBarView(
                     children: [
-                      OfficeTotalSale(sales),
+                      OfficeTotalSale(sales,size),
                       const OfficeApproved(),
                       const OfficePending(),
 

@@ -22,6 +22,8 @@ import 'package:wizzsales/model/languageModel/Languages.dart';
 import 'package:wizzsales/model/overrideModel/dealerOverrideWinner.dart';
 import 'package:wizzsales/utils/function/SharedPref.dart';
 import 'package:wizzsales/utils/res/SharedUtils.dart';
+import 'package:wizzsales/utils/res/StringUtils.dart';
+import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import '../adminPage/adminModel/stockReportModel/stockReportData.dart';
 import '../model/OLD/User.dart';
@@ -45,12 +47,12 @@ List<Types> roleList = [
   List<String> weeks=["monday".tr(),"tuesday".tr(),"wednesday".tr(),"thursday".tr(),"friday".tr(),"saturday".tr(),"sunday".tr()];
   List<String> chooseType=["daily".tr(),"weekly".tr(),"monthly".tr()];
   List<String> overrideSummary=["monthly".tr(),"annually".tr()];
-  List<String> comSummary=["daily".tr(),"payWeek".tr(),"monthly".tr(),"annually".tr()];
+  List<String> comSummary=["daily".tr(),"weekly".tr(),"monthly".tr(),"annually".tr()];
   List<String> progressList=["daily".tr(),"weekly".tr(),"monthly".tr(),"annually".tr()];
   List<String> reportType=["totalSale".tr(),"demos".tr(),"leads".tr()];
-  List<String> appointmentDays=["yesterday".tr(),"today".tr(),"week".tr(),"month".tr(),"year".tr()];
   List<String> days=["yesterday".tr(),"daily".tr(),"weekly".tr(),"monthly".tr(),"annual".tr()];
   List<String> day=["lastMonth".tr(),"yesterday".tr(),"daily".tr(),"weekly".tr(),"monthly".tr(),"annual".tr()];
+  List<String> withoutYesterday=["lastMonth".tr(),"daily".tr(),"weekly".tr(),"monthly".tr(),"annual".tr()];
   List<String> region=["male".tr(),"female".tr()];
 
   Map<String, dynamic> carouselType = {
@@ -90,6 +92,15 @@ void openEmail(String email) async {
     await launch(url);
   } else {
     print("hata oldu");
+  }
+}
+
+ openLink(BuildContext context,String link) async {
+
+  if (await canLaunch(link)) {
+    await launch(link);
+  } else {
+    snackBarDesign(context, StringUtil.error, "Wrong link");
   }
 }
 DateTime parseTime(String timeString, DateTime date) {
@@ -406,7 +417,16 @@ Map<String, dynamic> smashPhoneNumber(String phoneNumber) {
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
     return formattedDate;
   }
+  String extractDate(String dateTimeString) {
+  DateTime dateTime = DateTime.parse(dateTimeString);
+  return "${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}-${dateTime.year}";
+}
 
+
+  String extractTime(String dateTimeString) {
+  DateTime dateTime = DateTime.parse(dateTimeString);
+  return DateFormat.jm().format(dateTime);
+  }
   String mmDDYDate(String? isoDateString) {
     if(isoDateString!.isNotEmpty){
       DateTime date = DateTime.parse(isoDateString);
@@ -532,6 +552,8 @@ String convertTo12HourFormat(int hour) {
     String response="$hoursDifference hour $minutesDifference minute";
     return response;
   }
+
+
 String calculateTimeDifference(String start, String end) {
   String differenceString = '';
   if(start.isNotEmpty && end.isNotEmpty){
@@ -1025,19 +1047,27 @@ Future<void> showErrorMessage(BuildContext context,String text) async{
 
 }
 
-Future<Map<String, List<StockReportDataDetails>>> groupByDistributor(List<StockReportDataDetails> detailsList) async{
-  Map<String, List<StockReportDataDetails>> groupedData = {};
+// Distribütör ve Depo Adına Göre Gruplama Fonksiyonu
+Future<Map<String, Map<String, List<StockReportDataDetails>>>> groupByDistributorAndWarehouse(List<StockReportDataDetails> detailsList) async {
+  Map<String, Map<String, List<StockReportDataDetails>>> groupedData = {};
 
   for (var detail in detailsList) {
-    String distributorKey = detail.distributorId == 0 ? 'All' : detail.distName!;
+    String distributorKey = detail.importerWarehouseId == null ? 'All' : detail.importerWarehouseName ?? 'Bilinmeyen Distribütör';
+    String warehouseKey = detail.distWarehouseName ?? 'notAssigned'.tr();
 
-    if (groupedData.containsKey(distributorKey)) {
-      groupedData[distributorKey]!.add(detail);
+    if (!groupedData.containsKey(distributorKey)) {
+      groupedData[distributorKey] = {};
+    }
+
+    if (groupedData[distributorKey]!.containsKey(warehouseKey)) {
+      groupedData[distributorKey]![warehouseKey]!.add(detail);
     } else {
-      groupedData[distributorKey] = [detail];
+      groupedData[distributorKey]![warehouseKey] = [detail];
     }
   }
 
   return groupedData;
 }
+
+
 

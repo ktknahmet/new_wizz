@@ -166,35 +166,49 @@ class _AllCarouselState extends BaseStatefulPageState<AllCarousel> {
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.end,
                                                       children: [
-                                                        Text(item.sliderType!,style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
+                                                        item.sliderType == "link" ?
+                                                        Text("webPage".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
+                                                            :
+                                                        Text(upperFirstLetter(item.sliderType!),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
                                                       ],
                                                     )
                                                 ),
-
                                               ],
                                             ),
                                             const SizedBox(height: 8,),
                                             if(item.onClick !=null)
                                               GestureDetector(
-                                                onTap: (){
-                                                  if(item.sliderType !=null && item.onClick !=null){
-                                                    if(item.sliderType =="link"){
-                                                      launchUrl(Uri.parse(item.onClick!));
-                                                    }else{
-                                                      showCarouselDetails(context,item.onClick!,item.sliderType!);
+                                                  onTap:(){
+                                                    if(item.sliderType !=null && item.onClick !=null){
+                                                      if(item.sliderType =="link"){
+                                                        launchUrl(Uri.parse(item.onClick!));
+                                                      }else{
+                                                        showCarouselDetails(context,item.onClick!,item.sliderType!);
+                                                      }
                                                     }
-                                                  }
-                                                },
-                                                child: item.sliderType =="video" ?
-                                                Icon(Icons.slow_motion_video_outlined,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
-                                                    :item.sliderType =="pdf" ?
-                                                Icon(Icons.picture_as_pdf_outlined,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
-                                                    :item.sliderType=="link" ?
-                                                Icon(Icons.link,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
-                                                    :Icon(Icons.image,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
-
-                                              ),
+                                                  },
+                                                  child: Text("preview".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.wizzColor)),)),
                                             const SizedBox(height: 4,),
+                                           /* if(item.onClick !=null)
+                                              GestureDetector(
+                                                  onTap: (){
+                                                    if(item.sliderType !=null && item.onClick !=null){
+                                                      if(item.sliderType =="link"){
+                                                        launchUrl(Uri.parse(item.onClick!));
+                                                      }else{
+                                                        showCarouselDetails(context,item.onClick!,item.sliderType!);
+                                                      }
+                                                    }
+                                                  },
+                                                  child: item.sliderType =="video" ?
+                                                  Icon(Icons.slow_motion_video_outlined,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
+                                                      :item.sliderType =="pdf" ?
+                                                  Icon(Icons.picture_as_pdf_outlined,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
+                                                      :item.sliderType=="link" ?
+                                                  Icon(Icons.link,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
+                                                      :Icon(Icons.image,color:ColorUtil().getColor(context, ColorEnums.wizzColor),size: 32,)
+
+                                              ),*/
                                             Divider(
                                               thickness: 2,
                                               color: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -202,7 +216,10 @@ class _AllCarouselState extends BaseStatefulPageState<AllCarousel> {
                                             const SizedBox(height: 4,),
                                             GestureDetector(
                                               onTap: ()async{
-                                                await deleteSlider(context,item.id!);
+                                                bool check = await areYouSure(context);
+                                                if(check){
+                                                  await deleteSlider(context,item.id!);
+                                                }
                                               },
                                               child: Text("delete".tr(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.wizzColor)),),
 

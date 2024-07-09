@@ -64,7 +64,6 @@ class _TotalLeadsState extends State<TotalLeads> {
                     child: Column(
                       children: [
                         Container(
-                          height: 50,
                           decoration: BoxDecoration(
                               color: Colors.black87,
                               border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
@@ -77,54 +76,101 @@ class _TotalLeadsState extends State<TotalLeads> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      child:  Padding(
-                                          padding: const EdgeInsets.only(left: 2,right: 2),
-                                          child: Column(
-                                            children: [
-                                              Text("totalLeadCount".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                              Text(viewModel.totalLead.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                            ],
-                                          )
-                                      ),
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("totalLeadCount".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
                                     ),
-                                    SizedBox(
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(left: 2,right: 2),
-                                          child: Column(
-                                            children: [
-                                              Text("appointmentSet".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                              Text(viewModel.aptSet.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                            ],
-                                          )
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(left: 2,right: 2),
-                                          child: Column(
-                                            children: [
-                                              Text("notContacted".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                              Text(viewModel.notContacted.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                            ],
-                                          )
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(left: 2,right: 2),
-                                          child: Column(
-                                            children: [
-                                              Text("sold".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                              Text(viewModel.sold.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            ],
-                                          )
-                                      ),
-                                    ),
+                                    Text(viewModel.totalLead.toString(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
                                   ],
                                 ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("appointmentSet".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text(viewModel.aptSet.toString(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notContacted".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text(viewModel.notContacted.toString(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("sold".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text(viewModel.sold.toString(),style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notInterested".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.notInterested}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptCanceled".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.aptCanceled}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptRescheduled".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.aptRescheduled}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notHome".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.notHome}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("dns".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.dns}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+
                               ],
                             ),
                           ),
@@ -231,12 +277,12 @@ class _TotalLeadsState extends State<TotalLeads> {
                                               Expanded(child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
-                                                  Text(item.lead_type_name ?? "", style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                  Text(item.leadTypeName ?? "", style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                 ],
                                               ))
                                             ],
                                           ),
-                                          const SizedBox(height: 8,),
+                                          const SizedBox(height: 4,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -254,7 +300,7 @@ class _TotalLeadsState extends State<TotalLeads> {
                                                   ))
                                             ],
                                           ),
-                                          const SizedBox(height: 8,),
+                                          const SizedBox(height: 4,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -266,13 +312,13 @@ class _TotalLeadsState extends State<TotalLeads> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: [
-                                                      Text("${item.appointment_set_count ?? 0}",
+                                                      Text("${item.aptSetCount ?? 0}",
                                                         style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                     ],
                                                   ))
                                             ],
                                           ),
-                                          const SizedBox(height: 8,),
+                                          const SizedBox(height: 4,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -284,13 +330,13 @@ class _TotalLeadsState extends State<TotalLeads> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: [
-                                                      Text("${item.not_contacted_lead_count ?? 0}",
+                                                      Text("${item.notContacted ?? 0}",
                                                         style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                     ],
                                                   ))
                                             ],
                                           ),
-                                          const SizedBox(height: 8,),
+                                          const SizedBox(height: 4,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -302,7 +348,97 @@ class _TotalLeadsState extends State<TotalLeads> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: [
-                                                      Text("${item.sold_count ?? 0}",
+                                                      Text("${item.soldCount ?? 0}",
+                                                        style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                    ],
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: sizeWidth(context).width * 0.30,
+                                                  child: Text("notInterested".tr(),
+                                                    style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text("${item.notInterested ?? 0}",
+                                                        style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                    ],
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: sizeWidth(context).width * 0.30,
+                                                  child: Text("aptCanceled".tr(),
+                                                    style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text("${item.aptCanceled ?? 0}",
+                                                        style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                    ],
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: sizeWidth(context).width * 0.30,
+                                                  child: Text("aptRescheduled".tr(),
+                                                    style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text("${item.aptRescheduled ?? 0}",
+                                                        style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                    ],
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: sizeWidth(context).width * 0.30,
+                                                  child: Text("notHome".tr(),
+                                                    style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text("${item.notHomeCount ?? 0}",
+                                                        style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+                                                    ],
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: sizeWidth(context).width * 0.30,
+                                                  child: Text("dns".tr(),
+                                                    style: CustomTextStyle().bold14(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)),
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text("${item.dns ?? 0}",
                                                         style: CustomTextStyle().regular12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
                                                     ],
                                                   ))
@@ -362,7 +498,7 @@ class _TotalLeadsState extends State<TotalLeads> {
       viewModel.chooseLead.clear();
       viewModel.chooseLead.add("All");
       for(int i =0;i<viewModel.leadReports!.length;i++){
-        viewModel.chooseLead.add(viewModel.leadReports![i].lead_type_name!);
+        viewModel.chooseLead.add(viewModel.leadReports![i].leadTypeName!);
       }
       viewModel.leadReportValue(viewModel.leadReports!,viewModel.leadType);
 

@@ -17,6 +17,7 @@ class PageName{
   static const String dealerComPage ="Dealer Com Details";
   static const String profile ="Profile";
   static const String uploadPhoto ="Upload Picture";
+  static const String commDetails ="Com Details Page";
   static const String updateEmail ="Update Email";
   static const String updatePassword ="Update Password";
   static const String updateAddress ="Update Address";
@@ -55,6 +56,7 @@ class PageName{
   static const String inventoryReportPage="Inventory Report Page";
   static const String bonusWinnerPage="Bonus Winner Page";
   static const String stockHistory="Stock History Page";
+  static const String myCommissionPage="My Commission Page";
   static const String commissionSettings="Commission Settings Page";
   static const String payPeriodPage="Pay Period Page";
   static const String dealerBoardPage = "Dealer Board Page";
@@ -83,6 +85,7 @@ class PageName{
   static const String importerSummary ="Importer Summary";
   static const String assignGlobalStock ="Assign Global Stock";
   static const String stockManagement ="Stock Management";
+  static const String warehouseOperationsPage ="Warehouse Operations Page";
   static const String setOverrideUserPage ="Set Override User Page";
   static const String addWarehouse ="Add Warehouse";
   static const String setWarehouses ="Set Warehouses";

@@ -197,37 +197,27 @@ class _StockDetailsState extends State<StockDetails> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text("distributor".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),),
-                                                  value.assignedToDistributor == true ?
-                                                  Text(getOrganisationName(viewModel.organisations!,value.distributorId!) ?? "",style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),)
-                                                      :Column(
-                                                    children: [
-                                                      Align(
-                                                        alignment:Alignment.centerRight,
-                                                        child: DropdownButton<AllOrganisations?>(
-                                                          isDense: true,
-                                                          underline: const SizedBox(),
-                                                          dropdownColor: ColorUtil().getColor(context, ColorEnums.background),
-                                                          value: viewModel.organisations!.firstWhere(
-                                                                (org) => org.id == value.distributorId,
-                                                          ),
-                                                          onChanged: (AllOrganisations? newValue) {
-                                                            if (newValue != null) {
-                                                              viewModel.setDistId(value.serialNumber!, newValue.id!);
-                                                            }
-                                                          },
-                                                          items: viewModel.organisations!.map<DropdownMenuItem<AllOrganisations>>((AllOrganisations organisation) {
-                                                            return DropdownMenuItem<AllOrganisations>(
-                                                              value: organisation,
-                                                              child: Text(
-                                                                organisation.name!,
-                                                                style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
-                                                              ),
-                                                            );
-                                                          }).toList(),
+                                                  DropdownButton<AllOrganisations?>(
+                                                    alignment:AlignmentDirectional.centerEnd,
+                                                    underline: const SizedBox(),
+                                                    dropdownColor: ColorUtil().getColor(context, ColorEnums.background),
+                                                    value: viewModel.organisations!.firstWhere(
+                                                          (org) => org.id == value.distributorId,
+                                                    ),
+                                                    onChanged: (AllOrganisations? newValue) {
+                                                      if (newValue != null) {
+                                                        viewModel.setDistId(value.serialNumber!, newValue.id!);
+                                                      }
+                                                    },
+                                                    items: viewModel.organisations!.map<DropdownMenuItem<AllOrganisations>>((AllOrganisations organisation) {
+                                                      return DropdownMenuItem<AllOrganisations>(
+                                                        value: organisation,
+                                                        child: Text(
+                                                          organisation.name!,
+                                                          style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
                                                         ),
-                                                      ),
-
-                                                    ],
+                                                      );
+                                                    }).toList(),
                                                   ),
 
                                                 ],

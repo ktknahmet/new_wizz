@@ -20,6 +20,9 @@ import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../model/socialModel/SocialMedia.dart';
+import '../utils/res/PageName.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class SalesVm extends ChangeNotifier{
@@ -35,6 +38,7 @@ class SalesVm extends ChangeNotifier{
   TextEditingController serialIdController = TextEditingController();
   String query="";
   bool openComDesign=false;
+  List<SocialMedia>? socialMedia;
 
   LoginUser? loginUser;
   int index=0;
@@ -80,6 +84,42 @@ class SalesVm extends ChangeNotifier{
       status = value,
     });
     notifyListeners();
+  }
+  Future<void>getAccountValue(BuildContext context,String facebook,String twitter,String instagram,String tiktok) async{
+    String token = await pref.getString(context, SharedUtils.userToken);
+    String activeProfile = await pref.getString(context, SharedUtils.activeProfile);
+    String salesRoleId = await pref.getString(context, SharedUtils.salesRoleId);
+
+
+    ApiService apiService = ApiService(ServiceModule().baseService(token,activeProfile,salesRoleId));
+    notifyListeners();
+    try {
+      await apiService.getSocial(facebook,twitter,instagram,tiktok).then((value) =>{
+        socialMedia = value,
+      });
+
+    } catch (error) {
+      if (error is DioException) {
+        final res = error.response;
+
+        if (res?.statusCode == 401 || res?.statusCode == 403) {
+          await deleteToken(context);
+        }else if(res!.statusCode==400) {
+
+        }else if (error.type == DioExceptionType.connectionError) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/${PageName.internetPage}',
+                (Route<dynamic> route) => false,
+          );
+        }
+      }
+    } finally {
+
+      notifyListeners();
+
+    }
+
   }
 
   Future<void>getProductCoast(BuildContext context) async{

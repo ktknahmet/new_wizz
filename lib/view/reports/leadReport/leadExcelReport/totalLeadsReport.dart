@@ -153,6 +153,51 @@ class _TotalLeadsReportState extends State<TotalLeadsReport> {
                                         'sold'.tr(),
                                         style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
                                       ))),
+                              GridColumn(
+                                  visible:  getStatusVisibility("notInterested".tr(), viewModel.gridMap),
+                                  columnName: 'notInterested'.tr(),
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'notInterested'.tr(),
+                                        style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                      ))),
+                              GridColumn(
+                                  visible:  getStatusVisibility("aptCanceled".tr(), viewModel.gridMap),
+                                  columnName: 'aptCanceled'.tr(),
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'aptCanceled'.tr(),
+                                        style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                      ))),
+                              GridColumn(
+                                  visible:  getStatusVisibility("aptRescheduled".tr(), viewModel.gridMap),
+                                  columnName: 'aptRescheduled'.tr(),
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'aptRescheduled'.tr(),
+                                        style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                      ))),
+                              GridColumn(
+                                  visible:  getStatusVisibility("notHome".tr(), viewModel.gridMap),
+                                  columnName: 'notHome'.tr(),
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'notHome'.tr(),
+                                        style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                      ))),
+                              GridColumn(
+                                  visible:  getStatusVisibility("dns".tr(), viewModel.gridMap),
+                                  columnName: 'dns'.tr(),
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'dns'.tr(),
+                                        style: CustomTextStyle().black12(ColorUtil().getColor(context, ColorEnums.wizzColor)),
+                                      ))),
                             ],
                           ),
                         ),
@@ -177,6 +222,11 @@ class _TotalLeadsReportState extends State<TotalLeadsReport> {
       {"appointmentSet".tr(): true},
       {"notContacted".tr(): true},
       {"sold".tr(): true},
+      {"notInterested".tr(): true},
+      {"aptCanceled".tr(): true},
+      {"aptRescheduled".tr(): true},
+      {"notHome".tr(): true},
+      {"dns".tr(): true},
 
     ];
     for(int i=0;i<gridMap.length;i++){

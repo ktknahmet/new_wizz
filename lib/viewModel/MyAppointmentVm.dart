@@ -38,11 +38,15 @@ class MyAppointmentVm extends ChangeNotifier{
   dynamic soldTotal;
   dynamic notContactedTotal;
   List<Map<String, bool>> gridMap = [];
-  int yesterdayApt=0;
-  int todayApt=0;
-  int weekApt=0;
-  int monthApt=0;
-  int yearApt=0;
+  int aptSet=0;
+  int notContacted=0;
+  int sold=0;
+  int notInterested=0;
+  int aptCanceled=0;
+  int aptRescheduled=0;
+  int notHome=0;
+  int dns=0;
+  String currentDay=withoutYesterday[1];
 
   addGridMap(Map<String,bool> map){
     gridMap.add(map);
@@ -110,20 +114,81 @@ class MyAppointmentVm extends ChangeNotifier{
  }
 
 
-  appointmentTotalValue(DetailReportModel reportModel){
-    yesterdayApt=0;
-    todayApt=0;
-    weekApt =0;
-    monthApt =0;
-    yearApt =0;
+  appointmentTotalValue(int value,DetailReportModel reportModel){
+    currentDay = withoutYesterday[value];
+    aptSet=0;
+    notContacted=0;
+    sold=0;
+    notInterested=0;
+    aptCanceled=0;
+    aptRescheduled=0;
+    notHome=0;
+    dns=0;
 
-    for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
-      yesterdayApt =yesterdayApt+ (reportModel.leadsReport!.leadReports![i].yesterdayAppointmentSet ?? 0);
-      todayApt =todayApt+ (reportModel.leadsReport!.leadReports![i].daliyAppointmentSet ?? 0);
-      weekApt =weekApt+ (reportModel.leadsReport!.leadReports![i].weeklyAppointmentSet ?? 0);
-      monthApt =todayApt+ (reportModel.leadsReport!.leadReports![i].monthlyAppointmentSet ?? 0);
-      yearApt =todayApt+ (reportModel.leadsReport!.leadReports![i].annualyAppointmentSet ?? 0);
+    if(value==0){
+      for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+        aptSet =aptSet+ (reportModel.leadsReport!.leadReports![i].lastMonthAppointmentSet ?? 0);
+        notContacted =notContacted+ (reportModel.leadsReport!.leadReports![i].lastMonthNotContacted ?? 0);
+        sold =sold+ (reportModel.leadsReport!.leadReports![i].lastMonthSold ?? 0);
+        notInterested =notInterested+ (reportModel.leadsReport!.leadReports![i].lastMonthNotInterested ?? 0);
+        aptCanceled =aptCanceled+ (reportModel.leadsReport!.leadReports![i].lastMonthAptCanceled ?? 0);
+        aptRescheduled =aptRescheduled+ (reportModel.leadsReport!.leadReports![i].lastMonthAptRescheduled ?? 0);
+        notHome =notHome+ (reportModel.leadsReport!.leadReports![i].lastMonthNotHome ?? 0);
+        dns =dns+ (reportModel.leadsReport!.leadReports![i].lastMonthDns ?? 0);
+      }
     }
+
+    if(value==1){
+      for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+        aptSet =aptSet+ (reportModel.leadsReport!.leadReports![i].daliyAppointmentSet ?? 0);
+        notContacted =notContacted+ (reportModel.leadsReport!.leadReports![i].daliyNotContacted ?? 0);
+        sold =sold+ (reportModel.leadsReport!.leadReports![i].daliySold ?? 0);
+        notInterested =notInterested+ (reportModel.leadsReport!.leadReports![i].daliyNotInterested ?? 0);
+        aptCanceled =aptCanceled+ (reportModel.leadsReport!.leadReports![i].daliyAptCanceled ?? 0);
+        aptRescheduled =aptRescheduled+ (reportModel.leadsReport!.leadReports![i].daliyAptRescheduled ?? 0);
+        notHome =notHome+ (reportModel.leadsReport!.leadReports![i].daliyNotHome ?? 0);
+        dns =dns+ (reportModel.leadsReport!.leadReports![i].daliyDns ?? 0);
+      }
+    }
+
+    if(value==2){
+      for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+        aptSet =aptSet+ (reportModel.leadsReport!.leadReports![i].weeklyAppointmentSet ?? 0);
+        notContacted =notContacted+ (reportModel.leadsReport!.leadReports![i].weeklyNotContacted ?? 0);
+        sold =sold+ (reportModel.leadsReport!.leadReports![i].weeklySold ?? 0);
+        notInterested =notInterested+ (reportModel.leadsReport!.leadReports![i].weeklyNotInterested ?? 0);
+        aptCanceled =aptCanceled+ (reportModel.leadsReport!.leadReports![i].weeklyAptCanceled ?? 0);
+        aptRescheduled =aptRescheduled+ (reportModel.leadsReport!.leadReports![i].weeklyAptRescheduled ?? 0);
+        notHome =notHome+ (reportModel.leadsReport!.leadReports![i].weeklyNotHome ?? 0);
+        dns =dns+ (reportModel.leadsReport!.leadReports![i].weeklyDns ?? 0);
+      }
+    }
+    if(value==3){
+      for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+        aptSet =aptSet+ (reportModel.leadsReport!.leadReports![i].monthlyAppointmentSet ?? 0);
+        notContacted =notContacted+ (reportModel.leadsReport!.leadReports![i].monthlyNotContacted ?? 0);
+        sold =sold+ (reportModel.leadsReport!.leadReports![i].monthlySaleSold ?? 0);
+        notInterested =notInterested+ (reportModel.leadsReport!.leadReports![i].monthlyNotInterested ?? 0);
+        aptCanceled =aptCanceled+ (reportModel.leadsReport!.leadReports![i].monthlyNotAptCanceled ?? 0);
+        aptRescheduled =aptRescheduled+ (reportModel.leadsReport!.leadReports![i].monthlyNotAptRescheduled ?? 0);
+        notHome =notHome+ (reportModel.leadsReport!.leadReports![i].monthlyNotHome ?? 0);
+        dns =dns+ (reportModel.leadsReport!.leadReports![i].monthlyDns ?? 0);
+      }
+    }
+
+    if(value==4){
+      for (int i = 0; i < reportModel.leadsReport!.leadReports!.length; i++) {
+        aptSet =aptSet+ (reportModel.leadsReport!.leadReports![i].annualyAppointmentSet ?? 0);
+        notContacted =notContacted+ (reportModel.leadsReport!.leadReports![i].annualyNotContacted ?? 0);
+        sold =sold+ (reportModel.leadsReport!.leadReports![i].annualySold ?? 0);
+        notInterested =notInterested+ (reportModel.leadsReport!.leadReports![i].annualyNotInterested ?? 0);
+        aptCanceled =aptCanceled+ (reportModel.leadsReport!.leadReports![i].annualyAptCanceled ?? 0);
+        aptRescheduled =aptRescheduled+ (reportModel.leadsReport!.leadReports![i].annualyAptRescheduled ?? 0);
+        notHome =notHome+ (reportModel.leadsReport!.leadReports![i].annualyNotHome ?? 0);
+        dns =dns+ (reportModel.leadsReport!.leadReports![i].annualyDns ?? 0);
+      }
+    }
+
     notifyListeners();
   }
 

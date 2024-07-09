@@ -45,7 +45,7 @@ class _MyAppointmentState extends State<MyAppointment> {
     return Scaffold(
       backgroundColor: ColorUtil().getColor(context, ColorEnums.background),
       appBar: AddAppBar(
-        name: "myAppointment".tr(),
+        name: "myAppointments".tr(),
         func: () async {
           Navigator.pushNamed(context, '/${PageName.leadsAppointment}');
         },
@@ -66,7 +66,7 @@ class _MyAppointmentState extends State<MyAppointment> {
                     child: Column(
                       children: [
                         if (viewModel.detailsReportModel == null) spinKit(context)
-                        else   Container(
+                        else    Container(
                           decoration: BoxDecoration(
                               color: Colors.black87,
                               border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
@@ -78,69 +78,188 @@ class _MyAppointmentState extends State<MyAppointment> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      child:  Padding(
-                                        padding: const EdgeInsets.only(left: 2,right: 2),
-                                        child: Column(
-                                          children: [
-                                            Text("yesterday".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            Text(viewModel.yesterdayApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                          ],
-                                        )
+                                    GestureDetector(
+                                      onTap: (){
+                                        viewModel.appointmentTotalValue(0, viewModel.detailsReportModel!);
+                                      },
+                                      child:Container(
+                                        color:viewModel.currentDay=="lastMonth".tr() ? AppColors.grey :Colors.transparent,
+                                        height: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text("lastMonth".tr(), style: CustomTextStyle().bold10(AppColors.white)
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 2,right: 2),
-                                        child: Column(
-                                          children: [
-                                            Text("daily".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            Text(viewModel.todayApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                          ],
-                                        )
+                                    GestureDetector(
+                                      onTap: (){
+                                        viewModel.appointmentTotalValue(1, viewModel.detailsReportModel!);
+                                      },
+                                      child:  Container(
+                                        color:viewModel.currentDay=="daily".tr() ? AppColors.grey :Colors.transparent,
+                                        height: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text("daily".tr(), style: CustomTextStyle().bold10(AppColors.white)
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 2,right: 2),
-                                        child: Column(
-                                          children: [
-                                            Text("weekly".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            Text(viewModel.weekApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
-
-                                          ],
-                                        )
+                                    GestureDetector(
+                                      onTap: (){
+                                        viewModel.appointmentTotalValue(2, viewModel.detailsReportModel!);
+                                      },
+                                      child:  Container(
+                                        color:viewModel.currentDay=="weekly".tr() ? AppColors.grey :Colors.transparent,
+                                        height: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text("weekly".tr(), style:
+                                            CustomTextStyle().bold10(AppColors.white)
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 2,right: 2),
-                                        child: Column(
-                                          children: [
-                                            Text("monthly".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            Text(viewModel.monthApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
 
-                                          ],
-                                        )
+                                    GestureDetector(
+                                      onTap: (){
+                                        viewModel.appointmentTotalValue(3, viewModel.detailsReportModel!);
+                                      },
+                                      child:  Container(
+                                        color:viewModel.currentDay=="monthly".tr() ? AppColors.grey :Colors.transparent,
+                                        height: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text("monthly".tr(), style:
+                                            CustomTextStyle().bold10(AppColors.white)
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 2,right: 2),
-                                        child: Column(
-                                          children: [
-                                            Text("annual".tr(), style: CustomTextStyle().bold10(AppColors.white)),
-                                            Text(viewModel.yearApt.toString(), style: CustomTextStyle().bold10(AppColors.white)),
 
-                                          ],
-                                        )
+                                    GestureDetector(
+                                      onTap: (){
+                                        viewModel.appointmentTotalValue(4, viewModel.detailsReportModel!);
+                                      },
+                                      child:  Container(
+                                        color:viewModel.currentDay=="annual".tr() ? AppColors.grey :Colors.transparent,
+                                        height: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 2,right: 2),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text("annual".tr(), style:
+                                            CustomTextStyle().bold10(AppColors.white)
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
 
                                   ],
                                 ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptSet".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.aptSet}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notCont".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.notContacted}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptSold".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.sold}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notInterested".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.notInterested}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptCanceled".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.aptCanceled}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("aptRescheduled".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.aptRescheduled}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("notHome".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.notHome}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: sizeWidth(context).width*0.50,
+                                      child: Text("dns".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.whitePureLight)),),
+                                    ),
+                                    Text("${viewModel.dns}",style: CustomTextStyle().black14(ColorUtil().getColor(context, ColorEnums.whitePureLight))),
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
                               ],
                             ),
                           ),
@@ -564,7 +683,6 @@ class _MyAppointmentState extends State<MyAppointment> {
     loginUser ??= await getUser(context);
     await viewModel.detailReport(context, loginUser!.profiles![index].id!, loginUser!.profiles![index].organisation_id!);
 
-    viewModel.appointmentTotalValue(viewModel.detailsReportModel!);
     viewModel.chooseLead["All"]=-1;
     for(int i =0;i<viewModel.allAppointment!.length;i++){
       String status = statusCase(viewModel.allAppointment![i].astatus!).toString();

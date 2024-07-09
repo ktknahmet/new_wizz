@@ -46,12 +46,13 @@ class _OfficeProgressState extends BaseStatefulPageState<OfficeProgress> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    width: sizeWidth(context).width*0.30,
                     height: 40,
+                    width: sizeWidth(context).width*0.30,
                     decoration: decorationTransparent(context),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
+                        textAlign: TextAlign.center,
                         decoration: emptyDecoration(context),
                         style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
                         cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),

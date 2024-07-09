@@ -1,10 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizzsales/adminPage/adminVm/stockVm.dart';
 import 'package:wizzsales/constants/ColorsUtil.dart';
-import 'package:wizzsales/model/stockCheckIn/returnStock.dart';
 import 'package:wizzsales/model/stockModel/assignDealerList.dart';
 import 'package:wizzsales/utils/basePage/BaseStateful.dart';
 import 'package:wizzsales/utils/style/ColorEnums.dart';
@@ -99,10 +97,6 @@ class _DealerStockListState extends BaseStatefulPageState<DealerStockList>{
                                     ],
                                   ),
                                   const SizedBox(height: 4,),
-                                  const Divider(
-                                    thickness: 0.5,
-                                  ),
-                                  const SizedBox(height: 4,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -110,7 +104,18 @@ class _DealerStockListState extends BaseStatefulPageState<DealerStockList>{
                                         width: sizeWidth(context).width*0.30,
                                         child: Text("assignDate".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                       ),
-                                      Text(mmDDYDateTime(model.stockDate ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                      Text(extractDate(model.stockDate ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: sizeWidth(context).width*0.30,
+                                        child: Text("assignTime".tr(),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
+                                      ),
+                                      Text(extractTime(model.stockDate ?? ""),style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),),
                                     ],
                                   ),
                                   const SizedBox(height: 4,),

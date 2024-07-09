@@ -23,7 +23,6 @@ class _StockManagementState extends BaseStatefulPageState<StockManagement> {
       children: [
         GestureDetector(
           onTap: (){
-
             Navigator.pushNamed(context, '/${PageName.setWarehouses}');
           },
           child: Card(

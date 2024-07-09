@@ -71,8 +71,8 @@ class _BusinessCenterState extends BaseStatefulPageState<BusinessCenter> {
 
                 GestureDetector(
                   onTap: (){
+                    Navigator.pushNamed(context, '/${PageName.myCommissionPage}');
 
-                    Navigator.pushNamed(context, '/${PageName.commReport}');
                   },
                   child: Card(
                     shape: cardShape(context),

@@ -77,10 +77,7 @@ class StockVm extends ChangeNotifier{
   List<Map<String, bool>> gridMap = [];
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-
-  void addPoolListWithModel(List<AllAssignStock> list) {
-    // Seçilen elemanları tutacak geçici bir liste oluşturalım
-
+   addPoolListWithModel(List<AllAssignStock> list) {
     for (int i = 0; i < list.length; i++) {
       if (list[i].check == true && !uniqueSerialNumber.contains(list[i].serialNumber)) {
         PoolListDetails details = PoolListDetails(
@@ -320,6 +317,24 @@ class StockVm extends ChangeNotifier{
     return filteredList;
   }
 
+  List<DistStockList> searchWarehouseOperation(List<DistStockList> list, String query) {
+    if (query == "All") {
+      return list;
+    }
+    if (query == "None Assign") {
+      // warehouseName null olanları filtrele
+      List<DistStockList> filteredList = list.where((value) =>
+      value.warehouseName == null
+      ).toList();
+      return filteredList;
+    }
+    // Diğer durumlar için (contains kontrolü ile)
+    List<DistStockList> filteredList = list.where((value) =>
+    (value.warehouseName != null && value.warehouseName!.toString().toLowerCase().contains(query.toLowerCase()))
+    ).toList();
+    return filteredList;
+  }
+
   List<WarehouseList> searchWarehouse(List<WarehouseList> list, String query) {
     if (query.isEmpty) {
       return list;
@@ -444,8 +459,7 @@ class StockVm extends ChangeNotifier{
             );
             poolStock.add(model);
           }
-
-          await Future.delayed(const Duration(seconds: 2)); // Delay before resuming camera
+          await Future.delayed(const Duration(seconds: 2));
 
         } else {
           snackBarDesign(context, StringUtil.error, "serialIdMust8".tr());

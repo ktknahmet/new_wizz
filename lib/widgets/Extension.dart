@@ -7014,6 +7014,46 @@ showUpdateExtendDate(BuildContext context,CommissionVm viewModel,int poolId){
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width:sizeWidth(context).width*0.4,
+                              child: ElevatedButton(
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                  style: elevatedButtonStyle(context),
+                                  child: Text("back".tr(),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+
+                              ),
+                            ),
+                            SizedBox(
+                              width:sizeWidth(context).width*0.4,
+                              child: ElevatedButton(
+                                  onPressed: ()async{
+                                    if(extendDate.text.isNotEmpty){
+                                      extendDate.text = formatDateString(extendDate.text,"MM-dd-yyyy","yyyy-MM-dd");
+                                      ComRateExtendDate post = ComRateExtendDate(
+                                          calcPoolId:  poolId,
+                                          calcExpireDate: extendDate.text
+                                      );
+
+                                      await viewModel.updateExtendDate(context,post);
+                                      Navigator.pop(context);
+                                    }else{
+                                      Navigator.pop(context);
+                                      snackBarDesign(context, StringUtil.error, "requiredAdjust".tr());
+                                    }
+                                  },
+                                  style: elevatedButtonStyle(context),
+                                  child: Text("update".tr(),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
+
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4,),
                         TextField(
                           style: CustomTextStyle().semiBold12(ColorUtil().getColor(context, ColorEnums.textTitleLight)),
                           cursorColor: ColorUtil().getColor(context, ColorEnums.wizzColor),
@@ -7024,52 +7064,7 @@ showUpdateExtendDate(BuildContext context,CommissionVm viewModel,int poolId){
                             extendDate.text = await DatePickerHelper.getDatePicker(context);
                           },
                         ),
-                        const SizedBox(height: 8,),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width:sizeWidth(context).width*0.4,
-                                  child: ElevatedButton(
-                                      onPressed: (){
-                                        Navigator.pop(context);
-                                      },
-                                      style: elevatedButtonStyle(context),
-                                      child: Text("back".tr(),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
 
-                                  ),
-                                ),
-                                SizedBox(
-                                  width:sizeWidth(context).width*0.4,
-                                  child: ElevatedButton(
-                                    //note eklenecek
-                                      onPressed: ()async{
-                                        if(extendDate.text.isNotEmpty){
-                                          extendDate.text = formatDateString(extendDate.text,"MM-dd-yyyy","yyyy-MM-dd");
-                                          ComRateExtendDate post = ComRateExtendDate(
-                                              calcPoolId:  poolId,
-                                              calcExpireDate: extendDate.text
-                                          );
-
-                                          await viewModel.updateExtendDate(context,post);
-                                          Navigator.pop(context);
-                                        }else{
-                                          Navigator.pop(context);
-                                          snackBarDesign(context, StringUtil.error, "requiredAdjust".tr());
-                                        }
-                                      },
-                                      style: elevatedButtonStyle(context),
-                                      child: Text("update".tr(),style: CustomTextStyle().bold12(ColorUtil().getColor(context, ColorEnums.textDefaultLight)),)
-
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
                       ]
                   ),
                 ),

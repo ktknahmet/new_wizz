@@ -64,7 +64,6 @@ class _ScanStockBarcodeState extends State<ScanStockBarcode> {
           value: viewModel,
           child: Consumer<StockVm>(
             builder: (context,view,_){
-
                return Padding(
                  padding: const EdgeInsets.all(8.0),
                  child: SingleChildScrollView(

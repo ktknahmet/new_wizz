@@ -8,7 +8,7 @@ import 'package:wizzsales/adminPage/adminBoard/demoBoard/demoBoard.dart';
 import 'package:wizzsales/adminPage/adminBoard/sales/salesBoard.dart';
 import 'package:wizzsales/adminPage/adminBoard/weeklyAppt/weeklyAppt.dart';
 import 'package:wizzsales/adminPage/adminBonus/addBonus.dart';
-import 'package:wizzsales/adminPage/adminBonus/adminBonus.dart';
+import 'package:wizzsales/adminPage/adminBonus/bonusSettings.dart';
 import 'package:wizzsales/adminPage/adminBonus/bonusPage.dart';
 import 'package:wizzsales/adminPage/adminBonus/bonusReport/bonusWinnerReport.dart';
 import 'package:wizzsales/adminPage/adminBonus/bonusWinner.dart';
@@ -64,6 +64,7 @@ import 'package:wizzsales/adminPage/adminStockManagament/pages/stockScanBarcode.
 import 'package:wizzsales/adminPage/inventory/stockHistory.dart';
 import 'package:wizzsales/adminPage/adminStockManagament/pages/stockPage.dart';
 import 'package:wizzsales/adminPage/inventory/report/inventoryReport.dart';
+import 'package:wizzsales/adminPage/inventory/warehouseOperations.dart';
 import 'package:wizzsales/main.dart';
 import 'package:wizzsales/model/demoModel/demoQuestions.dart';
 import 'package:wizzsales/model/quickSaleModel/quickSaleModel.dart';
@@ -81,6 +82,7 @@ import 'package:wizzsales/view/expense/allExpense.dart';
 import 'package:wizzsales/view/expense/report/expenseReport.dart';
 import 'package:wizzsales/view/internetPage/internet.dart';
 import 'package:wizzsales/view/demos/demoTabbar/liveDemoTabBar.dart';
+import 'package:wizzsales/view/myCommission/myCommission.dart';
 import 'package:wizzsales/view/myLeads/leadDetails.dart';
 import 'package:wizzsales/view/myLeads/totalLeads.dart';
 import 'package:wizzsales/view/quickSales/AddQuickSale.dart';
@@ -96,6 +98,7 @@ import 'package:wizzsales/view/signature/signature.dart';
 import 'package:wizzsales/view/stock/dealerStockList.dart';
 import 'package:wizzsales/view/trainingSection/addContact.dart';
 import 'package:wizzsales/view/trainingSection/trainingSection.dart';
+import '../../adminPage/adminCommission/comWinDetails.dart';
 import '../../adminPage/adminCommission/rateList/editCommissionRate.dart';
 import '../../model/OLD/Sale.dart';
 import 'package:wizzsales/utils/res/PageName.dart';
@@ -178,6 +181,12 @@ class RouteGenerator {
 
       case '/${PageName.stockManagement}':
         return MaterialPageRoute(builder: (_) =>   StockManagement("importerInventory".tr()));
+
+      case '/${PageName.warehouseOperationsPage}':
+        return MaterialPageRoute(builder: (_) =>   WarehouseOperations("inventoryLocation".tr()));
+
+      case '/${PageName.myCommissionPage}':
+        return MaterialPageRoute(builder: (_) =>   MyCommission("myCommissions".tr()));
 
       case '/${PageName.dealerComPage}':
         Map<String, dynamic>? arguments = settings.arguments as Map<String, dynamic>?;
@@ -332,6 +341,11 @@ class RouteGenerator {
         DemoQuestions question = arguments!['question'];
         int demoId = arguments["demoId"];
         return MaterialPageRoute(builder: (_) =>  DemoQuestionPage(question,demoId));
+
+      case '/${PageName.commDetails}':
+        Map<String, dynamic>? arguments = settings.arguments as Map<String, dynamic>?;
+        int? id = arguments!["id"];
+        return MaterialPageRoute(builder: (_) =>  ComWinDetails(id));
 
       case '/${PageName.appointmentReport}':
         return MaterialPageRoute(builder: (_) =>  const AppointmentReport());
@@ -535,7 +549,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>   const AdminAddBonus());
 
       case '/${PageName.bonusScreen}':
-        return MaterialPageRoute(builder: (_) =>   const AdminBonus());
+        return MaterialPageRoute(builder: (_) =>    BonusSettings("bonusConfig".tr()));
 
       case '/${PageName.adminDigitalSignature}':
         return MaterialPageRoute(builder: (_) =>  AdminPaperWork("paperWork".tr()));

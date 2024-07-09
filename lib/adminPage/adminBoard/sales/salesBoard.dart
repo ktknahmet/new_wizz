@@ -14,6 +14,8 @@ import 'package:wizzsales/utils/style/WidgetStyle.dart';
 import 'package:wizzsales/widgets/Constant.dart';
 import 'package:wizzsales/widgets/Extension.dart';
 import 'package:wizzsales/widgets/WidgetExtension.dart';
+
+import '../../../constants/AppColors.dart';
 // ignore_for_file: use_build_context_synchronously
 
 class SalesBoardPage extends BaseStatefulPage {
@@ -47,35 +49,87 @@ class _SalesBoardPageState extends BaseStatefulPageState<SalesBoardPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        height: sizeWidth(context).height*0.08,
+                      Container(
                         width: sizeWidth(context).width*0.8,
-                        child:  ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: calculateCounts(viewModel.boardList!.appointments!).length,
-                          itemBuilder: (context,index){
-                            return SizedBox(
-                              height: 30,
-                              width: sizeWidth(context).width*0.21,
-                              child: Card(
-                                  elevation: 2,
-                                  shape: cardShape(context),
-                                  color: ColorUtil().getColor(context, ColorEnums.background),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(appointmentDays[index],style: CustomTextStyle().semiBold10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                        Text(calculateCountsSale(viewModel.boardList!.sales!)[index].toString(),style: CustomTextStyle().regular10(ColorUtil().getColor(context, ColorEnums.textDefaultLight))),
-                                      ],
+                        decoration: BoxDecoration(
+                            color: Colors.black87,
+                            border: Border.all(color: ColorUtil().getColor(context,ColorEnums.wizzColor), width: 1),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child:  Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("yesterday".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(calculateCountsSale(viewModel.boardList!.sales!)[0].toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("today".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(calculateCountsSale(viewModel.boardList!.sales!)[1].toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("week".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(calculateCountsSale(viewModel.boardList!.sales!)[2].toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("month".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(calculateCountsSale(viewModel.boardList!.sales!)[3].toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(left: 2,right: 2),
+                                        child: Column(
+                                          children: [
+                                            Text("year".tr(), style: CustomTextStyle().bold10(AppColors.white)),
+                                            Text(calculateCountsSale(viewModel.boardList!.sales!)[4].toString(), style: CustomTextStyle().bold10(AppColors.white)),
+
+                                          ],
+                                        )
+                                    ),
+                                  ),
+
+                                ],
                               ),
-                            );
-                          },
+                            ],
+                          ),
                         ),
                       ),
+
                       GestureDetector(
                         onTap: ()async{
                           showProgress(context, true);
